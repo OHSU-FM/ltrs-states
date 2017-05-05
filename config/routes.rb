@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   resources :approval_states
   resources :leave_requests do
     member do
-      post 'submit'
+      post 'submit' => 'leave_requests#submit'
     end
   end
 end
