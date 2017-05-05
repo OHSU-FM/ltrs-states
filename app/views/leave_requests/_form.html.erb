@@ -1,0 +1,17 @@
+<%= form_with(model: leave_request, local: true) do |form| %>
+  <% if leave_request.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(leave_request.errors.count, "error") %> prohibited this leave_request from being saved:</h2>
+
+      <ul>
+      <% leave_request.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

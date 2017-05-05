@@ -25,7 +25,9 @@ module LtrsStates
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
 
-    # Don't generate system test files.
-    config.generators.system_tests = nil
+    config.generators do |c|
+      c.test_framework :rspec
+      c.integration_tool :rspec
+    end
   end
 end

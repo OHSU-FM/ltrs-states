@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Approval States</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @approval_states.each do |approval_state| %>
+      <tr>
+        <td><%= link_to 'Show', approval_state %></td>
+        <td><%= link_to 'Edit', edit_approval_state_path(approval_state) %></td>
+        <td><%= link_to 'Destroy', approval_state, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Approval State', new_approval_state_path %>

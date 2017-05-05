@@ -1,3 +1,9 @@
 Rails.application.routes.draw do
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  root to: 'leave_requests#index'
+  resources :approval_states
+  resources :leave_requests do
+    member do
+      post 'submit'
+    end
+  end
 end

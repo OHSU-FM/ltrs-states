@@ -1,0 +1,20 @@
+<div class="row">
+  <div class="col-md-4 center-block" style="float:none">
+    <p id="notice"><%= notice %></p>
+    <h1>This request is in the <%= @leave_request.approval_state.aasm.current_state.to_s %> state</h1>
+    <h3>Available states include:</h3>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-4 center-block" style="float:none">
+    <% @leave_request.approval_state.aasm.events(permissible: true).map{|s| s.name}.each do |state| %>
+      <%= button_to state.to_s, public_send(button_to_state_path(state)) %>
+    <% end %>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-4 center-block">
+    <%= link_to 'Edit', edit_leave_request_path(@leave_request) %> |
+    <%= link_to 'Back', leave_requests_path %>
+  </div>
+</div>
