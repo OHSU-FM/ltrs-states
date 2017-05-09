@@ -42,5 +42,14 @@ RSpec.describe ApprovalState, type: :model do
       expect(as.approvable).to receive(:ready_for_submission?)
       as.submit
     end
+
+    it 'should ignore submit -> submit transition and log that it happened' do
+      expect(Rails.logger).to receive(:error)
+      as = create :leave_approval_state, aasm_state: 'submitted'; as.submit
+      e = as.errors
+      expect(e.messages[:submit].first)
+        .to include "Event 'submit' cannot transition from 'submitted'. "
+    end
+    # TODO test no mail is sent
   end
 end

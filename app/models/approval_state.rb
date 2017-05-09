@@ -24,6 +24,11 @@ class ApprovalState < ApplicationRecord
       end
 
       transitions from: :unsubmitted, to: :submitted
+
+      error do |e|
+        errors.add(e.event_name, e.message)
+        logger.error(errors[e.event_name].last)
+      end
     end
   end
 

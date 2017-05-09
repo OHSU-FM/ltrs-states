@@ -7,13 +7,14 @@ module StateEvents
   end
 
   def submit
+    @approval_state.submit!
     respond_to do |format|
-      if @approval_state.submit
-        format.html { redirect_to @approvable, notice: "#{@approvable.model_name.human} was successfully updated." }
+      if !@approval_state.errors.empty?
+        format.html { redirect_to @approvable, notice: "#{@approvable.model_name.human} was successfully submitted." }
         format.json { render :show, status: :ok, location: @leave_request }
       else
         # TODO better error
-        format.html { render :show, notice: "Sorry something's gone wrong" }
+        format.html { redirect_to @approvable, notice: "Sorry something's gone wrong" }
         format.json { render json: @approvable.errors, status: :unprocessable_entity }
       end
     end

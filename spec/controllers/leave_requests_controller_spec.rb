@@ -89,6 +89,22 @@ RSpec.describe LeaveRequestsController, type: :controller do
         expect(assigns(:leave_request)).to eq(leave_request)
       end
 
+      it "resets submitted approval_state to unsubmitted" do
+        leave_request = create :leave_request, :submitted
+        new_attributes = valid_attributes.update("start_date" => Time.new().at_midnight + 10.days)
+        put :update, params: {id: leave_request.id, leave_request: new_attributes}
+        leave_request.reload
+        expect(leave_request.approval_state).to be_unsubmitted
+      end
+
+      it "unsubmitted approval_state remains unsubmitted without error" do
+        leave_request = create :leave_request
+        new_attributes = valid_attributes.update("start_date" => Time.new().at_midnight + 10.days)
+        put :update, params: {id: leave_request.id, leave_request: new_attributes}
+        leave_request.reload
+        expect(leave_request.approval_state).to be_unsubmitted
+      end
+
       it "redirects to the leave_request" do
         leave_request = create :leave_request
         put :update, params: {id: leave_request.to_param, leave_request: valid_attributes}
@@ -162,6 +178,11 @@ RSpec.describe LeaveRequestsController, type: :controller do
       it "redirects to the leave_request" do
         post :submit, params: { id: leave_request.to_param }
         expect(response).to redirect_to leave_request_path(leave_request)
+      end
+
+      it "shows an error message" do
+        post :submit, params: { id: leave_request.to_param }
+        expect(assigns[:approval_state].errors).not_to be_empty
       end
     end
   end
