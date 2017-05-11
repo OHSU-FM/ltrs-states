@@ -30,6 +30,15 @@ class ApprovalState < ApplicationRecord
         logger.error(errors[e.event_name].last)
       end
     end
+
+    event :unsubmit do
+      transitions to: :unsubmitted
+
+      error do |e|
+        errors.add(e.event_name, e.message)
+        logger.error(errors[e.event_name].last)
+      end
+    end
   end
 
   def log_state_change

@@ -10,8 +10,8 @@
       </ul>
     </div>
   <% end %>
-
+  <%= form.date_select :start_date %>
   <div class="actions">
-    <%= form.submit %>
+    <%= form.submit onclick: "confirm('this will restart things')" %>
   </div>
 <% end %>

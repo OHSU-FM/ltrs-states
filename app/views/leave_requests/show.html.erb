@@ -7,7 +7,7 @@
 </div>
 <div class="row">
   <div class="col-md-4 center-block" style="float:none">
-    <% @leave_request.approval_state.aasm.events(permissible: true).map{|s| s.name}.each do |state| %>
+    <% (@leave_request.approval_state.aasm.events(permissible: true).map{|s| s.name} - [:unsubmit]).each do |state| %>
       <%= button_to state.to_s.capitalize, public_send(button_to_state_path(state), @leave_request) %>
     <% end %>
   </div>

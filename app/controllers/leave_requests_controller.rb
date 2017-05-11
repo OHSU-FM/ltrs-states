@@ -41,13 +41,22 @@ class LeaveRequestsController < ApplicationController
   # PATCH/PUT /leave_requests/1
   # PATCH/PUT /leave_requests/1.json
   def update
-    respond_to do |format|
-      if @leave_request.update(leave_request_params)
-        format.html { redirect_to @leave_request, notice: 'Leave request was successfully updated.' }
-        format.json { render :show, status: :ok, location: @leave_request }
-      else
-        format.html { render :edit }
-        format.json { render json: @leave_request.errors, status: :unprocessable_entity }
+    @leave_request.assign_attributes(leave_request_params)
+    if @leave_request.changed?
+      respond_to do |format|
+        if @leave_request.update(leave_request_params)
+          @leave_request.approval_state.unsubmit!
+          format.html { redirect_to @leave_request, notice: 'Leave request was successfully updated.' }
+          format.json { render :show, status: :ok, location: @leave_request }
+        else
+          format.html { render :edit }
+          format.json { render json: @leave_request.errors, status: :unprocessable_entity }
+        end
+      end
+    else
+      respond_to do |format|
+        format.html  { redirect_to @leave_request, notice: 'Nothing changed, so no emails were sent.' }
+        format.json  { render :show, status: :ok, location: @leave_request }
       end
     end
   end
