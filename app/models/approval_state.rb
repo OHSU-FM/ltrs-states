@@ -31,8 +31,18 @@ class ApprovalState < ApplicationRecord
       end
     end
 
+    # TODO get rid of this (use delete and fill in new request from attrs)
     event :unsubmit do
       transitions to: :unsubmitted
+
+      error do |e|
+        errors.add(e.event_name, e.message)
+        logger.error(errors[e.event_name].last)
+      end
+    end
+
+    event :reject do
+      transitions from: :in_review, to: :rejected
 
       error do |e|
         errors.add(e.event_name, e.message)

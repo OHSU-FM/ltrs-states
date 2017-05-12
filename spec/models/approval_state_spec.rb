@@ -52,4 +52,19 @@ RSpec.describe ApprovalState, type: :model do
     end
     # TODO test no mail is sent
   end
+
+  describe 'the reject event' do
+    let(:as) { create :leave_approval_state, aasm_state: 'in_review' }
+
+    it 'should transition from in_review to rejected' do
+      as.reject
+      expect(as).to be_rejected
+    end
+
+    it 'should error if rejected from non in_review state' do
+      as = create :leave_approval_state
+      expect(Rails.logger).to receive(:error)
+      as.reject
+    end
+  end
 end
