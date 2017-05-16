@@ -119,6 +119,7 @@ RSpec.describe LeaveRequestsController, type: :controller do
           leave_request.reload
           expect(leave_request.approval_state).to be_submitted
         end
+
       end
     end
 
@@ -179,6 +180,12 @@ RSpec.describe LeaveRequestsController, type: :controller do
         post :submit, params: { id: leave_request.to_param }
         expect(response).to redirect_to leave_request_path(leave_request)
       end
+
+      it "sends an email" do
+        expect { post :submit, params: { id: leave_request.to_param } }
+          .to change { ActionMailer::Base.deliveries.count }.by(1)
+      end
+
     end
 
     context "with submitted request" do

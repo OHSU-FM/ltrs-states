@@ -8,8 +8,10 @@ module StateEvents
 
   def submit
     respond_to do |format|
+      UserMailer.request_submitted(@approval_state).deliver_now
       if @approval_state.may_submit?
         if @approval_state.submit!
+
           format.html { redirect_to @approvable, notice: "#{@approvable.model_name.human} was successfully submitted." }
           format.json { render :show, status: :ok, location: @approvable }
         else
