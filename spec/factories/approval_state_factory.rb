@@ -1,11 +1,9 @@
 FactoryGirl.define do
   factory :approval_state do
     user
+  end
 
-    trait :leave do
-      association :approvable, factory: :leave_request
-    end
-
-    factory :leave_approval_state,  traits: [:leave]
+  factory :leave_approval_state do
+    association :approvable, factory: :leave_request
   end
 end

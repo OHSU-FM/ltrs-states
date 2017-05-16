@@ -43,14 +43,33 @@ RSpec.describe ApprovalState, type: :model do
       as.submit
     end
 
-    it 'should ignore submit -> submit transition and log that it happened' do
-      expect(Rails.logger).to receive(:error)
-      as = create :leave_approval_state, aasm_state: 'submitted'; as.submit
-      e = as.errors
-      expect(e.messages[:submit].first)
-        .to include "Event 'submit' cannot transition from 'submitted'. "
+    it 'should only transition from unsubmitted' do
+      (ApprovalState.aasm.states.map(&:name) - [:unsubmitted]).each do |state|
+        expect(Rails.logger).to receive(:error)
+        expect{
+          create(:leave_approval_state, aasm_state: state).submit
+        }.to raise_error AASM::InvalidTransition
+      end
     end
     # TODO test no mail is sent
+  end
+
+  describe 'the send_to_unopened event' do
+    let(:as) { create :leave_approval_state, aasm_state: 'submitted' }
+
+    it 'should transition from submitted to unopened' do
+      as.send_to_unopened
+      expect(as).to be_unopened
+    end
+
+    it 'should only transition from submitted' do
+      (ApprovalState.aasm.states.map(&:name) - [:submitted]).each do |state|
+        expect(Rails.logger).to receive(:error)
+        expect{
+          create(:leave_approval_state, aasm_state: state).send_to_unopened
+        }.to raise_error AASM::InvalidTransition
+      end
+    end
   end
 
   describe 'the reject event' do
@@ -61,10 +80,14 @@ RSpec.describe ApprovalState, type: :model do
       expect(as).to be_rejected
     end
 
-    it 'should error if rejected from non in_review state' do
-      as = create :leave_approval_state
-      expect(Rails.logger).to receive(:error)
-      as.reject
+    it 'should only transition from in_review' do
+      (ApprovalState.aasm.states.map(&:name) - [:in_review]).each do |state|
+        expect(Rails.logger).to receive(:error)
+        expect{
+          create(:leave_approval_state, aasm_state: state).reject
+        }.to raise_error AASM::InvalidTransition
+      end
     end
+    # TODO test mail sent
   end
 end

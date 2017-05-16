@@ -182,8 +182,8 @@ RSpec.describe LeaveRequestsController, type: :controller do
     end
 
     context "with submitted request" do
-      let(:approval_state) { create(:leave_approval_state, aasm_state: "submitted")}
-      let(:leave_request) { approval_state.approvable }
+      let(:leave_request) { create :leave_request, :submitted }
+      let(:approval_state) { leave_request.approval_state }
 
       it "redirects to the leave_request" do
         post :submit, params: { id: leave_request.to_param }
@@ -192,9 +192,35 @@ RSpec.describe LeaveRequestsController, type: :controller do
 
       it "shows an error message" do
         post :submit, params: { id: leave_request.to_param }
-        expect(assigns[:approval_state].errors).not_to be_empty
+        expect(flash[:notice]).not_to be_empty
       end
     end
   end
 
+  describe "POST send_to_unopened" do
+    context "with submitted request" do
+      let(:leave_request) { create :leave_request, :submitted  }
+      let(:approval_state) { leave_request.approval_state }
+
+      it "assigns the leave_request as @approvable" do
+        post :send_to_unopened, params: { id: leave_request.to_param }
+        expect(assigns[:approvable]).to eq leave_request
+      end
+
+      it "assigns the approval_state as @approval_state" do
+        post :send_to_unopened, params: { id: leave_request.to_param }
+        expect(assigns[:approval_state]).to eq approval_state
+      end
+
+      it "sends the send_to_unopened event to the approval_state" do
+        post :send_to_unopened, params: { id: leave_request.to_param }
+        expect(assigns[:approval_state].aasm_state).to eq "unopened"
+      end
+
+      it "redirects to the leave_request_path" do
+        post :send_to_unopened, params: { id: leave_request.to_param }
+        expect(response).to redirect_to leave_request_path(leave_request)
+      end
+    end
+  end
 end

@@ -26,8 +26,7 @@ class ApprovalState < ApplicationRecord
       transitions from: :unsubmitted, to: :submitted
 
       error do |e|
-        errors.add(e.event_name, e.message)
-        logger.error(errors[e.event_name].last)
+        log_and_raise_error e
       end
     end
 
@@ -36,8 +35,15 @@ class ApprovalState < ApplicationRecord
       transitions to: :unsubmitted
 
       error do |e|
-        errors.add(e.event_name, e.message)
-        logger.error(errors[e.event_name].last)
+        log_and_raise_error e
+      end
+    end
+
+    event :send_to_unopened do
+      transitions from: :submitted, to: :unopened
+
+      error do |e|
+        log_and_raise_error e
       end
     end
 
@@ -45,10 +51,15 @@ class ApprovalState < ApplicationRecord
       transitions from: :in_review, to: :rejected
 
       error do |e|
-        errors.add(e.event_name, e.message)
-        logger.error(errors[e.event_name].last)
+        log_and_raise_error e
       end
     end
+  end
+
+  def log_and_raise_error e
+    errors.add(e.event_name, e.message)
+    logger.error(errors[e.event_name].last)
+    raise e
   end
 
   def log_state_change

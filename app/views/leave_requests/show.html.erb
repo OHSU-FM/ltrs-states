@@ -15,6 +15,7 @@
 <div class="row">
   <div class="col-md-4 center-block">
     <%= link_to 'Edit', edit_leave_request_path(@leave_request) %> |
+    <%= link_to 'Destroy', @leave_request, method: :delete, data: { confirm: 'Are you sure?' } %> |
     <%= link_to 'Back', leave_requests_path %>
   </div>
 </div>
