@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe "leave_requests/edit", type: :view do
   before(:each) do
-    @leave_request = assign(:leave_request, LeaveRequest.create!())
+    @leave_request = assign(:leave_request, create(:leave_request))
   end
 
   it "renders the edit leave_request form" do
