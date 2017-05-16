@@ -13,4 +13,12 @@ RSpec.describe User, type: :model do
       expect(@user.full_name).to eq "hello there"
     end
   end
+
+  describe 'relationships' do
+    it 'user_approvers is a list of approver users sorted by approval_order' do
+      user = create :user, :with_approvers
+      # expect(user.user_approvers.map(&:approver)).to eq
+      # TODO finish this tomorrow
+    end
+  end
 end

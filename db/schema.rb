@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170502173857) do
+ActiveRecord::Schema.define(version: 20170516225544) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(version: 20170502173857) do
     t.bigint "user_id"
     t.string "approvable_type"
     t.bigint "approvable_id"
+    t.integer "approval_order"
     t.index ["approvable_type", "approvable_id"], name: "index_approval_states_on_approvable_type_and_approvable_id"
     t.index ["user_id"], name: "index_approval_states_on_user_id"
   end
@@ -34,6 +35,16 @@ ActiveRecord::Schema.define(version: 20170502173857) do
     t.index ["user_id"], name: "index_leave_requests_on_user_id"
   end
 
+  create_table "user_approvers", force: :cascade do |t|
+    t.bigint "user_id"
+    t.integer "approver_id"
+    t.string "approver_type"
+    t.integer "approval_order"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_user_approvers_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", limit: 255, default: "", null: false
     t.string "login", limit: 255, null: false
@@ -41,4 +52,5 @@ ActiveRecord::Schema.define(version: 20170502173857) do
     t.string "last_name", limit: 255, null: false
   end
 
+  add_foreign_key "user_approvers", "users"
 end

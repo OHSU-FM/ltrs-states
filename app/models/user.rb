@@ -1,5 +1,6 @@
 class User < ApplicationRecord
   has_many :approval_states
+  has_many :user_approvers
 
   validates_presence_of :login
 
