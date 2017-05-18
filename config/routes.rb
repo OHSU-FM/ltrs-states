@@ -5,6 +5,7 @@ Rails.application.routes.draw do
     member do
       post 'submit' => 'leave_requests#submit'
       post 'send_to_unopened' => 'leave_requests#send_to_unopened'
+      post 'review' => 'leave_requests#review'
     end
   end
 end

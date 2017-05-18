@@ -15,10 +15,11 @@ RSpec.describe User, type: :model do
   end
 
   describe 'relationships' do
-    it 'user_approvers is a list of approver users sorted by approval_order' do
-      user = create :user, :with_approvers
-      # expect(user.user_approvers.map(&:approver)).to eq
-      # TODO finish this tomorrow
+    it 'user_approvers is a list of references to approver users sorted by approval_order' do
+      user = create :user_with_approvers
+      expect(user.user_approvers.map(&:approver)).to all be_a User
+      # factory creates approvers in backwards order, so we can test sort here
+      expect(user.user_approvers.map(&:approval_order)).to eq [1, 2]
     end
   end
 end

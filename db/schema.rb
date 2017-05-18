@@ -22,7 +22,7 @@ ActiveRecord::Schema.define(version: 20170516225544) do
     t.bigint "user_id"
     t.string "approvable_type"
     t.bigint "approvable_id"
-    t.integer "approval_order"
+    t.integer "approval_order", default: 0
     t.index ["approvable_type", "approvable_id"], name: "index_approval_states_on_approvable_type_and_approvable_id"
     t.index ["user_id"], name: "index_approval_states_on_user_id"
   end

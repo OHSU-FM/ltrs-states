@@ -1,13 +1,13 @@
 FactoryGirl.define do
   factory :user_approver do
     user
-    approval_order 1
 
-    after(:create) do |user_approver, evaluator|
-      approver = create :user
-      user_approver.approver_id = approver.id
-      user_approver.approver_type = 'test_approver'
-      user_approver.save!
+    factory :user_approver_full do
+      after(:create) do |ua|
+        ua.approver_id = (create :user, first_name: "approver").to_param
+        ua.approver_type = "approver"
+        ua.save!
+      end
     end
   end
 end

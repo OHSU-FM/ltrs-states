@@ -2,7 +2,8 @@ module StateEvents
   extend ActiveSupport::Concern
 
   included do
-    before_action :set_approvable_and_state, only: [:submit, :send_to_unopened]
+    before_action :set_approvable_and_state,
+      only: [:submit, :send_to_unopened, :review]
     helper_method :submit
   end
 
@@ -11,7 +12,6 @@ module StateEvents
       UserMailer.request_submitted(@approval_state).deliver_now
       if @approval_state.may_submit?
         if @approval_state.submit!
-
           format.html { redirect_to @approvable, notice: "#{@approvable.model_name.human} was successfully submitted." }
           format.json { render :show, status: :ok, location: @approvable }
         else
@@ -37,6 +37,22 @@ module StateEvents
         end
       else
         format.html { redirect_to @approvable, notice: "This request has already been sent to the reviewer, so nothing happened." }
+      end
+    end
+  end
+
+  def review
+    respond_to do |format|
+      if @approval_state.may_review?
+        if @approval_state.review!
+          format.html { redirect_to @approvable, notice: "#{@approvable.model_name.human} was successfully reviewed." }
+          format.json { render :show, status: :ok, location: @approvable }
+        else
+          format.html { redirect_to @approvable, notice: "Sorry something's gone wrong" }
+          format.json { render json: @approvable.errors, status: :unprocessable_entity }
+        end
+      else
+        format.html { redirect_to @approvable, notice: "This request has already been opened, so nothing happened." }
       end
     end
   end

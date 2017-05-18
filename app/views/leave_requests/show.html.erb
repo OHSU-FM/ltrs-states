@@ -2,6 +2,12 @@
   <div class="col-md-4 center-block" style="float:none">
     <p id="notice"><%= notice %></p>
     <h1>This request is in the <%= @leave_request.approval_state.aasm.current_state.to_s %> state</h1>
+    <h3>Things that happened as a part of this transisiton:</h3>
+    <ul>
+      <% if UserMailer.respond_to? "request_#{@leave_request.approval_state.aasm.current_state}" %>
+        <li>sent this email: <%= link_to @leave_request.approval_state.aasm.current_state.to_s, "/rails/mailers/user_mailer/request_#{@leave_request.approval_state.aasm.current_state}" %></li>
+      <% end %>
+    </ul>
     <h3>Available states include:</h3>
   </div>
 </div>

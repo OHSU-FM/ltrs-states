@@ -7,7 +7,7 @@ RSpec.describe 'leave_requests/show', type: :view do
 
   it 'shows the current state of the request' do
     render
-    expect(rendered).to have_selector("h1", "unsubmitted")
+    within('h1') { expect(page).to have_content('unsubmitted') }
   end
 
   it 'renders buttons for permissible state transistions' do

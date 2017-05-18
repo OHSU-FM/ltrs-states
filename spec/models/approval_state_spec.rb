@@ -13,6 +13,10 @@ RSpec.describe ApprovalState, type: :model do
     expect(build :approval_state, approvable: nil).not_to be_valid
   end
 
+  it 'should start with an approval_order of 0' do
+    expect(create(:leave_approval_state).approval_order).to eq 0
+  end
+
   describe 'general state behavior' do
     it 'should act as a state machine' do
       expect(ApprovalState.aasm.states).to be_an Array
@@ -51,7 +55,6 @@ RSpec.describe ApprovalState, type: :model do
         }.to raise_error AASM::InvalidTransition
       end
     end
-    # TODO test no mail is sent
   end
 
   describe 'the send_to_unopened event' do
@@ -67,6 +70,24 @@ RSpec.describe ApprovalState, type: :model do
         expect(Rails.logger).to receive(:error)
         expect{
           create(:leave_approval_state, aasm_state: state).send_to_unopened
+        }.to raise_error AASM::InvalidTransition
+      end
+    end
+  end
+
+  describe 'the review event' do
+    let(:as) { create :leave_approval_state, aasm_state: 'unopened' }
+
+    it 'should transition from unopened to in_review' do
+      as.review
+      expect(as).to be_in_review
+    end
+
+    it 'should only transition from in_review' do
+      (ApprovalState.aasm.states.map(&:name) - [:unopened]).each do |state|
+        expect(Rails.logger).to receive(:error)
+        expect{
+          create(:leave_approval_state, aasm_state: state).review
         }.to raise_error AASM::InvalidTransition
       end
     end
@@ -88,6 +109,16 @@ RSpec.describe ApprovalState, type: :model do
         }.to raise_error AASM::InvalidTransition
       end
     end
-    # TODO test mail sent
+  end
+
+  describe 'methods' do
+    it '#next_approver should return the next reviewer' do
+      user = create :user_with_approvers
+      state = create :leave_approval_state, user: user, approval_order: 1
+
+      expect(state.next_user_approver).to eq user.user_approvers.first
+      state.approval_order = 2; state.save!
+      expect(state.next_user_approver).to eq user.user_approvers.second
+    end
   end
 end

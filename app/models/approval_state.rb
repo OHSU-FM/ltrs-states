@@ -47,6 +47,14 @@ class ApprovalState < ApplicationRecord
       end
     end
 
+    event :review do
+      transitions from: :unopened, to: :in_review
+
+      error do |e|
+        log_and_raise_error e
+      end
+    end
+
     event :reject do
       transitions from: :in_review, to: :rejected
 
@@ -64,5 +72,10 @@ class ApprovalState < ApplicationRecord
 
   def log_state_change
     logger.info("changing from #{aasm.from_state} to #{aasm.to_state} (event: #{aasm.current_event})")
+  end
+
+  def next_user_approver
+    user.user_approvers
+      .select{|appr| approval_order <= appr.approval_order }.first
   end
 end

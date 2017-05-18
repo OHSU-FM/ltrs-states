@@ -42,5 +42,9 @@ RSpec.describe LeaveRequestsController, type: :routing do
     it "routes to #send_to_unopened via POST" do
       expect(:post=> "/leave_requests/1/send_to_unopened").to route_to("leave_requests#send_to_unopened", :id => "1")
     end
+
+    it "routes to #review via POST" do
+      expect(:post=> "/leave_requests/1/review").to route_to("leave_requests#review", :id => "1")
+    end
   end
 end
