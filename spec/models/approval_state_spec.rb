@@ -111,6 +111,24 @@ RSpec.describe ApprovalState, type: :model do
     end
   end
 
+  describe 'the accept event' do
+    let(:as) { create :leave_approval_state, aasm_state: 'in_review' }
+
+    it 'should transition from in_review to accepted' do
+      as.accept
+      expect(as).to be_accepted
+    end
+
+    it 'should only transition from in_review' do
+      (ApprovalState.aasm.states.map(&:name) - [:in_review]).each do |state|
+        expect(Rails.logger).to receive(:error)
+        expect{
+          create(:leave_approval_state, aasm_state: state).accept
+        }.to raise_error AASM::InvalidTransition
+      end
+    end
+  end
+
   describe 'methods' do
     it '#next_approver should return the next reviewer' do
       user = create :user_with_approvers

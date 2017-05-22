@@ -9,3 +9,14 @@ RSpec.describe "LeaveRequests index", type: :request do
     end
   end
 end
+
+RSpec.describe "LeaveRequests show", type: :request do
+  let(:leave_request) { create :leave_request }
+  describe "GET /leave_request" do
+    it "does the right things" do
+      get leave_request_path leave_request
+      expect(response).to have_http_status(200)
+      expect(response).to render_template :show
+    end
+  end
+end

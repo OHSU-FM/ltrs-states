@@ -3,15 +3,15 @@ module StateEvents
 
   included do
     before_action :set_approvable_and_state,
-      only: [:submit, :send_to_unopened, :review]
+      only: [:submit, :send_to_unopened, :review, :reject, :accept]
     helper_method :submit
   end
 
   def submit
     respond_to do |format|
-      UserMailer.request_submitted(@approval_state).deliver_now
       if @approval_state.may_submit?
         if @approval_state.submit!
+          UserMailer.request_submitted(@approval_state).deliver_now
           format.html { redirect_to @approvable, notice: "#{@approvable.model_name.human} was successfully submitted." }
           format.json { render :show, status: :ok, location: @approvable }
         else
@@ -53,6 +53,40 @@ module StateEvents
         end
       else
         format.html { redirect_to @approvable, notice: "This request has already been opened, so nothing happened." }
+      end
+    end
+  end
+
+  def reject
+    respond_to do |format|
+      if @approval_state.may_reject?
+        if @approval_state.reject!
+          UserMailer.request_rejected(@approval_state).deliver_now
+          format.html { redirect_to @approvable, notice: "#{@approvable.model_name.human} was successfully rejected." }
+          format.json { render :show, status: :ok, location: @approvable }
+        else
+          format.html { redirect_to @approvable, notice: "Sorry something's gone wrong" }
+          format.json { render json: @approvable.errors, status: :unprocessable_entity }
+        end
+      else
+        format.html { redirect_to @approvable, notice: "This request has already been rejected, so nothing happened." }
+      end
+    end
+  end
+
+  def accept
+    respond_to do |format|
+      if @approval_state.may_accept?
+        if @approval_state.accept!
+          UserMailer.request_accepted(@approval_state).deliver_now
+          format.html { redirect_to @approvable, notice: "#{@approvable.model_name.human} was successfully accepted." }
+          format.json { render :show, status: :ok, location: @approvable }
+        else
+          format.html { redirect_to @approvable, notice: "Sorry something's gone wrong" }
+          format.json { render json: @approvable.errors, status: :unprocessable_entity }
+        end
+      else
+        format.html { redirect_to @approvable, notice: "This request has already been accepted, so nothing happened." }
       end
     end
   end

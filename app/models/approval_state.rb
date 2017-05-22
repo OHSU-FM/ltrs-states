@@ -62,6 +62,14 @@ class ApprovalState < ApplicationRecord
         log_and_raise_error e
       end
     end
+
+    event :accept do
+      transitions from: :in_review, to: :accepted
+
+      error do |e|
+        log_and_raise_error e
+      end
+    end
   end
 
   def log_and_raise_error e

@@ -13,5 +13,23 @@ FactoryGirl.define do
         leave_request.approval_state.update!(aasm_state: "unopened")
       end
     end
+
+    trait :in_review do
+      after :create do |leave_request|
+        leave_request.approval_state.update!(aasm_state: "in_review")
+      end
+    end
+
+    trait :rejected do
+      after :create do |leave_request|
+        leave_request.approval_state.update!(aasm_state: "rejected")
+      end
+    end
+
+    trait :accepted do
+      after :create do |leave_request|
+        leave_request.approval_state.update!(aasm_state: "accepted")
+      end
+    end
   end
 end

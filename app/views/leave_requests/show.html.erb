@@ -18,6 +18,14 @@
     <% end %>
   </div>
 </div>
+<% if @leave_request.approval_state.rejected? %>
+  <div class="row">
+    <div class="col-md-4 center-block" style="float:none">
+      <p>This is a terminal state. The request will now be either deleted or archived depending on what's useful.</p>
+      <p><%= link_to "click here", new_leave_request_path %> to start over.</p>
+    </div>
+  </div>
+<% end %>
 <div class="row">
   <div class="col-md-4 center-block">
     <%= link_to 'Edit', edit_leave_request_path(@leave_request) %> |

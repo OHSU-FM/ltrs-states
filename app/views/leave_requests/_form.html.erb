@@ -10,8 +10,9 @@
       </ul>
     </div>
   <% end %>
-  <%= form.date_select :start_date %>
+  <div><%= form.collection_select(:user_id, User.all, :id, :full_name) %></div>
+  <div><%= form.date_select :start_date %></div>
   <div class="actions">
-    <%= form.submit onclick: "confirm('this will restart things')" %>
+    <%= form.submit %>
   </div>
 <% end %>

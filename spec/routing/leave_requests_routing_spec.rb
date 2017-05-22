@@ -46,5 +46,13 @@ RSpec.describe LeaveRequestsController, type: :routing do
     it "routes to #review via POST" do
       expect(:post=> "/leave_requests/1/review").to route_to("leave_requests#review", :id => "1")
     end
+
+    it "routes to #reject via POST" do
+      expect(:post=> "/leave_requests/1/reject").to route_to("leave_requests#reject", :id => "1")
+    end
+
+    it "routes to #accept via POST" do
+      expect(:post=> "/leave_requests/1/accept").to route_to("leave_requests#accept", :id => "1")
+    end
   end
 end
