@@ -7,4 +7,12 @@ class User < ApplicationRecord
   def full_name
     "#{ first_name } #{ last_name }"
   end
+
+  def reviewers
+    user_approvers.where(approver_type: 'reviewer')
+  end
+
+  def notifiers
+    user_approvers.where(approver_type: 'notifier')
+  end
 end

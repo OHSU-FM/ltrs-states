@@ -20,6 +20,10 @@ RSpec.describe UserMailer, type: :mailer do
     it "cc's the user's first reviewer" do
       expect(mail.cc).to include leave_request.user.user_approvers.first.approver.email
     end
+
+    it 'renders the correct body' do
+      expect(mail.body).to include 'has been submitted'
+    end
   end
 
   describe 'request_rejected' do
@@ -36,6 +40,10 @@ RSpec.describe UserMailer, type: :mailer do
 
     it 'renders the sender email' do
       expect(mail.from).to eq ['from@example.com']
+    end
+
+    it 'renders the correct body' do
+      expect(mail.body).to include 'has been rejected'
     end
 
     # TODO send emails to all reviewer/notifier who've touched the request
@@ -61,11 +69,14 @@ RSpec.describe UserMailer, type: :mailer do
       expect(mail.from).to eq ['from@example.com']
     end
 
+    it 'renders the correct body' do
+      expect(mail.body).to include 'has been accepted'
+    end
+
     # TODO send emails to all notifiers
     it "cc's the user's notifier(s)" do
-      expect(mail.cc).to include leave_request.user.user_approvers
-        .where(approver_type: 'notifier').map{ |ua|
-        ua.approver.email
+      leave_request.user.user_approvers.where(approver_type: 'notifier').map{ |ua|
+        expect(mail.cc).to include ua.approver.email
       }
     end
   end

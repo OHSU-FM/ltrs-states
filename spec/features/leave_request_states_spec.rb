@@ -53,4 +53,14 @@ RSpec.feature "leave_request states", :type => :feature do
     expect(page).to have_text("accepted")
     expect(page).to have_selector(:link_or_button, "accepted")
   end
+
+  scenario "leave_request rejecet button pressed" do
+    leave_request = create :leave_request, :in_review
+    visit leave_request_path(leave_request)
+
+    click_button "Reject"
+
+    expect(page).to have_text("rejected")
+    expect(page).to have_selector(:link_or_button, "rejected")
+  end
 end

@@ -376,7 +376,7 @@ RSpec.describe LeaveRequestsController, type: :controller do
 
       it "sends the accept event to the approval_state" do
         post :accept, params: { id: leave_request.to_param }
-        expect(assigns[:approval_state].aasm_state).to eq "rejected"
+        expect(assigns[:approval_state].aasm_state).to eq "accepted"
       end
 
       it "redirects to the leave_request_path" do

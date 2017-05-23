@@ -1,5 +1,6 @@
 class LeaveRequest < ApplicationRecord
   belongs_to :user
+  has_one :approval_state, as: :approvable, dependent: :destroy
   delegate :next_user_approver, to: :approval_state
 
   # have to do this in an after_create callback so we have an approvable_id
