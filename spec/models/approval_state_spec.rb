@@ -138,5 +138,12 @@ RSpec.describe ApprovalState, type: :model do
       state.approval_order = 2; state.save!
       expect(state.next_user_approver).to eq user.user_approvers.second
     end
+
+    it '#current_user_approver should return the current_user_approver' do
+      user = create :user_with_approvers
+      state = create :submitted_leave_approval_state, user: user
+
+      expect(state.current_user_approver).to eq user.user_approvers.first
+    end
   end
 end

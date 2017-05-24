@@ -11,6 +11,7 @@ class LeaveRequestsController < ApplicationController
   # GET /leave_requests/1
   # GET /leave_requests/1.json
   def show
+    byebug
   end
 
   # GET /leave_requests/new

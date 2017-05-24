@@ -82,6 +82,11 @@ class ApprovalState < ApplicationRecord
     logger.info("changing from #{aasm.from_state} to #{aasm.to_state} (event: #{aasm.current_event})")
   end
 
+  def current_user_approver
+    user.user_approvers
+      .find{|appr| approval_order == appr.approval_order }
+  end
+
   def next_user_approver
     user.user_approvers
       .select{|appr| approval_order <= appr.approval_order }.first
