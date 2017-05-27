@@ -2,7 +2,9 @@
   <div class="col-md-4 center-block" style="float:none">
     <p id="notice"><%= notice %></p>
     <h1>This request is in the <%= @leave_request.approval_state.aasm.current_state.to_s %> state</h1>
-    <p>The next person to review this request will be: <%= @leave_request.approval_state.current_user_approver.approver.full_name %></p>
+    <% unless @leave_request.approval_state.unsubmitted? %>
+      <p>This request is waiting on the action of <b><%= @leave_request.approval_state.current_user_approver.approver.full_name %></p></b>
+    <% end %>
     <h3>Things that happened as a part of this transisiton:</h3>
     <ul>
       <% if UserMailer.respond_to? "request_#{@leave_request.approval_state.aasm.current_state}" %>
@@ -19,7 +21,7 @@
     <% end %>
   </div>
 </div>
-<% if @leave_request.approval_state.rejected? %>
+<% if ["rejected", "accepted"].include? @leave_request.approval_state.aasm_state %>
   <div class="row">
     <div class="col-md-4 center-block" style="float:none">
       <p>This is a terminal state. The request will now be either deleted or archived depending on what's useful.</p>

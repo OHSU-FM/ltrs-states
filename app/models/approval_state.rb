@@ -6,13 +6,13 @@ class ApprovalState < ApplicationRecord
 
   aasm do
     state :unsubmitted, initial: true
-    state :submitted
+    state :submitted, before_enter: :increment_approval_order
     state :unopened
     state :in_review
     state :missing_information
     state :rejected
     state :expired
-    state :accepted
+    state :accepted, before_enter: :increment_approval_order
     state :approval_complete
     state :error
 
@@ -72,6 +72,12 @@ class ApprovalState < ApplicationRecord
     end
   end
 
+  # AASM utility methods
+  def increment_approval_order
+    self.approval_order += 1
+    save!
+  end
+
   def log_and_raise_error e
     errors.add(e.event_name, e.message)
     logger.error(errors[e.event_name].last)
@@ -89,6 +95,6 @@ class ApprovalState < ApplicationRecord
 
   def next_user_approver
     user.user_approvers
-      .select{|appr| approval_order <= appr.approval_order }.first
+      .select{|appr| approval_order < appr.approval_order }.first
   end
 end

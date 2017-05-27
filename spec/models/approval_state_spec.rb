@@ -131,19 +131,17 @@ RSpec.describe ApprovalState, type: :model do
 
   describe 'methods' do
     it '#next_approver should return the next reviewer' do
-      user = create :user_with_approvers
-      state = create :leave_approval_state, user: user, approval_order: 1
+      request = create :leave_request, :submitted
+      user = request.user
 
-      expect(state.next_user_approver).to eq user.user_approvers.first
-      state.approval_order = 2; state.save!
-      expect(state.next_user_approver).to eq user.user_approvers.second
+      expect(request.approval_state.next_user_approver).to eq user.user_approvers.second
     end
 
     it '#current_user_approver should return the current_user_approver' do
-      user = create :user_with_approvers
-      state = create :submitted_leave_approval_state, user: user
+      request = create :leave_request, :submitted
+      user = request.user
 
-      expect(state.current_user_approver).to eq user.user_approvers.first
+      expect(request.approval_state.current_user_approver).to eq user.user_approvers.first
     end
   end
 end

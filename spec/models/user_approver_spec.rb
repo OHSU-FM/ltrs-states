@@ -13,5 +13,13 @@ RSpec.describe UserApprover, type: :model do
     it '#approver returns the approver user' do
       expect(ua.approver).to be_a User
     end
+
+    it '#reviewer? returns true if the user_approver is a reviewer' do
+      ua = create :user_approver, approver_type: 'reviewer'
+      expect(ua.reviewer?).to be_truthy
+
+      ua = create :user_approver_full
+      expect(ua.reviewer?).to be_falsey
+    end
   end
 end

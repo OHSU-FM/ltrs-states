@@ -64,12 +64,43 @@ RSpec.feature "leave_request states", :type => :feature do
     expect(page).to have_selector(:link_or_button, "rejected")
   end
 
-  fscenario "full leave request cycle" do
-    user = create :user_with_approvers
-    state = create :submitted_leave_approval_state, user: user
-    byebug
-    visit leave_request_path(state.approvable)
+  scenario "full leave request cycle (user w one reviewer)" do
+    request = create :leave_request, :submitted
+    user = request.user
+    visit leave_request_path(request)
 
-    expect(page).to have_text(user.reviewers.approver.full_name)
+    expect(page).to have_text(user.reviewers.first.approver.full_name)
+
+    click_button 'Send_to_unopened'
+    expect(page).to have_text(user.reviewers.first.approver.full_name)
+
+    click_button 'Review'
+    expect(page).to have_text(user.reviewers.first.approver.full_name)
+
+    click_button 'Accept'
+    expect(page).to have_text(user.notifiers.first.approver.full_name)
+  end
+
+  scenario "full leave request cycle (user w two reviewers)" do
+    request = create :leave_request, :submitted, :two_reviewers
+    user = request.user
+    visit leave_request_path(request)
+
+    expect(page).to have_text(user.reviewers.first.approver.full_name)
+
+    click_button 'Send_to_unopened'
+    expect(page).to have_text(user.reviewers.first.approver.full_name)
+
+    click_button 'Review'
+    expect(page).to have_text(user.reviewers.first.approver.full_name)
+
+    click_button 'Accept'
+    expect(page).to have_text(user.reviewers.second.approver.full_name)
+
+    click_button 'Review'
+    expect(page).to have_text(user.reviewers.second.approver.full_name)
+
+    click_button 'Accept'
+    expect(page).to have_text(user.notifiers.first.approver.full_name)
   end
 end
