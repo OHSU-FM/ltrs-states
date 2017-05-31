@@ -58,15 +58,20 @@ RSpec.describe ApprovalState, type: :model do
   end
 
   describe 'the send_to_unopened event' do
-    let(:as) { create :leave_approval_state, aasm_state: 'submitted' }
-
     it 'should transition from submitted to unopened' do
+      as = create :leave_approval_state, aasm_state: 'submitted'
       as.send_to_unopened
       expect(as).to be_unopened
     end
 
-    it 'should only transition from submitted' do
-      (ApprovalState.aasm.states.map(&:name) - [:submitted]).each do |state|
+    it 'should transition from in_review to unopened' do
+      as = create :leave_approval_state, aasm_state: 'in_review'
+      as.send_to_unopened
+      expect(as).to be_unopened
+    end
+
+    it 'should only transition from submitted or in_review' do
+      (ApprovalState.aasm.states.map(&:name) - [:submitted, :in_review]).each do |state|
         expect(Rails.logger).to receive(:error)
         expect{
           create(:leave_approval_state, aasm_state: state).send_to_unopened

@@ -84,7 +84,18 @@ module StateEvents
 
   def accept
     respond_to do |format|
-      if @approval_state.may_accept?
+      if @approval_state.next_user_approver.reviewer? and @approval_state.may_send_to_unopened?
+        if @approval_state.send_to_unopened!
+          # TODO mailer
+          # UserMailer.request_accepted(@approval_state).deliver_now
+          format.html { redirect_to @approvable,
+                        notice: "#{@approvable.model_name.human} was successfully sent to the next approver." }
+          format.json { render :show, status: :ok, location: @approvable }
+        else
+          format.html { redirect_to @approvable, notice: "Sorry something's gone wrong" }
+          format.json { render json: @approvable.errors, status: :unprocessable_entity }
+        end
+      elsif @approval_state.may_accept?
         if @approval_state.accept!
           UserMailer.request_accepted(@approval_state).deliver_now
           format.html { redirect_to @approvable,

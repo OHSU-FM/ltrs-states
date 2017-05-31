@@ -8,11 +8,11 @@ class ApprovalState < ApplicationRecord
     state :unsubmitted, initial: true
     state :submitted, before_enter: :increment_approval_order
     state :unopened
-    state :in_review
+    state :in_review, before_exit: :increment_approval_order
     state :missing_information
     state :rejected
     state :expired
-    state :accepted, before_enter: :increment_approval_order
+    state :accepted
     state :approval_complete
     state :error
 
@@ -40,7 +40,7 @@ class ApprovalState < ApplicationRecord
     end
 
     event :send_to_unopened do
-      transitions from: :submitted, to: :unopened
+      transitions from: [:submitted, :in_review], to: :unopened
 
       error do |e|
         log_and_raise_error e
