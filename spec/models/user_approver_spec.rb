@@ -21,5 +21,13 @@ RSpec.describe UserApprover, type: :model do
       ua = create :user_approver_full
       expect(ua.reviewer?).to be_falsey
     end
+
+    it '#notifier? returns true if the user_approver is a notifier' do
+      ua = create :user_approver, approver_type: 'notifier'
+      expect(ua.notifier?).to be_truthy
+
+      ua = create :user_approver_full
+      expect(ua.notifier?).to be_falsey
+    end
   end
 end

@@ -8,4 +8,8 @@ class UserApprover < ApplicationRecord
   def reviewer?
     approver_type == 'reviewer'
   end
+
+  def notifier?
+    approver_type == 'notifier'
+  end
 end

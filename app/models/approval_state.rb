@@ -6,13 +6,13 @@ class ApprovalState < ApplicationRecord
 
   aasm do
     state :unsubmitted, initial: true
-    state :submitted, before_enter: :increment_approval_order
+    state :submitted
     state :unopened
-    state :in_review, before_exit: :increment_approval_order
+    state :in_review, before_enter: :increment_approval_order
     state :missing_information
     state :rejected
     state :expired
-    state :accepted
+    state :accepted, after_enter: :increment_approval_order
     state :approval_complete
     state :error
 
@@ -40,7 +40,7 @@ class ApprovalState < ApplicationRecord
     end
 
     event :send_to_unopened do
-      transitions from: [:submitted, :in_review], to: :unopened
+      transitions from: [:submitted, :in_review], to: :unopened, guard: :unopened_allowed?
 
       error do |e|
         log_and_raise_error e
@@ -96,5 +96,9 @@ class ApprovalState < ApplicationRecord
   def next_user_approver
     user.user_approvers
       .select{|appr| approval_order < appr.approval_order }.first
+  end
+
+  def unopened_allowed?
+    next_user_approver.notifier? ? false : true
   end
 end

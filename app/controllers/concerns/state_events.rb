@@ -12,9 +12,11 @@ module StateEvents
       if @approval_state.may_submit?
         if @approval_state.submit!
           UserMailer.request_submitted(@approval_state).deliver_now
-          format.html { redirect_to @approvable,
-                        notice: "#{@approvable.model_name.human} was successfully submitted." }
-          format.json { render :show, status: :ok, location: @approvable }
+          if @approval_state.may_send_to_unopened? && @approval_state.send_to_unopened!
+            format.html { redirect_to @approvable,
+                          notice: "#{@approvable.model_name.human} was successfully submitted." }
+            format.json { render :show, status: :ok, location: @approvable }
+          end
         else
           # TODO better error
           format.html { redirect_to @approvable, notice: "Sorry something's gone wrong" }

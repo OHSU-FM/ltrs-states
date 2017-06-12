@@ -174,9 +174,9 @@ RSpec.describe LeaveRequestsController, type: :controller do
         expect(assigns[:approval_state]).to be_persisted
       end
 
-      it "sends the submit event to the approval_state" do
+      it "sends the submit event to the approval_state, followed by the send_to_unopened event" do
         post :submit, params: { id: leave_request.to_param }
-        expect(assigns[:approval_state].aasm_state).to eq "submitted"
+        expect(assigns[:approval_state].aasm_state).to eq "unopened"
       end
 
       it "redirects to the leave_request_path" do

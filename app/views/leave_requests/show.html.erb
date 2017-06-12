@@ -2,7 +2,9 @@
   <div class="col-md-4 center-block" style="float:none">
     <p id="notice"><%= notice %></p>
     <h1>This request is in the <%= @leave_request.approval_state.aasm.current_state.to_s %> state</h1>
-    <% unless @leave_request.approval_state.unsubmitted? %>
+    <% if "unopened" == @leave_request.approval_state.aasm_state %>
+      <p>This request is waiting on the action of <b><%= @leave_request.approval_state.next_user_approver.approver.full_name %></p></b>
+    <% elsif !["unsubmitted", "submitted"].include? @leave_request.approval_state.aasm_state %>
       <p>This request is waiting on the action of <b><%= @leave_request.approval_state.current_user_approver.approver.full_name %></p></b>
     <% end %>
     <h3>Things that happened as a part of this transisiton:</h3>

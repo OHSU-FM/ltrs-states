@@ -60,13 +60,20 @@ RSpec.describe ApprovalState, type: :model do
   describe 'the send_to_unopened event' do
     it 'should transition from submitted to unopened' do
       as = create :leave_approval_state, aasm_state: 'submitted'
-      as.send_to_unopened
+      as.send_to_unopened!
       expect(as).to be_unopened
     end
 
-    it 'should transition from in_review to unopened' do
-      as = create :leave_approval_state, aasm_state: 'in_review'
-      as.send_to_unopened
+    it 'should not transition from in_review to unopened if next_user_approver is notifier' do
+      as = create :leave_approval_state, :in_review
+      expect(Rails.logger).to receive(:error)
+      expect{ as.send_to_unopened! }.to raise_error AASM::InvalidTransition
+      expect(as).to be_in_review
+    end
+
+    it 'should transition from in_review to unopened if next_user_approver is reviewer' do
+      as = create :leave_approval_state, :in_review, :two_reviewers
+      as.send_to_unopened!
       expect(as).to be_unopened
     end
 
@@ -135,15 +142,15 @@ RSpec.describe ApprovalState, type: :model do
   end
 
   describe 'methods' do
-    it '#next_approver should return the next reviewer' do
-      request = create :leave_request, :submitted
+    it '#next_user_approver should return the next reviewer' do
+      request = create :leave_request, :in_review
       user = request.user
 
       expect(request.approval_state.next_user_approver).to eq user.user_approvers.second
     end
 
     it '#current_user_approver should return the current_user_approver' do
-      request = create :leave_request, :submitted
+      request = create :leave_request, :in_review
       user = request.user
 
       expect(request.approval_state.current_user_approver).to eq user.user_approvers.first

@@ -19,8 +19,7 @@ RSpec.feature "leave_request states", :type => :feature do
     click_button "Submit"
 
     expect(page).to have_text("submitted")
-    expect(page).to have_selector(:link_or_button, "submitted")
-    expect(page).to have_selector(:link_or_button, "Send_to_unopened")
+    expect(page).to have_selector(:link_or_button, "unopened")
   end
 
   scenario "leave_request Send_to_unopened button pressed" do
@@ -69,10 +68,10 @@ RSpec.feature "leave_request states", :type => :feature do
     user = request.user
     visit leave_request_path(request)
 
-    expect(page).to have_text(user.reviewers.first.approver.full_name)
+    expect(page).to have_text("submitted state")
 
     click_button 'Send_to_unopened'
-    expect(page).to have_text(user.reviewers.first.approver.full_name)
+    expect(page).to have_text("unopened state")
 
     click_button 'Review'
     expect(page).to have_text(user.reviewers.first.approver.full_name)
@@ -86,10 +85,10 @@ RSpec.feature "leave_request states", :type => :feature do
     user = request.user
     visit leave_request_path(request)
 
-    expect(page).to have_text(user.reviewers.first.approver.full_name)
+    expect(page).to have_text("submitted state")
 
     click_button 'Send_to_unopened'
-    expect(page).to have_text(user.reviewers.first.approver.full_name)
+    expect(page).to have_text("unopened state")
 
     click_button 'Review'
     expect(page).to have_text(user.reviewers.first.approver.full_name)

@@ -1,6 +1,6 @@
 class User < ApplicationRecord
   has_many :approval_states
-  has_many :user_approvers, -> { order('approval_order ASC') }
+  has_many :user_approvers, -> { order('approval_order ASC') }, dependent: :destroy
 
   validates_presence_of :login
 
