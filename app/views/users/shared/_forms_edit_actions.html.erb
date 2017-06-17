@@ -1,0 +1,37 @@
+
+  <div class='row'>
+    <div class='col-xs-3'>
+        <!-- always -->
+        <%= link_to('Back', @back_path , :class=>'btn btn-default') %>
+    </div>
+
+    <div class='col-xs-3'>
+      <%= link_to('View', record, class: 'btn btn-default') %>
+    </div>
+
+    <div class='col-xs-3'>
+        <!-- only on edit or new -->
+        <% if record.new_record? || ( params['action'] == 'edit' && can?(:edit, record) ) %>
+            <%= submit_tag 'Save', :class=>'btn btn-primary' %>
+        <% end %>
+    </div>
+
+    <!-- only on show or edit (not new) -->
+    <%= yield :extra_actions %>
+
+
+    <!-- only on show or edit (not new) -->
+    <% if can? :destroy, record  %>
+        <div class="pull-right col-xs-3">
+        <!-- only on show or edit (not new) -->
+        <% # Allow deletion of forms that have already been saved
+           unless record.new_record? %>
+            <div style="display:inline-block;" class="pull-right">
+                <%= submit_tag "Delete", :name=>:delete, :confirm=>'Are you sure?',
+                    :class=>'btn btn-danger',:disabled=> !record.can_delete?(current_user) %>
+            </div>
+        <% end %>
+        </div>
+    <% end %>
+
+  </div>

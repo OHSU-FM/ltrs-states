@@ -1,0 +1,15 @@
+    <ul class="sf-menu sf-js-enabled sf-shadow">
+        <li>
+            <%= link_to current_user.name, current_user,:class=>'sf-with-ul'  %>
+            <ul style="display: none; visibility: hidden; ">
+                <li><%= link_to "Account Settings", current_user  %></li>
+                <li>
+                    <%= button_to 'Sign out', destroy_user_session_path, :method=> :delete,:class=>'button_link center' %>   
+                </li>
+            </ul>
+        </li>   
+
+        <%= render :partial=>'layouts/nav_links'%>
+
+    </ul>
+

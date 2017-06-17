@@ -12,6 +12,13 @@ RSpec.describe User, type: :model do
       @user = create :user, first_name: 'hello', last_name: 'there'
       expect(@user.full_name).to eq 'hello there'
     end
+
+    it '#is_reviewer? checks if user is reviewer for any user' do
+      user = create :user_with_approvers
+      reviewer = user.reviewers.first.approver
+
+      expect(reviewer.is_reviewer?).to be_truthy
+    end
   end
 
   describe 'relationships' do

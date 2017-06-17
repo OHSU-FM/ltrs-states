@@ -1,0 +1,81 @@
+<div class='row leave_hours'>
+    <div class="col-xs-12 col-sm-12 col-md-8 col-lg-6">
+        <%= f.label :hours_administrative, 'Administrative hours' %><br/>
+      <%= f.number_field :hours_administrative, :include_blank=>true, :step=>0.1 ,:min=>0 %>
+    </div> 
+</div>
+<div class='row leave_hours'>
+    <div class="col-xs-12 col-sm-12 col-md-8 col-lg-6">
+        <%= f.label :hours_administrative_desc, 'Description of activities for administrative hours' %><br/>
+        <%= f.text_area :hours_administrative_desc, :size=>'40x3'  %>
+    </div> 
+</div>
+<div class='row leave_hours'>
+    <div class="col-xs-12 col-sm-12 col-md-8 col-lg-6">
+      <%= f.label :hours_administrative_role, 'Role during administrative event:' %><br />
+      <%= f.text_field :hours_administrative_role %>
+    </div> 
+</div>
+
+<div style="margin-bottom: 1em;">
+<h4>Clinical Faculty</h4>
+<div class="row">
+    <div class="toggle_form col-xs-7">
+  <%= f.label :basket_coverage, 'I need basket coverage' %>
+  <%= f.select :basket_coverage, options_for_select([['Yes',true],['No',false]], f.object.basket_coverage), {:prompt=>'Select'}, 
+        :class=>'toggle_form pull-right',
+        data: {target: '#clin_faculty'}
+        %>
+
+    </div>
+</div>
+
+<table id="clin_faculty" class="stop_flouc"><tbody>
+<tr>
+  <td class="field">
+  <%= f.label :covering ,'Designated covering MD/NP? '%>
+  </td>
+  <td> 
+  <%= f.text_field :covering%>
+  </td>
+</tr>
+</tbody></table></div>
+
+<div style="margin-bottom: 1em;">
+<h4>Expenses</h4>
+<div class="row">
+<div class="toggle_form col-xs-7">
+      <%= f.label :funding_no_cost, 'Will there be cost to the department?' %>
+      <%= f.select :funding_no_cost, options_for_select([['Yes', false],['No',true]], f.object.funding_no_cost), 
+          {:prompt=>'Select'}, :class=>'toggle_form pull-right',
+          data: {target: '#expenses', invert: true}
+      %>
+</div>
+</div>
+<dl id="expenses" class="dl-horizontal stop_flouc"><tbody>
+    <dt>
+        <%= f.label :funding_approx_cost, 'Approximate cost: '%>
+    </dt>
+    <dd>
+        <%= f.number_field :funding_approx_cost,:min=>0 %>  
+    </dd>
+    <dt>
+        <%= f.label :funding_no_cost_desc, 'Funding description:' %>
+    </dt>
+    <dd>
+        <%= f.text_area :funding_no_cost_desc, :size=>'40x3' %>
+    </dd>
+    <dt>
+        <%= f.label :funding_split, 'Split department cost?' %>
+    </dt>
+    <dd>
+    <%= f.select :funding_split, 
+        options_for_select([['yes','1'],['no','0']], f.object.funding_split), :prompt=>'Select'  %>
+    </dd>
+    <dt>
+        <%= f.label :funding_split_desc,'Split funding source:'%>
+    </dt>
+    <dd>
+        <%= f.text_area :funding_split_desc, :size=>'40x3' %>
+    </dd>
+</dl>

@@ -1,0 +1,84 @@
+<%= form_for(@user, url: polymorphic_path(@user, anchor: 'home'), html: {id: :edit_home}) do |f| %>
+<div class="col-xs-12 col-md-6">
+
+    <div id="ldap_delegates_query" class="ui-widget-content ui-corner-all partial_form">
+
+        <table class="table">
+        <tbody>
+          <tr>
+            <td><b>Name:</b></td>
+            <td><%= @user.full_name%></td>
+          </tr>
+          <tr>
+            <td><b>Email:</b></td>
+            <td><%= @user.email %></td>
+          </tr>
+          <tr>
+            <td><%= f.label :empid %></td>
+            <td><%= f.text_field :empid %></td>
+          </tr>
+          <tr>
+            <td><%= f.label :emp_class %></td>
+            <td><%= f.text_field :emp_class %></td>
+          </tr>
+          <tr>
+            <td><%= f.label :emp_home %></td>
+            <td><%= f.text_field :emp_home %></td>
+          </tr>
+          <tr>
+                <td>
+                    <%= f.label :password %>
+                </td><td>
+                    <%= f.password_field :password, disabled: @user.is_ldap %>
+                </td>
+          </tr>
+            <tr>
+                <td>
+                    <%= f.label :password_confirmation %>
+                </td><td>
+                    <%= f.password_field :password_confirmation, disabled: @user.is_ldap %>
+                </td>
+          </tr>
+          <tr>
+            <td><b>Current Login:</b></td>
+            <td><%=  @user.current_sign_in_at ? tz_convert(@user.current_sign_in_at, current_user.timezone) : 'N/A' %></td>
+          </tr>
+          <tr>
+            <td><b>Last Login:</b></td>
+            <td><%=  @user.last_sign_in_at ? tz_convert(@user.last_sign_in_at, current_user.timezone) : 'N/A' %></td>
+          </tr>
+          <tr>
+            <td><b>Time zone:</b></td>
+            <td>
+                <%=f.select :timezone, TZInfo::Country.get('US').zone_identifiers %>
+            </td>
+          </tr>
+        </tbody>
+        </table>
+
+    </div>
+
+    <div>
+        <hr/>
+        <%= f.submit 'Save',:class=>'btn btn-primary'%>
+    </div>
+</div>
+<div class="col-xs-12 col-md-6 bs-callout bs-callout-info">
+    <h2>About your account</h2>
+    <h4>User Information</h4>
+    <p>Accounts using network (LDAP) authentication should not use this system to change their password.</p>
+    <p>
+        Timezone information is needed in order to provide background information for leave and travel requests.
+        This is particularly important if contacts live in different time zones.
+    </p>
+    <h4>Contacts</h4>
+    <p>
+        People who will be notified when you fill out a leave and travel request.
+        This may also include people that are required to accept / reject your request once it is submitted.
+    </p>
+    <h4>Delegates</h4>
+    <p>
+        People who can fill out forms on your behalf.
+    </p>
+</div>
+<% end %>

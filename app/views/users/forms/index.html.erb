@@ -1,0 +1,68 @@
+<h1><%= hf_forms_title %></h1>
+<div class="hidden spinner-image"></div><hr/>
+<div>
+  <ul class="list-inline">
+    <li>
+      <%= active_link_to "My Forms", user_forms_path(current_user.id), :class=>'btn-default btn btn-md'  %>
+    </li>
+    <li>
+      <%= active_link_to 'Delegate Forms', user_delegate_forms_path(current_user.id), class:'btn btn-default btn-md' %>
+    </li>
+    <li>
+      <div class="dropdown">
+        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu2"
+          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          New Request
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenu2" role='menu'>
+          <li>
+            <%= link_to 'New Staff Leave Request', new_leave_request_path %>
+          </li>
+          <li>
+            <%= link_to 'New Faculty Leave Request', new_leave_request_path(:extra=>true)%>
+          </li>
+          <li>
+            <%= link_to 'New Travel Request', new_travel_request_path %>
+          </li>
+
+        </ul>
+      </div>
+    </li>
+
+  </ul>
+</div>
+
+<hr/>
+<% if @approvables.count == 0 %>
+  <div class="bs-callout bs-callout-danger col-xs-6">
+    <h4>
+      <% if action_name == 'delegate_forms' %>
+        No delegate forms to view
+      <% else %>
+        No Requests have been created. Click one of the buttons above to create one.
+      <% end %>
+    </h4>
+  </div>
+<% else %>
+  <table id='user_forms' class="table table-striped">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Details</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @approvables.each do |approvable| %>
+        <%= render :partial=>"users/shared/row_#{approvable.class.table_name}",
+          :locals=>{user: @user, record: approvable, show_user_form: true}%>
+      <% end %>
+    </tbody>
+  </table>
+
+  <div class="pagination">
+    <%= will_paginate @approvables %>
+  </div>
+
+<% end %>

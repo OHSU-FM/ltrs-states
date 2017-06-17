@@ -1,0 +1,43 @@
+
+<h1>User Accounts</h1>
+
+<%= render :partial=>'layouts/info' %>
+
+<div class="ui-widget-content ui-corner-all partial_form">
+<table class="table_contacts">
+<tbody>
+<% @users.each do |user|%>
+    <tr>
+        <td><%= link_to user.name, user%></td>
+        <td><%= link_to 'Forms', forms_user_path(user) %></td>
+        <td><%= link_to 'Approvals', approvals_user_path(user) %></td>
+        <td>
+            <% if user.is_admin %>
+                <%= form_for( user,:method=>:put) do |f| %>
+                    <%= f.hidden_field :is_admin, :value=>'0' %>
+                    <%= f.submit 'Remove Admin Status',:class=>'button' %>
+                <% end%>
+            <% else %>
+                <%= form_for( user, :method=>:put ) do |f| %>
+                    <%= f.hidden_field :is_admin, :value=>'1' %>
+                    <%= f.submit 'Add Admin Status',:class=>'button' %>
+                <% end%>
+            <% end %>
+        </td>
+        <td>
+            <%= button_to "Delete", user_path(user), {:method => 'delete',:class=>'button confirm dangerous',:confirm=>"Confirm deleting user: #{user.email}"} %>
+        </td>
+    </tr>
+    </tr>
+<% end %>
+</tbody></table>
+</div>
+
+<div class="ui-widget-content ui-corner-all partial_form">
+    <%= link_to 'Create new user', new_user_path, {:class=>'button'} %>
+</div>
+
+<div class="digg_pagination">
+    <%= will_paginate @users, :container => false, :param_name=>:user_page  %>
+</div>
+

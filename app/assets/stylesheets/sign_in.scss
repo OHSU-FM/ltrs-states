@@ -1,0 +1,32 @@
+html.sign-in, body.sign-in{ 
+    background: image-url("background-mountain.jpg") no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    height: 100%;
+    min-height: 100%;
+    width: 100%;
+
+}
+
+
+
+#sign-in-wrapper{position:relative;}
+
+#sign-in-form{
+    position: fixed;
+    background-color: rgba(0,0,0,0.5);
+    height: 300px;
+    max-height: 80%;
+    padding: 2em;
+    margin-top: -150px;
+    top: 50%;
+    h2, label{
+        color: #fff;
+    }
+    td{
+        padding: 5px;
+    }
+}
+

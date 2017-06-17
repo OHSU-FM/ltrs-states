@@ -1,0 +1,13 @@
+<div class='row'>
+    <div class='col-xs-3'>
+        <!-- always -->
+        <%= link_to('Back', @back_path , :class=>'btn btn-default') %>
+    </div>
+   
+    
+    <div class="pull-right col-xs-3">
+        <!-- only on edit or new -->
+        <%= submit_tag 'Next', :class=>'btn btn-success pull-right' %>        
+    </div>
+</div>
+

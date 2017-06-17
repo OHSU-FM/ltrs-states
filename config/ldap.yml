@@ -1,0 +1,17 @@
+development:
+  host: ldap.ohsu.edu
+  port: 389
+  attribute: cn
+  base: 'OU=User Accounts,DC=ohsum01,DC=ohsu,DC=edu'
+  admin_user: 'CN=svcLDAPFamilyMedicine,OU=Service Accounts,OU=Special Accounts,DC=ohsum01,DC=ohsu,DC=edu'
+  admin_password: molt6*pate
+  ssl: false
+
+test:
+  host: localhost
+  port: 3389
+  attribute: cn
+  base: ou=people,dc=test,dc=com
+  admin_user: cn=admin,dc=test,dc=com
+  admin_password: admin_password
+  ssl: simple_tls

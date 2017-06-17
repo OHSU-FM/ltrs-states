@@ -1,0 +1,103 @@
+<h1 id="approvals_title">
+    <%= hf_filter.titleize %>
+    Approvals 
+    <%= "For #{@user.name}" unless current_user.id == @user.id %>
+</h1>
+<div class='container-fluid'>
+    <div class="row">
+        <%= form_tag(
+            search_user_approvals_path(
+                user_id: @user.id, 
+                search_filter: @search_filter), 
+            id: :search_approvals, 
+            method: :get, 
+            remote: true) do %>
+            <ul class='list-inline col-xs-12 col-md-5'>
+                <li>
+                  <%= label_tag(:sort_by)%><br/>
+                  <%= select_tag(:sort_by, hf_sort_by_options) %>
+                </li>
+                <li>
+                    <%= label_tag :sort_order %><br/>
+                    <%= select_tag(:sort_order, hf_sort_order_options) %>
+                </li>
+                <li>
+                  <%= label_tag :filter %><br/>
+                  <%= select_tag(:filter, hf_filter_options) %>
+                </li>
+            </ul>
+            <ul class='list-inline col-xs-12 col-md-6 pull-right'>
+                <li>
+                    <%= label_tag :search %>
+                    <i class="glyphicon glyphicon-question-sign" style="font-size:1.4em;cursor:pointer;cursor:hand;"
+                        data-html="true"
+                        data-toggle="popover" title="Search Query Help" data-content="
+                        <p>
+                        The following keywords can be used / combined to perform searches
+                        </p>
+                        <p>
+                        <strong>and</strong>: Both the previous and the following statement must be present<br/>
+                        <strong>or</strong>: Either the previous or following statement must be present<br/>
+                        <strong>not</strong>: The following statement must not be present<br/>
+                        <strong>leave</strong>: Only show leave requests<br/>
+                        <strong>travel</strong>: Only show travel requests<br/>
+                        * all searches are case insensitive 
+                        </p>
+                        "></i>
+                    <br/>
+                    <div class="input-group">
+                        <input name="q" type="text" class="form-control" placeholder="Search..." 
+                        <%if defined?(@q) && @q.present? %> 
+                            value="<%= @q %>"
+                        <%end%>>
+                      <span class="input-group-btn">
+                        <%= submit_tag("Go!", class: 'btn btn-default') %>
+                      </span>
+                    </div><!-- /input-group -->
+                </li>
+            </ul>
+        <% end %>
+    </div>
+    <div id="search_description" class="col-xs-12">
+        <% filter_desc = filter_description(@filter_name) %>
+        <% if filter_desc.present? %>
+        <div class="row">
+            <div class='col-xs-10 col-md-6 bs-callout bs-callout-info'>
+                <%= filter_description @filter_name %>
+            </div>
+        </div>
+        <% end %>
+        <% if @approvals.count == 0 %>
+        <div class="row">
+        <div class='col-xs-10 col-md-6 bs-callout bs-callout-danger'>
+            <h4>There are not any approvals to list</h4>
+        </div>
+        </div>
+        <% end %>
+    </div>
+</div>
+<div class="wide partial_form">
+    <% if @approvals.count > 0 %>
+        <table id="approvals_table" class='table table-striped'>
+        <thead>
+          <tr>
+            <th>From</th>
+            <th>Details</th>
+            <th>Action</th>   
+          </tr>
+        </thead>
+        <tbody>
+        <% @approvals.each do |approval| %>
+            <%= render :partial=>"users/shared/row_#{approval.approvable.class.table_name}", 
+                :locals=>{
+                    :record=>approval.approvable, 
+                    :user=>@user,
+                    :show_approver_form=>true} %>
+        <% end %>
+        </tbody>
+        </table>
+    <% end %>
+</div>
+<div class="digg_pagination">
+    <%= will_paginate @approvals %>
+</div>

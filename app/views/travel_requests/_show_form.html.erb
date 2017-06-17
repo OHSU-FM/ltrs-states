@@ -1,0 +1,288 @@
+<div class="ui-widget-content ui-corner-all wide partial_form">
+<h3>Travel Dates</h3>
+<table class="table_view"><tbody>
+<tr>
+    <td>
+        Departure Date:
+    </td>
+    <td>
+        <%= @travel_request.dest_depart_date %>
+    </td>
+</tr>
+<tr>
+    <td>
+        Preferred departure time:
+    </td>
+    <td>
+        <%= @travel_request.dest_depart_hour %>
+    </td>
+</tr>
+<tr>
+    <td>
+        Preffered arrival time:
+    </td>
+    <td>
+        <%= @travel_request.dest_arrive_hour %>
+    </td>
+</tr>
+<tr>
+    <td>
+        Return Date:
+    </td>
+    <td>
+        <%= @travel_request.ret_depart_date %>
+    </td>
+</tr>
+<tr>
+    <td>
+        Preferred departure Time:
+    </td>
+    <td>
+        <%= @travel_request.ret_depart_hour  %>
+    </td>
+</tr>
+<tr>
+    <td>
+        Preferred arrival Time:
+    </td>
+    <td>
+        <%= @travel_request.ret_arrive_hour %>
+    </td>
+</tr>
+<tr>
+    <td>
+      Description:
+    </td>
+    <td>
+        <%= @travel_request.dest_desc %>
+    </td>
+</tr>
+<% unless @travel_request.request_change.blank? %>
+<tr>
+    <td><b>THIS IS AN EDIT TO A PREVIOUS LEAVE REQUEST</b></td>
+    <td><br /></td>
+</tr>
+<tr>
+    <td><%= @travel_request.request_change %></td>
+    <td></td>
+</tr>
+<% end %>
+</tbody></table></div>
+
+<div class="ui-widget-content ui-corner-all wide partial_form">
+<h3> Expense <%= if not @travel_request.expense_card_use then ': None' end %>  </h3>
+<table class="table_view" style="<%= if not @travel_request.expense_card_use then 'display:none;' end %>">
+<tbody>
+<tr>
+    <td>
+        Will travel expenses be charged to a credit card?
+    </td>
+    <td>
+        <%= boolean_to_words @travel_request.expense_card_use %>
+    </td>
+</tr>
+<tr>
+    <td>
+        Expense card type:
+    </td>
+    <td>
+        <%= @travel_request.expense_card_type %>
+    </td>
+</tr>
+<tr>
+    <td>
+        Expense card description:
+    </td>
+    <td>
+        <%= @travel_request.expense_card_desc %>
+    </td>
+</tr>
+</tbody></table></div>
+<div class="ui-widget-content ui-corner-all wide partial_form">
+<h3> Airline Reservation<%= if not @travel_request.air_use then ': None' end %></h3>
+
+<table class="table_view" style="<%= if not @travel_request.air_use then 'display:none;' end %>">
+<tbody>
+<tr>
+    <td>
+        Flight Destination:
+    </td>
+    <td>
+        <%= @travel_request.air_desc %>
+    </td>
+</tr>
+<tr>
+    <td>
+        Frequent Flyer ID:
+    </td>
+    <td>
+        <%= @travel_request.ffid %>
+    </td>
+</tr>
+<tr>
+    <td>
+        Preferred Airline:
+    </td>
+    <td>
+        <%= @travel_request.preferred_airline %>
+    </td>
+</tr>
+<tr>
+    <td>
+        Menu Notes:
+    </td>
+    <td>
+        <%= @travel_request.menu_notes %>
+    </td>
+</tr>
+<tr>
+    <td>
+        Additional travelers:
+    </td>
+    <td>
+        <%= @travel_request.additional_travelers %>
+    </td>
+</tr>
+<tr>
+    <td>
+        Other notes:
+    </td>
+    <td>
+        <%= @travel_request.other_notes %>
+    </td>
+</tr>
+</tbody></table></div>
+<div class="ui-widget-content ui-corner-all wide partial_form">
+<h3>Rental Car<%= if not @travel_request.car_rental then ': None' end %>  </h3>
+<table class="table_view" style="<%= if not @travel_request.car_rental then 'display:none;' end %>"  >
+<tbody>
+<tr>
+    <td>
+        Do you need to rent a car?:
+    </td>
+    <td>
+        <%= @travel_request.car_rental %>
+    </td>
+</tr>
+<tr>
+    <td>
+        Car rental company:
+    </td>
+    <td>
+        <%= @travel_request.car_rental_co %>
+    </td>
+</tr>
+</tbody></table></div>
+<div class="ui-widget-content ui-corner-all wide partial_form">
+    <h3>Lodging <%= if not @travel_request.lodging_use then ': None' end %></h3>
+<table class="table_view" style="<%= if not @travel_request.lodging_use then 'display:none;' end %>" >
+<tbody>
+<tr>
+    <td>
+        Do you need lodging accomodations?
+    </td>
+    <td>
+        <%= @travel_request.lodging_use %>
+    </td>
+</tr>
+<tr>
+    <td>
+        Account type:
+    </td>
+    <td>
+        <%= @travel_request.lodging_card_type %>
+    </td>
+</tr>
+<tr>
+  <td>
+   Account description:<br />
+  <%= @travel_request.lodging_card_desc %>
+  </td>
+</tr>
+<tr>
+    <td>
+        Lodging name:
+    </td>
+    <td>
+        <%= @travel_request.lodging_name %>
+    </td>
+</tr>
+<tr>
+    <td>
+        Phone number:
+    </td>
+    <td>
+        <%= @travel_request.lodging_phone %>
+    </td>
+</tr>
+<tr>
+    <td>
+        Arrival Date:
+    </td>
+    <td>
+        <%= @travel_request.lodging_arrive_date %>
+    </td>
+</tr>
+<tr>
+    <td>
+        Departure Date:
+    </td>
+    <td>
+        <%= @travel_request.lodging_depart_date %>
+    </td>
+</tr>
+<tr>
+    <td>
+        Charge card:
+    </td>
+    <td>
+        <%= @travel_request.lodging_card_desc %>
+    </td>
+</tr>
+<tr>
+    <td>
+        Additional People:
+    </td>
+    <td>
+        <%= @travel_request.lodging_additional_people %>
+    </td>
+</tr>
+<tr>
+    <td>
+        Other Notes:
+    </td>
+    <td>
+        <%= @travel_request.lodging_other_notes %>
+    </td>
+</tr>
+
+</tbody></table></div>
+<div class="ui-widget-content ui-corner-all wide partial_form">
+<h3> Conference Registration<%= if not @travel_request.conf_prepayment then ': None' end %> </h3>
+<% if @travel_request.conf_prepayment %>
+<table class="table_view">
+<tbody>
+<tr>
+    <td>
+        Do you need to prepay for conference registration?
+    </td>
+    <td>
+        <%= boolean_to_words @travel_request.conf_prepayment %>
+    </td>
+</tr>
+<tr>
+    <td>
+        File:
+    </td>
+    <td>
+    <% @travel_request.user_files.each do |g|  %>
+
+        <%= link_to g.uploaded_file_file_name, user_file_url(g, protocol: 'https://', only_path: false) %><br />
+    <% end %>
+    </td>
+</tr>
+</tbody>
+</table>
+<% end %>
+</div>
+

@@ -3,7 +3,9 @@ FactoryGirl.define do
     login 'test'
     first_name 'test'
     last_name 'user'
-    email 'test@example.com'
+    sequence :email do |n|
+      "user#{n}@example.com"
+    end
 
     factory :user_with_approvers do
       after(:create) do |user|
@@ -25,6 +27,10 @@ FactoryGirl.define do
         create :user_approver, user: user, approver_id: reviewer2.id, approver_type: 'reviewer', approval_order: 2
         user.reload
       end
+    end
+
+    factory :admin do
+      is_admin true
     end
   end
 end

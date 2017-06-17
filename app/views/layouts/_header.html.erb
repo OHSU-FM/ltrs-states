@@ -1,0 +1,9 @@
+<div id="header">
+    
+    <% if user_signed_in? %>
+        <%= render :partial=>'layouts/nav'%>
+    <% else %>
+        <%= render :partial=>'layouts/nav_noauth'%>
+    <% end %>
+
+</div><!-- header -->

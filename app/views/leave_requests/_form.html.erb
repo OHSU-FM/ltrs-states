@@ -1,18 +1,218 @@
-<%= form_with(model: leave_request, local: true) do |form| %>
-  <% if leave_request.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(leave_request.errors.count, "error") %> prohibited this leave_request from being saved:</h2>
+<% render :partial=> 'leave_requests/extra_actions'%>
 
-      <ul>
-      <% leave_request.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
+<% unless @leave_request.new_record? %>
+<h3>Request changes</h3>
+<div class='row'>
+  <div class="col-md-6 col-lg-6">
+    <%= f.label :request_change, "If this is a change to a previous request, explain the situation below." %> <br />
+    <%= f.text_area :request_change, :size=>'60x3' %>
+    <p>Please update the leave hours distribution below with the actual number of hours you used.</p>
+  </div>
+</div>
+<hr />
+<% end %>
+<% if @leave_request.new_record? %>
+  <div class="ui-widget-content ui-corner-all wide partial_form">
+    <h4>Submitter Details</h4>
+    <%= f.label :user_id, 'Submit as:' %><br/>
+    <%= f.select :user_id, options_from_collection_for_select([current_user] + current_user.delegators, "id", "name", current_user.id) %>
+    <table>
+      <tbody>
+        <tr>
+          <td>
+            <b>
+            </b>
+          </td>
+          <td>
+          </td>
+        </tr>
+    </tbody></table>
+  </div>
+<% else %>
+  <div class="ui-widget-content ui-corner-all wide partial_form">
+    <h4>Submitter Details</h4>
+    Submitted as:<br/>
+
+    <table>
+      <tbody>
+        <tr>
+          <td>
+            <b>
+            </b>
+          </td>
+
+          <td>
+            <%= @leave_request.user.nil? ? current_user.name : @leave_request.user.name %>
+          </td>
+        </tr>
+        <% unless @leave_request.form_user.nil? || @leave_request.form_user != current_user.name %>
+          <tr>
+            <td>
+              <b>
+                Submitted by:
+              </b>
+            </td>
+
+            <td>
+              <%= @leave_request.form_user %>
+            </td>
+          </tr>
+        <% end %>
+    </tbody></table>
+  </div>
+
+<% end %>
+
+<h4>Leave dates and information</h4>
+<div class='row leave_dates'>
+  <div class='col-xs-6'>
+    <ul class="list-inline">
+      <li>
+        <%= f.label :start_date, 'First day of leave' %><br />
+        <%= f.date_field :start_date, required: :required,
+          min: '2000-01-01', max: '2100-01-01'  %>
+      </li>
+      <li>
+        <%= f.label :start_hour, '(optional)' %><br />
+        <%= f.select :start_hour, hour_options(), {:prompt=>'Hour'}  %>
+      </li>
+      <li>
+        <%= f.label :start_min, '(optional)' %><br />
+        <%= f.select :start_min, ['0','15','30','45'] , {:prompt=>'Min'}  %>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<h4>Return dates and information</h4>
+<div class='row leave_dates'>
+  <div class='col-xs-6'>
+    <ul class="list-inline">
+      <li>
+        <%= f.label :end_date, 'Last day of leave' %><br />
+        <%= f.date_field :end_date, required: :required,
+          min: '2000-01-01', max: '2100-01-01'  %>
+      </li>
+      <li>
+        <%= f.label :end_hour, '(optional)' %><br />
+        <%= f.select :end_hour, hour_options(), {:prompt=>'Hour'}  %>
+      </li>
+      <li>
+        <%= f.label :end_min, '(optional)' %><br />
+        <%= f.select :end_min, ['0','15','30','45'] , {:prompt=>'Min'}  %>
+      </li>
+    </ul>
+  </div>
+</div>
+<div class="row">
+  <div class="col-xs-12 col-sm-12 col-md-8 col-lg-6">
+    <%= f.label :desc, 'Description of leave (optional)' %><br />
+    <%= f.text_area :desc, :size=>'40x3', :style=>'max-width:100%;height:80px;max-height:80px;' %>
+  </div>
+</div>
+
+<h4>Leave Hours</h4>
+<div class='row leave_hours'>
+  <div class='col-xs-6'>
+    <dl class='dl-horizontal'>
+      <dt>
+        <%= f.label :hours_vacation, 'Vacation Hours' %>
+      </dt>
+      <dd>
+        <%= f.number_field :hours_vacation, :include_blank=>true,
+          :step=>0.1, :min=>0 %>
+      </dd>
+      <dt>
+        <%= f.label :hours_sick, 'Sick Hours' %><br/>
+      </dt>
+      <dd>
+        <%= f.number_field :hours_sick, :include_blank=>true,:step=>0.1, :min=>0 %>
+      </dd>
+      <dt>
+        <%= f.label :hours_cme, 'CME Hours' %><br/>
+      </dt>
+      <dd>
+        <%= f.number_field :hours_cme, :include_blank=>true,:step=>0.1, :min=>0 %>
+      </dd>
+      <dt>
+        <%= f.label :hours_other, 'Other Hours' %>
+      </dt>
+      <dd>
+        <%= f.number_field :hours_other, :include_blank=>true,:step=>0.1, :min=>0 %>
+      </dd>
+    </dl>
+  </div>
+  <div class='col-xs-5 bs-callout bs-callout-info'>
+    <span data-toggle="tooltip" title="Value is an estimate only, and does not account for holidays." >
+      <h4>*Time Off Estimator</h4>
+    </span>
+    <dl class="dl-horizontal">
+      <dt>
+        <b>Weekdays:</b>
+      </dt>
+      <dd>
+        <span class="js_days_estimate">
+        </span>
+      </dd>
+      <dt>
+        <b>Leave Hours Total:</b>
+      </dt>
+      <dd>
+        <span class="js_hours_total">
+        </span>
+      </dd>
+    </dl>
+  </div>
+
+</div>
+<div class='row'>
+  <div class="col-xs-12 col-sm-12 col-md-8 col-lg-6">
+    <%= f.label :hours_other_desc, 'Other hours description' %><br />
+    <%= f.text_area :hours_other_desc, :size=>'40x3', :style=>'max-width:100%;height:80px;max-height:80px;' %>
+  </div>
+</div>
+
+<div class='row'>
+  <div class='col-xs-3 col-lg-2'>
+  </div>
+</div>
+
+<% if not @leave_request.has_extra %>
+  <div class='row leave_hours'>
+    <div class="col-md-6 col-lg-6">
+      <%= f.label :hours_comp, 'Comp Hours' %><br/>
+      <%= f.number_field :hours_comp, :include_blank=>true,:step=>0.1,:min=>0  %>
     </div>
-  <% end %>
-  <div><%= form.collection_select(:user_id, User.all, :id, :full_name) %></div>
-  <div><%= form.date_select :start_date %></div>
-  <div class="actions">
-    <%= form.submit %>
+  </div>
+  <div class='row'>
+
+    <div class="col-md-6 col-lg-6">
+      <%= f.label :hours_comp_desc, 'Comp hours description' %><br />
+      <%= f.text_area :hours_comp_desc, :size=>'40x3' %>
+    </div>
+  </div>
+  <div class='row leave_hours'>
+    <div class="col-md-6 col-lg-6">
+      <%= f.label :hours_training, 'Training Hours' %><br/>
+      <%= f.number_field :hours_training, :include_blank=>true,:step=>0.1,:min=>0  %>
+    </div>
+  </div>
+  <div class='row'>
+    <div class="col-md-6 col-lg-6">
+      <%= f.label :hours_training_desc, 'Training hours description' %> <br />
+      <%= f.text_area :hours_training_desc, :size=>'40x3' %>
+    </div>
   </div>
 <% end %>
+
+<%= f.fields_for :leave_request_extra do |builder| %>
+  <%= render 'leave_requests/form_extra_fields',:f=>builder %>
+<% end %>
+<div class="row">
+  <div class="toggle_form col-xs-7">
+    <%= f.label :need_travel, 'Do you need to have travel arranged?' %>
+    <%= f.select :need_travel, options_for_select([['yes','1'],['no','0']], f.object.need_travel),
+      {:prompt=>'Select'}, class: 'pull-right' %>
+  </div>
+</div>
+

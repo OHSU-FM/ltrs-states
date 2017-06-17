@@ -1,0 +1,17 @@
+<tr class="nested-fields ldap_search">
+    <td><%= link_to_remove_association f  do %>
+        <span class="glyphicon glyphicon-minus-sign" style='color:red;'></span>
+    <% end %>
+    </td>
+    <td><%= f.text_field :email, placeholder:'Enter name or email to search',
+                class: 'ldap_query', 
+                title: f.object.name,
+                data: {
+                    url: ldap_search_path(:format=>:json),
+                    email: f.object.email,
+                    toggle: 'tooltip'
+                }%></td>
+    <td><%= f.select :approval_order, f.object.approval_order_enum %></td>
+    <td><%= f.select :role_id, f.object.role_id_enum %></td>
+</tr>
+

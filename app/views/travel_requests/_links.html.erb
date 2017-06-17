@@ -1,0 +1,14 @@
+
+<div class="ui-widget-content ui-corner-all wide partial_form">
+    <%= submit_tag('Save',:class=>'button')  %>
+    <% if not @travel_request.new_record? \
+            and @travel_request.leave_request \
+            and @travel_request.leave_request.new_record? %>
+        <%= submit_tag('Create Staff Leave Request',:name=>:create_related_request,:class=>'button')%> | 
+        <%= submit_tag('Create Clinician Leave Request',:name=>:create_related_request_extra,:class=>'button')%>
+    <% elsif not @travel_request.new_record?  %> | 
+        <%= link_to 'View Leave Request', @travel_request.leave_request, :class=>'button'%>
+    <% end %>
+
+</div>
+

@@ -1,0 +1,81 @@
+<%= form_for(@user, url: polymorphic_path(@user, anchor: 'contacts'), html: {id: :edit_contacts}) do |f| %>
+<div class="col-xs-12 col-md-6">
+    <div class="ui-widget-content ui-corner-all partial_form">
+        <div id="ldap_query" style="padding:1em;">
+            <table class="table">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Email/Name</th>
+                    <th><span 
+                        data-toggle="tooltip"
+                        title="The order in which the notifications will occur during the approval process">
+                            Notification <br/>Level</span></th>
+                    <th>Role</th>
+                </tr>
+            </thead>
+            <tbody id="ldap_query_table"> 
+            <%= f.fields_for :user_default_emails do |g| %>
+                <%= render :partial=>'users/user_default_email_fields', :locals=>{:f=>g} %>
+            <% end %>
+            </tbody></table>
+            <%= link_to_add_association '+ Add Contact', f, :user_default_emails %>
+        </div>
+    </div>
+    
+    <div>
+        <hr/>
+        <%= f.submit 'Save',:class=>'btn btn-primary'%>
+    </div>
+</div>
+<div class="col-xs-12 col-md-6 bs-callout bs-callout-info">
+    <h2>About the review process</h2>
+    <div>
+
+        <h4>Email</h4>
+            <ul>
+                <li>Each user is limited to a maximum of <%= UserDefaultEmail::MAX_CONTACTS %> contacts</li>
+                <li>You can search for users by entering one of the following:
+                    <ul>
+                        <li>Email Address</li>
+                        <li>Full Name</li>
+                        <li>Last Name</li>
+                        <li>OHSU Network Login</li>
+                    </ul>
+                </li>
+                <li>
+                    The system will search through the OHSU email directory and inform you if a match cannot be made
+                </li>
+            </ul>
+
+        <h4>Notification Level</h4>
+        <ul>
+            <li>
+                The notification level is the order in which your requests will be authorized once it has been submitted.
+            </li>
+            <li>
+                Each notification level is required to have at least one reviewer
+            </li>
+        </ul>
+
+        <h4>Roles</h4>
+        <ul>
+            <li>
+                <em>Notify:</em>
+                People you would like to be notified that a request has occurred.
+            </li>
+            <li>
+                <em>Reviewer:</em>
+                A person that will accept or reject your request. 
+            </li>
+        </ul>
+
+        <h4>Request Forms</h4>
+        <ul>
+            <li>A request must be submitted before the review process can begin.</li>
+            <li>Once a form has been approved by the reviewer with the highest notification order the request is approved and complete.</li>
+            <li>You will automatically be CC'ed whenever someone makes a judgement on a request</li>
+        </ul>
+    </div>
+</div>
+<% end %>

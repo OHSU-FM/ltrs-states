@@ -1,0 +1,20 @@
+<%= render :partial=>'layouts/info', :locals  =>{:record=>record} %>
+
+<h2 class="<%= icon_name %>"> 
+    <%= "#{record.form_type} #{record.class.name.titleize}" %>
+    <span class='label label-default'>Edit</span>    
+        <hr/>
+</h2>   
+<%= form_for record, html: {multipart: true, class: "#{record.class.name}_form" } do |f| %> 
+    <div class="ui-widget-content ui-corner-all wide partial_form">
+        <%= render :partial=>"users/shared/forms_edit_actions", :locals=>{:record=>record} %>
+        <hr/>
+    </div>
+ 
+    <%= render :partial=>"#{record.class.table_name}/form", :locals=>{:f=>f} %>
+
+    <div class="ui-widget-content ui-corner-all wide partial_form">
+        <hr/>
+        <%= render :partial=>"users/shared/forms_edit_actions", :locals=>{:record=>record} %>
+    </div>
+<% end %>

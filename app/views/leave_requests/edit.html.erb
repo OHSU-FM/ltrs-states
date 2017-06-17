@@ -1,6 +1,1 @@
-<h1>Editing Leave Request</h1>
-
-<%= render 'form', leave_request: @leave_request %>
-
-<%= link_to 'Show', @leave_request %> |
-<%= link_to 'Back', leave_requests_path %>
+<%= render :partial=>'users/shared/edit', :locals=>{:record=>@leave_request, :icon_name=>'icon-request-leave'} %>

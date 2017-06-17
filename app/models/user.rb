@@ -4,6 +4,16 @@ class User < ApplicationRecord
 
   validates_presence_of :login
 
+  devise :database_authenticatable, :ldap_authenticatable, :rememberable, :trackable, :timeoutable
+
+  def is_admin?
+    is_admin
+  end
+
+  def is_reviewer?
+    UserApprover.where(approver_id: self.id, approver_type: 'reviewer').count > 0
+  end
+
   def full_name
     "#{ first_name } #{ last_name }"
   end

@@ -1,0 +1,50 @@
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <%= link_to image_tag("OHSU-logo-dark.png"),'http://www.ohsu.edu', target: '_blank' %>
+                </li>
+                <% if can? :access, :rails_admin %>
+                <li>
+                <%= link_to rails_admin_path, :style=>'color:red;', target: '_blank' do  %>
+                    Admin <i class="glyphicon glyphicon-link"></i> 
+                <% end%>
+                </li>
+                <% end %>
+                <% if current_user %>
+                <li>
+                    <%= active_link_to("Home", home_index_path) %>
+                </li>
+                <li>
+                    <%= active_link_to("Account", user_path(current_user)) if current_user  %>
+                </li>
+                <li class='active'>
+                    <%= active_link_to "My Forms", user_forms_path(current_user.id)  %>
+                </li>
+                <% if current_user.is_reviewer? %>
+                    <li>
+                    <% url = user_approvals_path(current_user.id, filter: :pending) %>
+                    <%= link_to(url, class: (request.path == url) ? 'active' : '' ) do %>
+                        <% approvals_count =  current_user.approvals_count  %>
+
+                        <span> Approvals </span>
+                        <% if approvals_count > 0 %>
+                            <span class='label label-danger label-badge' style="text-indent:0px;"><%= approvals_count %></span>
+                        <% end %>
+
+                    <% end %>
+                </li>
+                <% end %>
+                <% end %>
+                <li> 
+                <a target="_blank" href="https://ozone.ohsu.edu/fammed">Family Medicine Ozone Site <i class="glyphicon glyphicon-link"></i></a>
+                </li>   
+                <li> 
+                    <a target="_blank" href="https://o2.ohsu.edu/human-resources/benefits/time-off-work/paid-time-off-accruals/holidays.cfm">OHSU Holiday Calendar <i class="glyphicon glyphicon-link"></i> </a>
+                </li>
+                <li>
+                    <% if current_user %>
+                        <%= button_to "Sign out #{current_user.login}", destroy_user_session_path, :method=> :delete, :class=>'btn btn-link', :style=>'padding-left:0px;' %>
+                    <% end %>
+                </li>
+
+            </ul>
+

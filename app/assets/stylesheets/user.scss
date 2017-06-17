@@ -1,0 +1,20 @@
+
+/* Ldap query styling */
+.ldap_search{
+    /* font-size: 14pt; */    
+}
+.ldap_search .find{
+    
+}
+
+.ldap_search .found .ldap_search_label{
+    padding: 0.2em 0.6em;
+    background-color:#BBF;
+    border-radius: 10px 10px;
+}
+
+table#user_forms{
+    td:nth-child(2){
+        white-space: nowrap;
+    }
+}

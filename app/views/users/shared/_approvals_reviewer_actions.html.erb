@@ -1,0 +1,13 @@
+<%= form_for(approval_state,
+    :remote=>true,
+    :class=>'control-group',
+    :url=>user_approval_path({:user_id=>user.id, :id=>approval_state.id}),
+    :html=> {'data-type'=>'json', :multipart=>true}) do |f| %>
+    <%= hidden_field_tag(:status_was, approval_state.status) %>
+    <strong>Status: </strong>
+    <%= f.select :status, 
+        options_for_select( approval_state.reviewer_status_enum, 
+        approval_state.status), {:prompt=>'Status'} %>
+    <%= f.submit 'Save',:class=>'btn btn-success post_with_status js_ajax_destroy pull-right' %>
+<% end %>
+
