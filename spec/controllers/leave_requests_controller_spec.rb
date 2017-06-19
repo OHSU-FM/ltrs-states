@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe LeaveRequestsController, type: :controller do
   describe "GET #index" do
+    login_user
     it "assigns all leave_requests as @leave_requests" do
       leave_request = create :leave_request
       get :index
@@ -10,6 +11,7 @@ RSpec.describe LeaveRequestsController, type: :controller do
   end
 
   describe "GET #show" do
+    login_user
     it "assigns the requested leave_request as @leave_request" do
       leave_request = create :leave_request
       get :show, params: {id: leave_request.to_param}
@@ -18,6 +20,7 @@ RSpec.describe LeaveRequestsController, type: :controller do
   end
 
   describe "GET #new" do
+    login_user
     it "assigns a new leave_request as @leave_request" do
       get :new
       expect(assigns(:leave_request)).to be_a_new(LeaveRequest)
@@ -25,6 +28,7 @@ RSpec.describe LeaveRequestsController, type: :controller do
   end
 
   describe "GET #edit" do
+    login_user
     it "assigns the requested leave_request as @leave_request" do
       leave_request = create :leave_request
       get :edit, params: {id: leave_request.to_param}
@@ -34,6 +38,7 @@ RSpec.describe LeaveRequestsController, type: :controller do
 
   describe "POST #create" do
     context "with valid params" do
+      login_user
       let(:valid_attributes) { build(:leave_request).attributes }
 
       it "creates a new LeaveRequest" do
@@ -55,6 +60,7 @@ RSpec.describe LeaveRequestsController, type: :controller do
     end
 
     context "with invalid params" do
+      login_user
       let(:invalid_attributes) {
         build(:leave_request).attributes.except("user_id").merge("user_id" => nil)
       }
@@ -72,6 +78,7 @@ RSpec.describe LeaveRequestsController, type: :controller do
   end
 
   describe "PUT #update" do
+    login_user
     context "with valid params" do
       let(:valid_attributes) { build(:leave_request).attributes }
 
@@ -143,6 +150,7 @@ RSpec.describe LeaveRequestsController, type: :controller do
   end
 
   describe "DELETE #destroy" do
+    login_user
     it "destroys the requested leave_request" do
       leave_request = create :leave_request
       expect {
@@ -158,6 +166,7 @@ RSpec.describe LeaveRequestsController, type: :controller do
   end
 
   describe "POST #submit" do
+    login_user
     context "with unsubmitted request" do
       let(:leave_request) { create :leave_request }
 
@@ -212,6 +221,7 @@ RSpec.describe LeaveRequestsController, type: :controller do
   end
 
   describe "POST send_to_unopened" do
+    login_user
     context "with submitted request" do
       let(:leave_request) { create :leave_request, :submitted  }
       let(:approval_state) { leave_request.approval_state }
@@ -257,6 +267,7 @@ RSpec.describe LeaveRequestsController, type: :controller do
   end
 
   describe "POST review" do
+    login_user
     context "with unopened request" do
       let(:leave_request) { create :leave_request, :unopened }
       let(:approval_state) { leave_request.approval_state }
@@ -302,6 +313,7 @@ RSpec.describe LeaveRequestsController, type: :controller do
   end
 
   describe "POST reject" do
+    login_user
     context "with in_review request" do
       let(:leave_request) { create :leave_request, :in_review }
       let(:approval_state) { leave_request.approval_state }
@@ -357,6 +369,7 @@ RSpec.describe LeaveRequestsController, type: :controller do
   end
 
   describe "POST accept" do
+    login_user
     context "with in_review request" do
       let(:leave_request) { create :leave_request, :in_review }
       let(:approval_state) { leave_request.approval_state }

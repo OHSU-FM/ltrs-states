@@ -6,12 +6,12 @@
   <body>
     <h1><%= @msg %></h1>
     <p>
-        <b>Status:</b><%= @approval_state.verdict %>
-    </p>
-    <p>
-        <%= link_to 'Click here to view the leave request', leave_request_url(@leave_request, :protocol=>'https://', :only_path=>false) %>
-    </p>
-    <%= render :partial=> 'leave_requests/show_form', :locals=>{ :current_user=>@leave_request.user } %>
-  </body>
+      <b>Status:</b><%= @approval_state.verdict %>
+  </p>
+  <p>
+    <%= link_to('Click here to view the leave request', @approval_state.approvable, :protocol=>'https://', :only_path=>false) %>
+  </p>
+  <%= render :partial=> 'leave_requests/show_form', locals: { current_user: @approval_state.user, leave_request: @approval_state.approvable } %>
+</body>
 </html>
 

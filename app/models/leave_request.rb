@@ -1,6 +1,7 @@
 class LeaveRequest < ApplicationRecord
   belongs_to :user
   has_one :approval_state, as: :approvable, dependent: :destroy
+  has_one :travel_request
   delegate :next_user_approver, to: :approval_state
 
   # have to do this in an after_create callback so we have an approvable_id
@@ -16,6 +17,10 @@ class LeaveRequest < ApplicationRecord
 
   def approval_state
     ApprovalState.find_by(approvable: self)
+  end
+
+  def is_traveling
+    return (not travel_request.nil? or need_travel)
   end
 
   private

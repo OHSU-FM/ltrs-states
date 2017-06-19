@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170617000410) do
+ActiveRecord::Schema.define(version: 20170619221312) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -56,6 +56,60 @@ ActiveRecord::Schema.define(version: 20170617000410) do
     t.index ["user_id"], name: "index_leave_requests_on_user_id"
   end
 
+  create_table "travel_requests", force: :cascade do |t|
+    t.string "form_user", limit: 255
+    t.string "form_email", limit: 255
+    t.text "dest_desc"
+    t.boolean "air_use", default: false
+    t.string "air_desc", limit: 255
+    t.text "ffid"
+    t.date "dest_depart_date"
+    t.string "dest_depart_hour", limit: 255
+    t.string "dest_depart_min", limit: 255
+    t.string "dest_arrive_hour", limit: 255
+    t.string "dest_arrive_min", limit: 255
+    t.text "preferred_airline"
+    t.text "menu_notes"
+    t.integer "additional_travelers"
+    t.date "ret_depart_date"
+    t.string "ret_depart_hour", limit: 255
+    t.string "ret_depart_min", limit: 255
+    t.string "ret_arrive_hour", limit: 255
+    t.string "ret_arrive_min", limit: 255
+    t.text "other_notes"
+    t.boolean "car_rental", default: false
+    t.date "car_arrive"
+    t.string "car_arrive_hour", limit: 255
+    t.string "car_arrive_min", limit: 255
+    t.date "car_depart"
+    t.string "car_depart_hour", limit: 255
+    t.string "car_depart_min", limit: 255
+    t.text "car_rental_co"
+    t.boolean "lodging_use", default: false
+    t.text "lodging_card_type"
+    t.text "lodging_card_desc"
+    t.text "lodging_name"
+    t.string "lodging_phone", limit: 255
+    t.date "lodging_arrive_date"
+    t.date "lodging_depart_date"
+    t.text "lodging_additional_people"
+    t.text "lodging_other_notes"
+    t.boolean "conf_prepayment"
+    t.text "conf_desc"
+    t.boolean "expense_card_use", default: false
+    t.string "expense_card_type", limit: 255
+    t.string "expense_card_desc", limit: 255
+    t.integer "status", default: 0
+    t.integer "user_id"
+    t.integer "leave_request_id"
+    t.boolean "mail_sent", default: false
+    t.boolean "mail_final_sent", default: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.datetime "deleted_at"
+    t.text "request_change"
+  end
+
   create_table "user_approvers", force: :cascade do |t|
     t.bigint "user_id"
     t.integer "approver_id"
@@ -87,6 +141,7 @@ ActiveRecord::Schema.define(version: 20170617000410) do
     t.integer "empid"
     t.string "emp_class"
     t.string "emp_home"
+    t.boolean "is_ldap", default: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

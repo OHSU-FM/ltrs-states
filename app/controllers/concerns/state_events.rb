@@ -11,7 +11,7 @@ module StateEvents
     respond_to do |format|
       if @approval_state.may_submit?
         if @approval_state.submit!
-          UserMailer.request_submitted(@approval_state).deliver_now
+          UserMailer.send("#{@approval_state.approvable.class.to_s.underscore}", @approval_state).deliver_now
           if @approval_state.may_send_to_unopened? && @approval_state.send_to_unopened!
             format.html { redirect_to @approvable,
                           notice: "#{@approvable.model_name.human} was successfully submitted." }

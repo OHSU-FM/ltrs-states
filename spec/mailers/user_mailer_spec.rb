@@ -70,7 +70,7 @@ RSpec.describe UserMailer, type: :mailer do
     end
   end
 
-  describe 'request_accepted' do
+  fdescribe 'request_accepted' do
     let(:leave_request) { create :leave_request, :accepted, :two_reviewers }
     let(:mail) { described_class.request_accepted(leave_request.approval_state).deliver_now }
 

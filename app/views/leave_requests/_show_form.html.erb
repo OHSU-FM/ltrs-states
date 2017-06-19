@@ -1,90 +1,79 @@
-
 <div class="ui-widget-content ui-corner-all wide partial_form">
-<h3> Leave Dates and Description </h3>
-<table class="table_view"><tbody>
-<tr>
-    <td><b>First day of leave:</b></td>
-    <td>
-        <%= @leave_request.start_date %>
-        <%= (@leave_request.start_hour || "N/A")  %>
-        <%= (@leave_request.start_min || "N/A" ) %>
-    </td>
-</tr>
-<tr>
-    <td>  <b>Last day of leave:</b> </td>
-    <td>
-        <%= @leave_request.end_date %>
-        <%= ( @leave_request.end_hour || "N/A") %>
-        <%= ( @leave_request.end_min || "N/A") %>
-    </td>
-</tr>
-<tr>
-    <td>Description of Leave:</td>
-    <td><%= @leave_request.desc%></td>
-</tr>
+  <h3> Leave Dates and Description </h3>
+  <table class="table_view"><tbody>
+      <tr>
+        <td><b>First day of leave:</b></td>
+        <td>
+          <%= leave_request.start_date %>
+          <%= (leave_request.start_hour || "N/A")  %>
+          <%= (leave_request.start_min || "N/A" ) %>
+        </td>
+      </tr>
+      <tr>
+        <td>  <b>Last day of leave:</b> </td>
+        <td>
+          <%= leave_request.end_date %>
+          <%= ( leave_request.end_hour || "N/A") %>
+          <%= ( leave_request.end_min || "N/A") %>
+        </td>
+      </tr>
+      <tr>
+        <td>Description of Leave:</td>
+        <td><%= leave_request.desc%></td>
+      </tr>
 </tbody></table></div>
 
 <div class="ui-widget-content ui-corner-all wide partial_form">
-<% unless @leave_request.request_change.blank? %>
-<tr>
-    <td><b>THIS IS AN EDIT TO A PREVIOUS LEAVE REQUEST</b></td>
-    <td><br /></td>
-</tr>
-<tr>
-    <td><%= @leave_request.request_change %></td>
-    <td></td>
-</tr>
-<% end %>
-<h3> Leave Hours </h3>
-<table class="table_view"><tbody>
-<tr>
-    <td><b>Vacation Hours:</b></td>
-    <td><%= @leave_request.hours_vacation %></td>
-</tr>
-<tr>
-    <td><b>Sick Hours:</b></td>
-    <td><%= @leave_request.hours_sick %></td>
-</tr>
-<tr>
-    <td><b>CME Hours:</b></td>
-    <td><%= @leave_request.hours_cme %></td>
-</tr>
-<tr>
-    <td><b>Other Hours:</b></td>
-    <td><%= @leave_request.hours_other %></td>
-</tr>
-<tr>
-    <td><b>Other Hours Description:</b></td>
-    <td><%= @leave_request.hours_other_desc.present? ? @leave_request.hours_other_desc : 'None' %></td>
-</tr>
+  <h3> Leave Hours </h3>
+  <table class="table_view"><tbody>
+      <tr>
+        <td><b>Vacation Hours:</b></td>
+        <td><%= leave_request.hours_vacation %></td>
+      </tr>
+      <tr>
+        <td><b>Sick Hours:</b></td>
+        <td><%= leave_request.hours_sick %></td>
+      </tr>
+      <tr>
+        <td><b>CME Hours:</b></td>
+        <td><%= leave_request.hours_cme %></td>
+      </tr>
+      <tr>
+        <td><b>Other Hours:</b></td>
+        <td><%= leave_request.hours_other %></td>
+      </tr>
+      <tr>
+        <td><b>Other Hours Description:</b></td>
+        <td><%= leave_request.hours_other_desc.present? ? leave_request.hours_other_desc : 'None' %></td>
+      </tr>
 
-<tr>
-    <td><b>Training Hours:</b></td>
-    <td><%= @leave_request.hours_training %></td>
-</tr>
-<tr>
-    <td><b>Training Hours Description:</b></td>
-    <td><%= @leave_request.hours_training_desc.present? ? @leave_request.hours_training_desc : 'None' %></td>
-</tr>
+      <tr>
+        <td><b>Training Hours:</b></td>
+        <td><%= leave_request.hours_training %></td>
+      </tr>
+      <tr>
+        <td><b>Training Hours Description:</b></td>
+        <td><%= leave_request.hours_training_desc.present? ? leave_request.hours_training_desc : 'None' %></td>
+      </tr>
 
-<% #Only show this field on Staff forms (per Connie Yu) %>
-<%if not @leave_request.has_extra %>
-<tr>
-    <td><b>Comp Hours:</b></td>
-    <td><%= @leave_request.hours_comp %></td>
-</tr>
-<tr>
-    <td><b>Comp Hours Description:</b></td>
-    <td><%= @leave_request.hours_comp_desc.present? ? @leave_request.hours_comp_desc : 'None' %></td>
-</tr>
-<% end %>
+      <% #Only show this field on Staff forms (per Connie Yu) %>
+      <%if not leave_request.has_extra %>
+        <tr>
+          <td><b>Comp Hours:</b></td>
+          <td><%= leave_request.hours_comp %></td>
+        </tr>
+        <tr>
+          <td><b>Comp Hours Description:</b></td>
+          <td><%= leave_request.hours_comp_desc.present? ? leave_request.hours_comp_desc : 'None' %></td>
+        </tr>
+      <% end %>
 
-<%= render('leave_requests/show_extra', :leave_request=>@leave_request.leave_request_extra) if @leave_request.leave_request_extra %>
-<tr>
-    <td><b>Need Travel Arrangements:</b></td>
-    <td><%= boolean_to_words @leave_request.need_travel %></td>
-</tr>
-</tbody>
-</table>
+      <%= render('leave_requests/show_extra', :leave_request=>leave_request.leave_request_extra) if leave_request.leave_request_extra %>
+      <tr>
+        <td><b>Need Travel Arrangements:</b></td>
+        <td><%= boolean_to_words leave_request.need_travel %></td>
+      </tr>
+    </tbody>
+  </table>
 </div>
 

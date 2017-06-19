@@ -101,4 +101,28 @@ class ApprovalState < ApplicationRecord
   def unopened_allowed?
     next_user_approver.notifier? ? false : true
   end
+
+  def ready_to_submit?
+    new_record? == false && approvable.new_record? == false && unsubmitted?
+  end
+
+  def is_complete?
+    expired? or rejected? or approval_complete?
+  end
+
+  def verdict
+    if self.is_complete?
+      return self.status_str.titleize
+    elsif self.ready_to_submit?
+      return 'Ready to submit'
+    elsif missing_information?
+      return "Waiting on response from #{self.user.name || self.user.email} "
+    elsif unopened? or in_review?
+      return "Waiting on response from #{self.current_user_approver.approver.full_name}"
+    elsif next_user_approver.nil?
+      return "Error"
+    else
+      return "Waiting on response from #{next_user_approver.approver.full_name}"
+    end
+  end
 end

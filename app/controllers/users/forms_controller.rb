@@ -2,7 +2,10 @@ class Users::FormsController < ApplicationController
   before_action :load_user
 
   def index
-    @approvables = @user.approval_states.map(&:approvable)
+    approvables = @user.approvables
+    @approvables = WillPaginate::Collection.create(@page, @per_page, approvables.length) do |pager|
+      pager.replace approvables
+    end
     respond_to do |format|
       format.html # forms.html.erb
       format.json {render :json => @approvals }

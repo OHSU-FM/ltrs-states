@@ -1,4 +1,4 @@
-<strong>Status: </strong><%= record.approval_state.status_str %>
+<strong>Status: </strong><%= record.approval_state.aasm_state.humanize %>
 <br/>
 
 
