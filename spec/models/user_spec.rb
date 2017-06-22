@@ -5,6 +5,15 @@ RSpec.describe User, type: :model do
     it 'must have a login' do
       expect(build(:user, login: nil)).not_to be_valid
     end
+
+    it 'must have a first and last name' do
+      expect(build(:user, first_name: nil)).not_to be_valid
+      expect(build(:user, last_name: nil)).not_to be_valid
+    end
+
+    it 'must have a email' do
+      expect(build(:user, email: nil)).not_to be_valid
+    end
   end
 
   describe 'methods' do
@@ -44,6 +53,31 @@ RSpec.describe User, type: :model do
     it 'notifiers is a list of user_approvers with approver_type: notifier' do
       expect(@user.notifiers.map(&:approver)).to all be_a User
       expect(@user.notifiers.map(&:approver_type)).to all eq 'notifier'
+    end
+  end
+
+  fdescribe 'delegation:' do
+    it '#user_delegations is a list of user_delegations' do
+      user = create :user
+      delegate_user = create :user
+      user_delegation = create :user_delegation, user: user, delegate_user: delegate_user
+      expect(user.user_delegations).to include user_delegation
+    end
+
+    it '#delegates is a list of users we have delegated authority to' do
+      user = create :user
+      delegate_user = create :user
+      user_delegation = create :user_delegation, user: user, delegate_user: delegate_user
+      expect(user.delegates).to include delegate_user
+      expect(delegate_user.delegates).not_to include user
+    end
+
+    it '#delegators is a list of users who have delgated authority to us' do
+      user = create :user
+      delegate_user = create :user
+      user_delegation = create :user_delegation, user: user, delegate_user: delegate_user
+      expect(delegate_user.delegators).to include user
+      expect(user.delegators).not_to include delegate_user
     end
   end
 end

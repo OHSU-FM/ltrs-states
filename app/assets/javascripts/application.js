@@ -19,6 +19,7 @@
 //= require calendar
 //= require utils
 //= require users
+//= require users_ldap_search
 //= require user_forms
 //= require approvals
 //= require survey

@@ -1,21 +1,21 @@
-<%= render :partial=>'layouts/info', :locals  =>{:record=>record} %>
+<%= render :partial=>'layouts/info', locals: { record: record } %>
 
 <h2>
-    <%= "#{record.form_type} #{record.class.name.titleize}" %>
-    <span class='label label-default'>New</span>    
-    <hr/>
+  <%= "#{record.form_type} #{record.class.name.titleize}" %>
+  <span class='label label-default'>New</span>
+  <hr/>
 </h2>
-<%= form_for record, html: {class: "#{record.class.name}_form" } do |f| %> 
-    <div>
-        <%= render :partial=>"users/shared/forms_new_actions", :locals=>{:record=>record} %>
-        <hr/>
-    </div>
- 
-    <%= render :partial=>"#{record.class.table_name}/form", :locals=>{:f=>f} %>
+<%= form_for record, html: { class: "#{record.class.name}_form" } do |f| %>
+  <div>
+    <%= render partial: "users/shared/forms_new_actions", locals: { record: record } %>
+    <hr/>
+  </div>
 
-    <div>
-        <hr/>
-        <%= render :partial=>"users/shared/forms_new_actions", :locals=>{:record=>record} %>
-    </div>
+  <%= render partial: "#{record.class.table_name}/form", locals: { f: f } %>
+
+  <div>
+    <hr/>
+    <%= render partial: "users/shared/forms_new_actions", locals: { record: record } %>
+  </div>
 <% end %>
 

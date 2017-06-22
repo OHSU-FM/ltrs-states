@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-  protect_from_forgery with: :exception
+  protect_from_forgery
   before_action :authenticate_user!
 
   append_before_action :check_for_pagination, only: :index

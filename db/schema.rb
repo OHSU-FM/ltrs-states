@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170619221312) do
+ActiveRecord::Schema.define(version: 20170622221829) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,6 +25,28 @@ ActiveRecord::Schema.define(version: 20170619221312) do
     t.integer "approval_order", default: 0
     t.index ["approvable_type", "approvable_id"], name: "index_approval_states_on_approvable_type_and_approvable_id"
     t.index ["user_id"], name: "index_approval_states_on_user_id"
+  end
+
+  create_table "leave_request_extras", force: :cascade do |t|
+    t.integer "leave_request_id"
+    t.integer "work_days"
+    t.decimal "work_hours", precision: 5, scale: 2, default: "0.0"
+    t.boolean "basket_coverage"
+    t.string "covering", limit: 255
+    t.decimal "hours_professional", precision: 5, scale: 2, default: "0.0"
+    t.text "hours_professional_desc"
+    t.string "hours_professional_role", limit: 255
+    t.decimal "hours_administrative", precision: 5, scale: 2, default: "0.0"
+    t.text "hours_administrative_desc"
+    t.string "hours_administrative_role", limit: 255
+    t.boolean "funding_no_cost"
+    t.text "funding_no_cost_desc"
+    t.decimal "funding_approx_cost"
+    t.boolean "funding_split"
+    t.text "funding_split_desc"
+    t.string "funding_grant", limit: 255
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "leave_requests", force: :cascade do |t|
@@ -53,6 +75,8 @@ ActiveRecord::Schema.define(version: 20170619221312) do
     t.boolean "need_travel", default: false
     t.boolean "mail_sent", default: false
     t.boolean "mail_final_sent", default: false
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_leave_requests_on_deleted_at"
     t.index ["user_id"], name: "index_leave_requests_on_user_id"
   end
 
@@ -106,8 +130,9 @@ ActiveRecord::Schema.define(version: 20170619221312) do
     t.boolean "mail_final_sent", default: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.datetime "deleted_at"
     t.text "request_change"
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_travel_requests_on_deleted_at"
   end
 
   create_table "user_approvers", force: :cascade do |t|
@@ -118,6 +143,14 @@ ActiveRecord::Schema.define(version: 20170619221312) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_user_approvers_on_user_id"
+  end
+
+  create_table "user_delegations", force: :cascade do |t|
+    t.bigint "user_id"
+    t.integer "delegate_user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_user_delegations_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -142,8 +175,20 @@ ActiveRecord::Schema.define(version: 20170619221312) do
     t.string "emp_class"
     t.string "emp_home"
     t.boolean "is_ldap", default: true
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_users_on_deleted_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  end
+
+  create_table "versions", force: :cascade do |t|
+    t.string "item_type", null: false
+    t.integer "item_id", null: false
+    t.string "event", null: false
+    t.string "whodunnit"
+    t.text "object"
+    t.datetime "created_at"
+    t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
   add_foreign_key "user_approvers", "users"

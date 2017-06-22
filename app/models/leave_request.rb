@@ -8,6 +8,9 @@ class LeaveRequest < ApplicationRecord
   # to reference
   after_create :build_approval_state
 
+  has_paper_trail
+  acts_as_paranoid
+
   # checks the presence of some attributes and returns true if they're there
   # @return [Boolean] true if attributes present, else false
   def ready_for_submission?
@@ -21,6 +24,15 @@ class LeaveRequest < ApplicationRecord
 
   def is_traveling
     return (not travel_request.nil? or need_travel)
+  end
+
+  # Virtual attribute: returns string stating form type
+  def form_type
+    has_extra ? 'Faculty' : 'Staff'
+  end
+
+  def related_record
+    travel_request
   end
 
   private

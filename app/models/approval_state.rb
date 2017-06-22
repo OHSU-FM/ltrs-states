@@ -4,6 +4,8 @@ class ApprovalState < ApplicationRecord
   belongs_to :approvable, polymorphic: true
   belongs_to :user
 
+  has_paper_trail
+
   aasm do
     state :unsubmitted, initial: true
     state :submitted

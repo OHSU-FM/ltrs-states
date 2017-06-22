@@ -5,7 +5,7 @@ Rails.application.routes.draw do
 
   resources :home, only: :index
   root to: 'home#index'
-  resources :users, only: [:show, :edit] do
+  resources :users, only: [:show, :edit, :update] do
     resources :forms, controller: 'users/forms', only: :index do
       member do
         put  'submit'
@@ -25,4 +25,6 @@ Rails.application.routes.draw do
   end
 
   resources :travel_requests, except: :index
+
+  match :ldap_search, to: 'users#ldap_search', via: :get, as: :ldap_search
 end

@@ -1,21 +1,10 @@
-<% render :partial=> 'leave_requests/extra_actions'%>
+<% render partial: 'leave_requests/extra_actions'%>
 
-<% unless @leave_request.new_record? %>
-<h3>Request changes</h3>
-<div class='row'>
-  <div class="col-md-6 col-lg-6">
-    <%= f.label :request_change, "If this is a change to a previous request, explain the situation below." %> <br />
-    <%= f.text_area :request_change, :size=>'60x3' %>
-    <p>Please update the leave hours distribution below with the actual number of hours you used.</p>
-  </div>
-</div>
-<hr />
-<% end %>
 <% if @leave_request.new_record? %>
   <div class="ui-widget-content ui-corner-all wide partial_form">
     <h4>Submitter Details</h4>
     <%= f.label :user_id, 'Submit as:' %><br/>
-    <%= f.select :user_id, options_from_collection_for_select([current_user] + current_user.delegators, "id", "name", current_user.id) %>
+    <%= f.select :user_id, options_from_collection_for_select([current_user] + current_user.delegators, "id", "full_name", current_user.id) %>
     <table>
       <tbody>
         <tr>
@@ -42,10 +31,10 @@
           </td>
 
           <td>
-            <%= @leave_request.user.nil? ? current_user.name : @leave_request.user.name %>
+            <%= @leave_request.user.nil? ? current_user.full_name : @leave_request.user.full_name %>
           </td>
         </tr>
-        <% unless @leave_request.form_user.nil? || @leave_request.form_user != current_user.name %>
+        <% unless @leave_request.form_user.nil? || @leave_request.form_user != current_user.full_name %>
           <tr>
             <td>
               <b>
@@ -74,11 +63,11 @@
       </li>
       <li>
         <%= f.label :start_hour, '(optional)' %><br />
-        <%= f.select :start_hour, hour_options(), {:prompt=>'Hour'}  %>
+        <%= f.select :start_hour, hf_hour_options, { prompt: 'Hour' } %>
       </li>
       <li>
         <%= f.label :start_min, '(optional)' %><br />
-        <%= f.select :start_min, ['0','15','30','45'] , {:prompt=>'Min'}  %>
+        <%= f.select :start_min, ['0','15','30','45'] , { prompt: 'Min' } %>
       </li>
     </ul>
   </div>
@@ -95,11 +84,11 @@
       </li>
       <li>
         <%= f.label :end_hour, '(optional)' %><br />
-        <%= f.select :end_hour, hour_options(), {:prompt=>'Hour'}  %>
+        <%= f.select :end_hour, hf_hour_options, { prompt: 'Hour' } %>
       </li>
       <li>
         <%= f.label :end_min, '(optional)' %><br />
-        <%= f.select :end_min, ['0','15','30','45'] , {:prompt=>'Min'}  %>
+        <%= f.select :end_min, ['0','15','30','45'] , { prompt: 'Min'} %>
       </li>
     </ul>
   </div>
@@ -107,7 +96,7 @@
 <div class="row">
   <div class="col-xs-12 col-sm-12 col-md-8 col-lg-6">
     <%= f.label :desc, 'Description of leave (optional)' %><br />
-    <%= f.text_area :desc, :size=>'40x3', :style=>'max-width:100%;height:80px;max-height:80px;' %>
+    <%= f.text_area :desc, size: '40x3', style: 'max-width:100%;height:80px;max-height:80px;' %>
   </div>
 </div>
 
@@ -119,26 +108,26 @@
         <%= f.label :hours_vacation, 'Vacation Hours' %>
       </dt>
       <dd>
-        <%= f.number_field :hours_vacation, :include_blank=>true,
-          :step=>0.1, :min=>0 %>
+        <%= f.number_field :hours_vacation, include_blank: true,
+          step: 0.1, min: 0 %>
       </dd>
       <dt>
         <%= f.label :hours_sick, 'Sick Hours' %><br/>
       </dt>
       <dd>
-        <%= f.number_field :hours_sick, :include_blank=>true,:step=>0.1, :min=>0 %>
+        <%= f.number_field :hours_sick, include_blank: true, step: 0.1, min: 0 %>
       </dd>
       <dt>
         <%= f.label :hours_cme, 'CME Hours' %><br/>
       </dt>
       <dd>
-        <%= f.number_field :hours_cme, :include_blank=>true,:step=>0.1, :min=>0 %>
+        <%= f.number_field :hours_cme, include_blank: true, step: 0.1, min: 0 %>
       </dd>
       <dt>
         <%= f.label :hours_other, 'Other Hours' %>
       </dt>
       <dd>
-        <%= f.number_field :hours_other, :include_blank=>true,:step=>0.1, :min=>0 %>
+        <%= f.number_field :hours_other, include_blank: true, step: 0.1, min: 0 %>
       </dd>
     </dl>
   </div>
@@ -168,7 +157,7 @@
 <div class='row'>
   <div class="col-xs-12 col-sm-12 col-md-8 col-lg-6">
     <%= f.label :hours_other_desc, 'Other hours description' %><br />
-    <%= f.text_area :hours_other_desc, :size=>'40x3', :style=>'max-width:100%;height:80px;max-height:80px;' %>
+    <%= f.text_area :hours_other_desc, size: '40x3', style: 'max-width:100%;height:80px;max-height:80px;' %>
   </div>
 </div>
 
@@ -181,38 +170,38 @@
   <div class='row leave_hours'>
     <div class="col-md-6 col-lg-6">
       <%= f.label :hours_comp, 'Comp Hours' %><br/>
-      <%= f.number_field :hours_comp, :include_blank=>true,:step=>0.1,:min=>0  %>
+      <%= f.number_field :hours_comp, include_blank: true, step: 0.1, min: 0  %>
     </div>
   </div>
   <div class='row'>
 
     <div class="col-md-6 col-lg-6">
       <%= f.label :hours_comp_desc, 'Comp hours description' %><br />
-      <%= f.text_area :hours_comp_desc, :size=>'40x3' %>
+      <%= f.text_area :hours_comp_desc, size: '40x3' %>
     </div>
   </div>
   <div class='row leave_hours'>
     <div class="col-md-6 col-lg-6">
       <%= f.label :hours_training, 'Training Hours' %><br/>
-      <%= f.number_field :hours_training, :include_blank=>true,:step=>0.1,:min=>0  %>
+      <%= f.number_field :hours_training, include_blank: true, step: 0.1, min: 0  %>
     </div>
   </div>
   <div class='row'>
     <div class="col-md-6 col-lg-6">
       <%= f.label :hours_training_desc, 'Training hours description' %> <br />
-      <%= f.text_area :hours_training_desc, :size=>'40x3' %>
+      <%= f.text_area :hours_training_desc, size: '40x3' %>
     </div>
   </div>
 <% end %>
 
 <%= f.fields_for :leave_request_extra do |builder| %>
-  <%= render 'leave_requests/form_extra_fields',:f=>builder %>
+  <%= render 'leave_requests/form_extra_fields', f: builder %>
 <% end %>
 <div class="row">
   <div class="toggle_form col-xs-7">
     <%= f.label :need_travel, 'Do you need to have travel arranged?' %>
     <%= f.select :need_travel, options_for_select([['yes','1'],['no','0']], f.object.need_travel),
-      {:prompt=>'Select'}, class: 'pull-right' %>
+      { prompt: 'Select' }, class: 'pull-right' %>
   </div>
 </div>
 

@@ -17,4 +17,11 @@ RSpec.describe LeaveRequest, type: :model do
     lr = create :leave_request
     expect{ lr.destroy }.to change{ ApprovalState.count }.by(-1)
   end
+
+  describe 'method' do
+    it '#related_record references associated travel_request' do
+      expect((create :leave_request, :with_travel_request).related_record)
+        .to be_a TravelRequest
+    end
+  end
 end

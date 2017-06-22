@@ -1,15 +1,14 @@
 $().ready( function(){
-
     // Automatically perform lookups on input textbox after losing focus and text entered
     $(document).on('focusout', '.ldap_search .ldap_query', function(){
         var node = $(this).parents('.ldap_search');
         query_ldap(node);
     });
-        
+
     $(document).on('cocoon:after-insert'), function(e, intertedItem){
         $(insertedItem).find('.tooltip').each(function(){
             style_tooltip(this);
-        });  
+        });
     }
 
 });
@@ -27,12 +26,12 @@ function get_error_message(data){
 
 function ui_add_errors(node, message){
     $(node).find('.ldap_query')
-        .attr('title', message) 
+        .attr('title', message)
         .addClass('field_with_errors')
         .tooltip();
     $(node).find('.check_name')
         .removeClass('ui-state-active ui-state-hover')
-        .addClass('ui-state-error');  
+        .addClass('ui-state-error');
 }
 
 function ui_remove_errors(node){
@@ -51,9 +50,9 @@ function enable_ui(node){
 
 function disable_ui(node){
     var ldap_query = $(node).find('.ldap_query');
-    var button = $(node).find('.check_name'); 
+    var button = $(node).find('.check_name');
     ldap_query.prop('disabled', true);
-    button.prop('disabled', true); 
+    button.prop('disabled', true);
 }
 
 function node_opts(node){
@@ -72,6 +71,8 @@ function check_for_logout(data){
 function query_ldap(node){
     disable_ui(node);
     opts = node_opts(node);
+    console.log(opts.url);
+    console.log(opts.query);
     var q = opts.query.q.toLowerCase();
 
     // Check for email addresses that are not from ohsu
@@ -87,7 +88,8 @@ function query_ldap(node){
         url: opts.url,
         node: node,
         dataType: 'json',
-        type: 'get',
+        contentType: 'application/json',
+        type: 'GET',
         data: opts.query,
         error: function(data){
             check_for_logout(data);
@@ -105,7 +107,7 @@ function query_ldap(node){
 
             // remove old errors (if any)
             ui_remove_errors(node);
-            
+
             // update ui
             $(node).find('.ldap_query')
                 .val(data.email)
@@ -115,9 +117,9 @@ function query_ldap(node){
             // enable ui
             enable_ui(node);
         }
-        
+
     });
-    
+
 }
 
 

@@ -1,11 +1,10 @@
 FactoryGirl.define do
+  sequence(:email) { |n| "user#{n}@example.com" }
   factory :user do
     login 'test'
     first_name 'test'
     last_name 'user'
-    sequence :email do |n|
-      "user#{n}@example.com"
-    end
+    email
 
     factory :user_with_approvers do
       after(:create) do |user|

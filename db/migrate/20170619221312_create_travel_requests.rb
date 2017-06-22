@@ -50,7 +50,6 @@ class CreateTravelRequests < ActiveRecord::Migration[5.1]
       t.boolean  "mail_final_sent",                       default: false
       t.datetime "created_at"
       t.datetime "updated_at"
-      t.datetime "deleted_at"
       t.text     "request_change"
     end
   end

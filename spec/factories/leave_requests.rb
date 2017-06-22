@@ -45,5 +45,11 @@ FactoryGirl.define do
     trait :two_reviewers do
       association :user, factory: :user_two_reviewers
     end
+
+    trait :with_travel_request do
+      after(:create) do |lr|
+        create :travel_request, user: lr.user, leave_request: lr
+      end
+    end
   end
 end

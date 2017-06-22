@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe UserApprover, type: :model do
-  let(:ua) { create :user_approver_full }
+  let(:ua) { create :user_approver }
 
   describe 'validations' do
     it 'requires a user' do
@@ -15,18 +15,18 @@ RSpec.describe UserApprover, type: :model do
     end
 
     it '#reviewer? returns true if the user_approver is a reviewer' do
-      ua = create :user_approver, approver_type: 'reviewer'
+      ua = create :user_reviewer
       expect(ua.reviewer?).to be_truthy
 
-      ua = create :user_approver_full
+      ua = create :user_approver
       expect(ua.reviewer?).to be_falsey
     end
 
     it '#notifier? returns true if the user_approver is a notifier' do
-      ua = create :user_approver, approver_type: 'notifier'
+      ua = create :user_notifier
       expect(ua.notifier?).to be_truthy
 
-      ua = create :user_approver_full
+      ua = create :user_approver
       expect(ua.notifier?).to be_falsey
     end
   end

@@ -7,9 +7,23 @@ class User < ApplicationRecord
   has_many :travel_requests, through: :approval_states,
     source: :approvable, source_type: "TravelRequest"
 
-  validates_presence_of :login
+  has_many :user_delegations, dependent: :delete_all, inverse_of: :user
+  has_many :delegates, through: :user_delegations,
+    source: :delegate_user, foreign_key: :delegate_user_id
+  has_and_belongs_to_many :delegators, join_table: :user_delegations,
+    foreign_key: :delegate_user_id,
+    association_foreign_key: :user_id,
+    class_name: 'User'
+
+  accepts_nested_attributes_for :user_approvers, allow_destroy: true
+  accepts_nested_attributes_for :user_delegations, allow_destroy: true
+
+  validates_presence_of :login, :first_name, :last_name, :email
 
   devise :database_authenticatable, :ldap_authenticatable, :rememberable, :trackable, :timeoutable
+
+  has_paper_trail
+  acts_as_paranoid
 
   def is_admin?
     is_admin

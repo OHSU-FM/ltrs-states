@@ -17,4 +17,11 @@ class TravelRequest < ApplicationRecord
   accepts_nested_attributes_for :approval_state, allow_destroy: true
   accepts_nested_attributes_for :travel_files, allow_destroy: true
   accepts_nested_attributes_for :user_files, allow_destroy: true
+
+  has_paper_trail
+  acts_as_paranoid
+
+  def related_record
+    leave_request
+  end
 end

@@ -5,13 +5,15 @@
     <% end %>
   </td>
   <td>
-    <%= f.text_field :email, placeholder: 'Enter name or email to search',
+    <%= f.text_field :approver_id, placeholder: 'Enter name or email to search',
       class: 'ldap_query',
       title: f.object.full_name,
       data: {
         url: ldap_search_path(format: :json),
-        email: f.object.email,
+        approver: f.object.email,
         toggle: 'tooltip'
       } %>
   </td>
+  <td><%= f.select :approval_order, f.object.approval_order_enum %></td>
+  <td><%= f.select :approver_type, f.object.role_id_enum %></td>
 </tr>
