@@ -1,28 +1,25 @@
-<%= render :partial=>'layouts/info', :locals  =>{:record=>record} %>
+<%= render partial: 'layouts/info', locals: { record: record } %>
 
 <% if record.deleted_at.present? %>
-    <div class="bs-callout bs-callout-danger col-lg-3 col-xs-12">
-        <h4>This record has been deleted </h4>
-    </div>
+  <div class="bs-callout bs-callout-danger col-lg-3 col-xs-12">
+    <h4>This record has been deleted </h4>
+  </div>
 <% else %>
-    <h1 class="<%= icon_name %>">
-        Viewing <%= "#{record.form_type} #{record.class.name.titleize}" %>
-    </h1>
-    
-    <div class="ui-widget-content ui-corner-all wide partial_form">
-        <%= render :partial=>'users/shared/forms_show_actions', :locals=>{:record=>record} %>
-        <hr/>
-    </div>
+  <h1 class="<%= icon_name %>">
+    Viewing <%= "#{record.form_type} #{record.class.name.titleize}" %>
+  </h1>
 
-    <%= render :partial=>'users/shared/forms_approval_status', :locals=>{:record=>record, :user=>user} %>
-    
-    <%= render "#{record.class.table_name}/show_form" %>
+  <div class="ui-widget-content ui-corner-all wide partial_form">
+    <%= render partial: 'users/shared/forms_show_actions', locals: { record: record } %>
+    <hr/>
+  </div>
 
-    <div class="ui-widget-content ui-corner-all wide partial_form">
-        <hr/>
-        <%= render :partial=>'users/shared/forms_show_actions', :locals=>{:record=>record} %>
-    </div>
+  <%= render partial: 'users/shared/forms_approval_status', locals: { record: record, user: user } %>
 
+  <%= render "#{record.class.table_name}/show_form" %>
+
+  <div class="ui-widget-content ui-corner-all wide partial_form">
+    <hr/>
+    <%= render partial: 'users/shared/forms_show_actions', locals: { record: record } %>
+  </div>
 <% end %>
-    
-

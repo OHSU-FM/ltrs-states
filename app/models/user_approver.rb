@@ -7,10 +7,6 @@ class UserApprover < ApplicationRecord
 
   MAX_CONTACTS = 10
 
-  # def approver
-  #   approver_id.nil? ? nil : User.find(approver_id)
-  # end
-
   def reviewer?
     approver_type == 'reviewer'
   end

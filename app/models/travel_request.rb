@@ -24,4 +24,9 @@ class TravelRequest < ApplicationRecord
   def related_record
     leave_request
   end
+
+  # use this for research/clinical later
+  def form_type
+    ''
+  end
 end

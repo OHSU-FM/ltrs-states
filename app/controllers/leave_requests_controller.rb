@@ -5,17 +5,24 @@ class LeaveRequestsController < ApplicationController
   # GET /leave_requests
   # GET /leave_requests.json
   def index
-    @leave_requests = LeaveRequest.paginate(:page=>@page,:per_page=>@per_page).order('created_at DESC')
+    @leave_requests = LeaveRequest.paginate(page: @page, per_page: @per_page)
+      .order('created_at DESC')
   end
 
   # GET /leave_requests/1
   # GET /leave_requests/1.json
   def show
+    # TODO open event if current_user if next_user_approver
   end
 
   # GET /leave_requests/new
   def new
+    @back_path = user_forms_path(current_user)
     @leave_request = LeaveRequest.new
+    if params.has_key?(:extra) and params[:extra] == 'true'
+      @leave_request.build_leave_request_extra
+      @leave_request.has_extra = true
+    end
   end
 
   # GET /leave_requests/1/edit

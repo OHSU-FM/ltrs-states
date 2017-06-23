@@ -4,6 +4,9 @@ class LeaveRequest < ApplicationRecord
   has_one :travel_request
   delegate :next_user_approver, to: :approval_state
 
+  has_one :leave_request_extra, dependent: :destroy
+  accepts_nested_attributes_for :leave_request_extra, allow_destroy: true
+
   # have to do this in an after_create callback so we have an approvable_id
   # to reference
   after_create :build_approval_state

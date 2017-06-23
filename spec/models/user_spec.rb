@@ -22,8 +22,9 @@ RSpec.describe User, type: :model do
       expect(@user.full_name).to eq 'hello there'
     end
 
-    it '#is_reviewer? checks if user is reviewer for any user' do
+    fit '#is_reviewer? checks if user is reviewer for any user' do
       user = create :user_with_approvers
+      byebug
       reviewer = user.reviewers.first.approver
 
       expect(reviewer.is_reviewer?).to be_truthy
@@ -56,7 +57,7 @@ RSpec.describe User, type: :model do
     end
   end
 
-  fdescribe 'delegation:' do
+  describe 'delegation:' do
     it '#user_delegations is a list of user_delegations' do
       user = create :user
       delegate_user = create :user
