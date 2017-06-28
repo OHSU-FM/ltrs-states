@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe LeaveRequestsController, type: :controller do
-  describe "GET #index" do
+  fdescribe "GET #index" do
     login_user
     it "assigns all leave_requests as @leave_requests" do
       leave_request = create :leave_request

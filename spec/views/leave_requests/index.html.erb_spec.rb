@@ -1,15 +1,9 @@
 require 'rails_helper'
+require 'will_paginate/array'
 
 RSpec.describe "leave_requests/index", type: :view do
   before(:each) do
-    @leave_requests = FactoryGirl.create_list(:leave_request, 2)
-  end
-
-  it 'renders a list of leave_requests' do
-    assign :leave_requests, @leave_requests; render
-    @leave_requests.each do |lr|
-      expect(rendered).to have_content lr.user.full_name
-    end
+    @leave_requests = FactoryGirl.create_list(:leave_request, 2).paginate()
   end
 
   it 'renders show links to each request' do
@@ -19,10 +13,10 @@ RSpec.describe "leave_requests/index", type: :view do
     end
   end
 
-  it 'renders delete links for each request' do
+  fit 'renders delete links for each request' do
     assign :leave_requests, @leave_requests; render
     @leave_requests.each do |lr|
-      expect(rendered).to have_link("Destroy", href: leave_request_path(lr))
+      expect(rendered).to have_link(href: leave_request_path(lr))
     end
   end
 

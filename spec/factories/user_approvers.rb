@@ -3,9 +3,11 @@ FactoryGirl.define do
     user
 
     after(:build) do |ua|
-      approver = create :user, first_name: 'approver'
-      ua.approver_id = approver.to_param
-      ua.approver_type = "approver"
+      if ua.approver_id.nil?
+        approver = create :user, first_name: 'approver'
+        ua.approver_id = approver.to_param
+        ua.approver_type = 'approver'
+      end
     end
 
     factory :user_reviewer do

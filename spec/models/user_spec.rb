@@ -22,9 +22,8 @@ RSpec.describe User, type: :model do
       expect(@user.full_name).to eq 'hello there'
     end
 
-    fit '#is_reviewer? checks if user is reviewer for any user' do
+    it '#is_reviewer? checks if user is reviewer for any user' do
       user = create :user_with_approvers
-      byebug
       reviewer = user.reviewers.first.approver
 
       expect(reviewer.is_reviewer?).to be_truthy
