@@ -16,7 +16,7 @@
 
   <%= render partial: 'users/shared/forms_approval_status', locals: { record: record, user: user } %>
 
-  <%= render "#{record.class.table_name}/show_form" %>
+  <%= render partial: "#{record.class.table_name}/show_form", locals: { record.class.name.underscore.to_sym => record } %>
 
   <div class="ui-widget-content ui-corner-all wide partial_form">
     <hr/>

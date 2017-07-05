@@ -68,10 +68,10 @@
         </tr>
       <% end %>
 
-      <%= render('leave_requests/show_extra', :leave_request=>leave_request.leave_request_extra) if leave_request.leave_request_extra %>
+      <%= render('leave_requests/show_extra', leave_request: leave_request.leave_request_extra) if leave_request.leave_request_extra %>
       <tr>
         <td><b>Need Travel Arrangements:</b></td>
-        <td><%= boolean_to_words leave_request.need_travel %></td>
+        <td><%= hf_boolean_to_words leave_request.need_travel %></td>
       </tr>
     </tbody>
   </table>

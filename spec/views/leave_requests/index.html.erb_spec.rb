@@ -13,7 +13,7 @@ RSpec.describe "leave_requests/index", type: :view do
     end
   end
 
-  fit 'renders delete links for each request' do
+  it 'renders delete links for each request' do
     assign :leave_requests, @leave_requests; render
     @leave_requests.each do |lr|
       expect(rendered).to have_link(href: leave_request_path(lr))

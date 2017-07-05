@@ -1,6 +1,6 @@
 class LeaveRequestsController < ApplicationController
   include StateEvents
-  before_action :set_leave_request, only: [:show, :edit, :update, :destroy]
+  before_action :load_resources, only: [:show, :edit, :update, :destroy]
 
   # GET /leave_requests
   # GET /leave_requests.json
@@ -80,8 +80,9 @@ class LeaveRequestsController < ApplicationController
 
   private
     # Use callbacks to share common setup or constraints between actions.
-    def set_leave_request
-      @leave_request = LeaveRequest.find(params[:id])
+    def load_resources
+      @user = current_user
+      @leave_request = LeaveRequest.includes(:leave_request_extra, :travel_request).find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

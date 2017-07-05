@@ -23,6 +23,6 @@ class Users::FormsController < ApplicationController
   private
 
   def load_user
-    @user = User.find(params[:user_id].to_i)
+    @user = User.find(params[:user_id])
   end
 end

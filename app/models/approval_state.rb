@@ -112,19 +112,45 @@ class ApprovalState < ApplicationRecord
     expired? or rejected? or approval_complete?
   end
 
+  def submitted_or_higher?
+    !unsubmitted?
+  end
+
   def verdict
-    if self.is_complete?
-      return self.status_str.titleize
-    elsif self.ready_to_submit?
+    if is_complete?
+      return aasm_state.titleize
+    elsif ready_to_submit?
       return 'Ready to submit'
     elsif missing_information?
-      return "Waiting on response from #{self.user.name || self.user.email} "
-    elsif unopened? or in_review?
-      return "Waiting on response from #{self.current_user_approver.approver.full_name}"
+      return "Waiting on response from #{user.name || user.email} "
+    elsif unopened?
+      return "Waiting on response from #{next_user_approver.approver.full_name}"
+    elsif in_review?
+      return "Waiting on response from #{current_user_approver.approver.full_name}"
     elsif next_user_approver.nil?
       return "Error"
     else
       return "Waiting on response from #{next_user_approver.approver.full_name}"
+    end
+  end
+
+  def process_state
+    state = {}
+    user.reviewers.each do |r|
+      state[r] = verdict_for_user(r)
+    end
+    state
+  end
+
+  private
+
+  def verdict_for_user ua
+    if approval_order < ua.approval_order
+      return 'Not Started'
+    elsif approval_order > ua.approval_order
+      return 'Accepted'
+    elsif approval_order == ua.approval_order
+      return aasm_state
     end
   end
 end

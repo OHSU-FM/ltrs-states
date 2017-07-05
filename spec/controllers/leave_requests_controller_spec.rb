@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe LeaveRequestsController, type: :controller do
-  fdescribe "GET #index" do
+  describe "GET #index" do
     login_user
     it "assigns all leave_requests as @leave_requests" do
       leave_request = create :leave_request
@@ -221,8 +221,8 @@ RSpec.describe LeaveRequestsController, type: :controller do
   end
 
   describe "POST send_to_unopened" do
-    login_user
     context "with submitted request" do
+      login_user
       let(:leave_request) { create :leave_request, :submitted  }
       let(:approval_state) { leave_request.approval_state }
 
@@ -251,6 +251,7 @@ RSpec.describe LeaveRequestsController, type: :controller do
     end
 
     context "with unsubmitted request" do
+      login_user
       let(:leave_request) { create :leave_request }
       let(:approval_state) { leave_request.approval_state }
 

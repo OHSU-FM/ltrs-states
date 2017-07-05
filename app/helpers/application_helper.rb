@@ -44,4 +44,8 @@ module ApplicationHelper
       '11pm'
     ]
   end
+
+  def hf_boolean_to_words value
+    value.present? ? "Yes" : "No"
+  end
 end

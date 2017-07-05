@@ -22,6 +22,23 @@ class Ability
 
   def normal_user_permissions user
     can :modify, User, id: user.id
+
+    unless user.new_record?
+      can :create, LeaveRequest
+      can :create, TravelRequest
+    end
+
+    can [:read, :destroy], LeaveRequest do |lr|
+      lr.user == user || user.reviewable_users.include?(lr.user)
+    end
+
+    can [:read, :destroy], TravelRequest do |tr|
+      tr.user == user || user.reviewable_users.include?(tr.user)
+    end
+
+    can :update, ApprovalState do |as|
+      as.user == user || user.reviewable_users.include?(as.user)
+    end
   end
 #     controllable_user_ids = user.controllable_users.map{|u|u.id}
 #     controllable_user_emails = user.controllable_users.map{|u|u.email}

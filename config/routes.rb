@@ -12,6 +12,7 @@ Rails.application.routes.draw do
         post 'submit'
       end
     end
+    resources :approvals, only: [:index], controller: 'users/approvals'
     match 'delegate_forms' => 'users/forms#delegate_forms', via: :get, as: :delegate_forms
   end
   resources :leave_requests do

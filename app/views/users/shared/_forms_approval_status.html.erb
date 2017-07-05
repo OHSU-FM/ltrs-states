@@ -1,106 +1,73 @@
-    <% if record.can_edit?(current_user) && record.approval_state.ready_to_submit? %>
-    <div class="bs-callout bs-callout-danger">
-
-        <h3 class="dangerous"> Request saved, don't forget to submit it! </h3>
-        <p>
-            Your request has been saved, but please review your information below before submitting it. If you are satisfied with
-            the information you have entered please click the button below to <b>submit</b> the request
-            and notify your contacts.
-        </p>
-        <% if user.user_default_emails.size > 0 %>
-            <%= render :partial=>'users/show_user_contacts', :locals=>{:user=>record.user} %>
-        <% else %>
-            <h4 class="dangerous">
-                No contacts present
-            </h4>
-            <p class="dangerous">
-                If you submit this request before creating contacts no one will receive notification of your request.
-            </p>
-            <p class="dangerous">
-                Click <%= link_to 'here', user, :target=>'_blank'%> to add email addresses to your contacts list
-            </p>
-        <% end %>
-
-
-    </div>
+<% if can?(:edit, record) && record.approval_state.ready_to_submit? %>
+  <div class="bs-callout bs-callout-danger">
+    <h3 class="dangerous"> Request saved, don't forget to submit it! </h3>
+    <p>
+      Your request has been saved, but please review your information below before submitting it. If you are satisfied with
+      the information you have entered please click the button below to <b>submit</b> the request
+      and notify your contacts.
+    </p>
+    <% if user.user_default_emails.size > 0 %>
+      <%= render partial: 'users/show_user_contacts', locals: { user: record.user } %>
+    <% else %>
+      <h4 class="dangerous">
+        No contacts present
+      </h4>
+      <p class="dangerous">
+        If you submit this request before creating contacts no one will receive notification of your request.
+      </p>
+      <p class="dangerous">
+        Click <%= link_to 'here', user, target: '_blank'%> to add email addresses to your contacts list
+      </p>
     <% end %>
+  </div>
+<% end %>
 
-    <div class="bs-callout bs-callout-primary">
-        <h3> Form Details </h3>
-        <table class='table'>
-        <tbody>
-
-        <% if record.form_email != record.user.email %>
-            <tr>
-                <td><b>Submitted by:</b></td>
-                <td><%= record.form_user %></td>
-            </tr>
-        <% end %>
-
+<div class="bs-callout bs-callout-primary">
+  <h3> Form Details </h3>
+  <table class='table'>
+    <tbody>
+      <% if record.form_email != record.user.email %>
         <tr>
-            <td><b>Name:</b></td>
-            <td><%= record.user.name %></td>
+          <td><b>Submitted by:</b></td>
+          <td><%= record.form_user %></td>
         </tr>
+      <% end %>
+      <tr>
+        <td><b>Name:</b></td>
+        <td><%= record.user.full_name %></td>
+      </tr>
+      <tr>
+        <td><b>Email:</b></td>
+        <td><%= record.user.email%></td>
+      </tr>
+      <tr>
+        <td><b>Submitted:</b></td>
+        <td><%= tz_convert(record.created_at, current_user.timezone) %></td>
+      </tr>
+      <tr>
+        <td><b>Approval Status:</b></td>
+        <td>
+          <%= record.approval_state.verdict %>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <%= record.user.full_name %>
+        </td>
+        <td>
+          <%= record.approval_state.submitted_or_higher? ? 'Submitted' : '<b style="color:red;">Unsubmitted</b>'.html_safe %>
+        </td>
+      </tr>
+      <% record.approval_state.process_state.each do |reviewer, verdict| %>
         <tr>
-            <td><b>Email:</b></td>
-            <td><%= record.user.email%></td>
+          <td class="<%= 'icon-asterisk' if reviewer.approval_order == record.approval_state.approval_order %>">
+            <%= reviewer.full_name %>
+          </td>
+          <td>
+            <%= verdict %>
+          </td>
         </tr>
-        <tr>
-            <td><b>Submitted:</b></td>
-            <td><%= tz_convert( record.created_at, current_user.timezone ) %></td>
-        </tr>
-        <tr>
-            <td><b>Approval Status:</b></td>
-            <td>
-                <%= record.approval_state.verdict %>
-            </td>
-        </tr>
-
-        <tr>
-            <td>
-                <%= record.user.name %>
-            </td>
-            <td>
-                <%= record.approval_state.submitted? ? 'Submitted' : '<b style="color:red;">Unsubmitted</b>'.html_safe %>
-            </td>
-        </tr>
-        <%
-            old_states = record.approval_state.approvals_status_history
-            approval_order = record.approval_state.approval_order
-            shown_actions = false
-            # Find target opts
-            target_opts = old_states.find{|opts|
-                opts[:ude].email==current_user.email && opts[:ude].approval_order >= approval_order}
-        %>
-        <% old_states.each do |opts| %>
-            <%  # get the current approval_state
-                approval_state = opts[:ver] || record.approval_state
-
-                # show approval actions form on the correct record (only once)
-                show_actions = !shown_actions && opts == target_opts
-                # mark actions as shown if we have decided to show them
-                shown_actions = true if show_actions
-            %>
-
-            <tr>
-                <td class="<%=  # Mark this as the current approval that we are waiting on
-                        'icon-asterisk' if opts[:ude].approval_order == approval_order %>">
-                    <%= opts[:ude].displayname || opts[:ude].name %>
-                </td>
-
-                <td>
-                    <%  if show_actions %>
-                        <%= render :partial=>'users/shared/approvals_reviewer_actions',
-                            :locals=>{:approval_state=>approval_state, :user=>current_user, record: record} %>
-                    <%  else %>
-                        <% if opts[:ver].nil? %>
-                            <small>Not started</small>
-                        <% else %>
-                            <%= opts[:ver].status_str.titleize %>
-                        <% end %>
-                    <%  end %>
-                </td>
-            </tr>
-        <% end %>
-        </tbody></table>
-    </div>
+      <% end %>
+    </tbody>
+  </table>
+</div>

@@ -1,22 +1,22 @@
-    <% if user.user_default_emails.size > 0 %>
-        <h4>Contacts list:</h4>
-        <ul>
-          <% user.user_default_emails.each do |ude| %>
-          <li>
-              <span tooltip="<%=ude.email %>">
-                <%= ude.approval_order %> &nbsp 
-                <%= ude.role_id_str %> &nbsp
-                <%= ude.displayname.present? ? ude.displayname : ude.email  %>
-              </span>
-          </li>
-          <% end %>
-        </ul>
-    <% else %>
-        <h4 class="label label-danger">
-            No contacts present
-        </h4>
-        <p class="label label-danger">
-            If you create a request before creating contacts no one will receive notification of your request. Please contact the web administrator.
-        </p>
+<% if user.user_default_emails.size > 0 %>
+  <h4>Contacts list:</h4>
+  <ul>
+    <% user.user_default_emails.each do |ude| %>
+      <li>
+        <span tooltip="<%=ude.email %>">
+          <%= ude.approval_order %> &nbsp
+          <%= ude.role_id_str %> &nbsp
+          <%= ude.displayname.present? ? ude.displayname : ude.email  %>
+        </span>
+      </li>
     <% end %>
+  </ul>
+<% else %>
+  <h4 class="label label-danger">
+    No contacts present
+  </h4>
+  <p class="label label-danger">
+    If you create a request before creating contacts no one will receive notification of your request. Please contact the web administrator.
+  </p>
+<% end %>
 

@@ -155,5 +155,55 @@ RSpec.describe ApprovalState, type: :model do
 
       expect(request.approval_state.current_user_approver).to eq user.user_approvers.first
     end
+
+    fit '#submitted_or_higher? should return true if state has ever been submitted' do
+      (ApprovalState.aasm.states.map(&:name) - [:unsubmitted, :missing_information, :expired, :approval_complete, :error]).each do |state|
+        request = create :leave_request, state
+        expect(request.approval_state.submitted_or_higher?).to be_truthy
+      end
+    end
+  end
+
+  describe 'process_state' do
+    context 'one reviewer' do
+      before(:each) do
+        @user = create :user_with_approvers
+        @request = create :leave_request, user: @user
+      end
+
+      it "'s keys are the users user_approvers" do
+        @request.approval_state.process_state.keys.each do |k|
+          expect(@user.user_approvers).to include k
+        end
+      end
+
+      it "'s values should be a string" do
+        @request.approval_state.process_state.values.each do |v|
+          expect(v).to be_a String
+        end
+      end
+
+      it "value for a given approver is 'Not Started' if approval_order is > \
+        state approval_order" do
+        expect(@request.approval_state.process_state.values.last).to eq 'Not Started'
+      end
+
+      # it "'s values should be a phrase that compares a user with what action is \
+      #  expected of them for this request" do
+      #   expect(@request.approval_state.process_state.values.first).to eq 'unopened'
+      # end
+    end
+
+    context 'two reviewers' do
+      before(:each) do
+        @user = create :user_two_reviewers
+        @request = create :leave_request, user: @user
+      end
+
+      it "value for a given reviewer is 'accepted' if \
+        approval_order < state approval order" do
+        expect(@request.approval_state.process_state[@user.reviewers.first]).to eq 'accepted'
+      end
+    end
   end
 end

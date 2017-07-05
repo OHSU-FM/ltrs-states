@@ -28,6 +28,13 @@ FactoryGirl.define do
       end
     end
 
+    factory :user_with_delegate do
+      after(:create) do |user|
+        d = create :user, first_name: 'delegate', email: "delegate4u#{user.id}@example.com"
+        create :user_delegation, user: user, delegate_user: d
+      end
+    end
+
     factory :admin do
       is_admin true
     end

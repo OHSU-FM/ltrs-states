@@ -1,6 +1,7 @@
 class User < ApplicationRecord
   has_many :approval_states
-  has_many :user_approvers, -> { order('approval_order ASC') }, dependent: :destroy
+  has_many :user_approvers, -> { order('approval_order ASC') },
+    dependent: :destroy
 
   has_many :leave_requests, through: :approval_states,
     source: :approvable, source_type: "LeaveRequest"
@@ -8,8 +9,12 @@ class User < ApplicationRecord
     source: :approvable, source_type: "TravelRequest"
 
   has_many :user_delegations, dependent: :delete_all, inverse_of: :user
+
+  # users we've delegated control to
   has_many :delegates, through: :user_delegations,
     source: :delegate_user, foreign_key: :delegate_user_id
+
+  # users who've delegated control to us
   has_and_belongs_to_many :delegators, join_table: :user_delegations,
     foreign_key: :delegate_user_id,
     association_foreign_key: :user_id,
@@ -20,7 +25,8 @@ class User < ApplicationRecord
 
   validates_presence_of :login, :first_name, :last_name, :email
 
-  devise :database_authenticatable, :ldap_authenticatable, :rememberable, :trackable, :timeoutable
+  devise :database_authenticatable, :ldap_authenticatable, :rememberable,
+    :trackable, :timeoutable
 
   has_paper_trail
   acts_as_paranoid
@@ -51,5 +57,35 @@ class User < ApplicationRecord
 
   def approvables
     leave_requests + travel_requests
+  end
+
+  def reviewables
+    [reviewable_users.map(&:leave_requests) + reviewable_users.map(&:travel_requests)].flatten
+  end
+
+  # cancancan utility functions
+
+  # @return Array[User] users that this user is able to control
+  def controllable_users
+    @controllable_users ||= ([self] + delegators).uniq
+  end
+
+  # @return Array[User] users that this user is able to view
+  # def viewable_users
+  #   @viewable_users ||=
+  # end
+
+  # @return Array[User] users that this user is able to review
+  def reviewable_users
+    ru = UserApprover.where(approver_id: id,
+                            approver_type: 'reviewer').map(&:user)
+    @reviewable_users ||= (controllable_users + ru).flatten.uniq
+  end
+
+  # @return Array[User] users that this user is notified about
+  def notifiable_users
+    nu = UserApprover.where(approver_id: id,
+                            approver_type: 'notifier').map(&:user)
+    @notifiable_users ||= (controllable_users + nu).flatten.uniq
   end
 end

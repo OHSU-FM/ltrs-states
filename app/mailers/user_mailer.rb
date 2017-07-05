@@ -1,4 +1,5 @@
 class UserMailer < ApplicationMailer
+  add_template_helper(ApplicationHelper)
 
   def request_submitted(approval_state, opts={})
     @approval_state = approval_state
