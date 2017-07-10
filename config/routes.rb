@@ -15,13 +15,14 @@ Rails.application.routes.draw do
     resources :approvals, only: [:index], controller: 'users/approvals'
     match 'delegate_forms' => 'users/forms#delegate_forms', via: :get, as: :delegate_forms
   end
-  resources :leave_requests do
+  resources :leave_requests, except: :index do
     member do
       post 'submit' => 'leave_requests#submit'
       post 'send_to_unopened' => 'leave_requests#send_to_unopened'
       post 'review' => 'leave_requests#review'
       post 'reject' => 'leave_requests#reject'
       post 'accept' => 'leave_requests#accept'
+      post 'update_state' => 'leave_requests#update_state'
     end
   end
 

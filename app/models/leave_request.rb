@@ -14,6 +14,10 @@ class LeaveRequest < ApplicationRecord
   has_paper_trail
   acts_as_paranoid
 
+  validates_presence_of :start_date, :end_date
+  validate :hours_present
+  validate :date_sequence
+
   # checks the presence of some attributes and returns true if they're there
   # @return [Boolean] true if attributes present, else false
   def ready_for_submission?
@@ -42,5 +46,25 @@ class LeaveRequest < ApplicationRecord
 
   def build_approval_state
     ApprovalState.create(user: user, approvable: self)
+  end
+
+  def hours_present
+    if (hours_vacation == 0 && hours_sick == 0 && hours_other == 0 &&
+        hours_training == 0 && hours_comp == 0 && hours_cme == 0)
+      errors.add(:hours_vacation, '')
+      errors.add(:hours_sick, '')
+      errors.add(:hours_other, '')
+      errors.add(:hours_training, '')
+      errors.add(:hours_comp, '')
+      errors.add(:hours_cme, '')
+      errors.add(:base, 'Leave hours: cannot all be blank')
+    end
+  end
+
+  def date_sequence
+    if start_date && end_date && start_date > end_date
+      errors.add(:end_date, '')
+      errors.add(:start_date, 'Beginning of leave cannot be later than end date')
+    end
   end
 end

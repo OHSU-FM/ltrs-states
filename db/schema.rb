@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170622221829) do
+ActiveRecord::Schema.define(version: 20170710234555) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -51,7 +51,7 @@ ActiveRecord::Schema.define(version: 20170622221829) do
 
   create_table "leave_requests", force: :cascade do |t|
     t.bigint "user_id"
-    t.datetime "start_date"
+    t.date "start_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "form_user", limit: 255

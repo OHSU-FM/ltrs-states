@@ -11,11 +11,20 @@ RSpec.describe LeaveRequestsController, type: :controller do
   end
 
   describe "GET #show" do
-    login_user
-    it "assigns the requested leave_request as @leave_request" do
-      leave_request = create :leave_request
-      get :show, params: {id: leave_request.to_param}
-      expect(assigns(:leave_request)).to eq(leave_request)
+    context 'as user' do
+      before(:each) do
+        @user = create :user
+      end
+
+      it "assigns the requested leave_request as @leave_request" do
+        leave_request = create :leave_request, user: @user
+        get :show, params: { id: leave_request.to_param }
+        expect(assigns(:leave_request)).to eq(leave_request)
+      end
+    end
+
+    context 'as reviewer' do
+
     end
   end
 

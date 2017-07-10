@@ -156,7 +156,7 @@ RSpec.describe ApprovalState, type: :model do
       expect(request.approval_state.current_user_approver).to eq user.user_approvers.first
     end
 
-    fit '#submitted_or_higher? should return true if state has ever been submitted' do
+    it '#submitted_or_higher? should return true if state has ever been submitted' do
       (ApprovalState.aasm.states.map(&:name) - [:unsubmitted, :missing_information, :expired, :approval_complete, :error]).each do |state|
         request = create :leave_request, state
         expect(request.approval_state.submitted_or_higher?).to be_truthy

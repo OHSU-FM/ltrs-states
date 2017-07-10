@@ -14,10 +14,11 @@ module ControllerMacros
     logout(warden_scope(resource))
   end
 
-  def login_user
+  def login_user u=nil
     before(:each) do
+      user = u || FactoryGirl.create(:user)
       @request.env["devise.mapping"] = Devise.mappings[:user]
-      sign_in(FactoryGirl.create :user)
+      sign_in(user)
     end
   end
 

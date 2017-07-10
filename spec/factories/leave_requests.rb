@@ -1,6 +1,9 @@
 FactoryGirl.define do
   factory :leave_request do
     association :user, factory: :user_with_approvers
+    hours_vacation 1
+    start_date DateTime.now.tomorrow.to_date
+    end_date DateTime.now.tomorrow.to_date + 1.day
 
     trait :submitted do
       after :create do |leave_request|

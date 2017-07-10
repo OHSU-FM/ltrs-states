@@ -3,8 +3,12 @@ module StateEvents
 
   included do
     before_action :set_approvable_and_state,
-      only: [:submit, :send_to_unopened, :review, :reject, :accept]
+      only: [:update_state, :submit, :send_to_unopened, :review, :reject, :accept]
     helper_method :submit
+  end
+
+  def update_state
+    send params[:approval_state][:aasm_state]
   end
 
   def submit

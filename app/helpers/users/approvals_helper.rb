@@ -30,4 +30,11 @@ module Users::ApprovalsHelper
         'Selecting from all approvals'
     end
   end
+
+  def hf_approval_state_permitted_options approval_state
+    states = approval_state.aasm.states(permitted: true).map(&:name).map(&:to_s).map(&:humanize)
+    events = approval_state.aasm.events(permitted: true).map(&:name).map(&:to_s)
+    current = [approval_state.aasm_state].map{|c| [c.humanize, c]}
+    return (states.zip(events) + current)
+  end
 end

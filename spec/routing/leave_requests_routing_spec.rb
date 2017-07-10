@@ -3,8 +3,8 @@ require "rails_helper"
 RSpec.describe LeaveRequestsController, type: :routing do
   describe "routing" do
 
-    it "routes to #index" do
-      expect(:get => "/leave_requests").to route_to("leave_requests#index")
+    it "doesn't route to #index" do
+      expect(:get => "/leave_requests").not_to route_to("leave_requests#index")
     end
 
     it "routes to #new" do

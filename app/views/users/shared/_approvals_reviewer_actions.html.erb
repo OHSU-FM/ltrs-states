@@ -1,3 +1,14 @@
-<% approval_state.aasm.events(permitted: true).map(&:name).each do |event| %>
-  <%= event.to_s %>
+<%= form_for(approval_state,
+    remote: true,
+    class: 'control-group',
+    url: polymorphic_path(approval_state.approvable, action: 'update_state'),
+    method: :post,
+    html: { 'data-type': 'json', multipart: true }) do |f| %>
+    <%= hidden_field_tag(:status_was, approval_state.aasm_state) %>
+    <strong>Status: </strong>
+    <%= f.select :aasm_state,
+        options_for_select(hf_approval_state_permitted_options(approval_state),
+        approval_state.aasm_state), { prompt: 'Status' } %>
+    <%= f.submit 'Save', class: 'btn btn-success post_with_status js_ajax_destroy pull-right' %>
 <% end %>
+

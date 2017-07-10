@@ -32,15 +32,6 @@ class ApprovalState < ApplicationRecord
       end
     end
 
-    # TODO get rid of this (use delete and fill in new request from attrs)
-    event :unsubmit do
-      transitions to: :unsubmitted
-
-      error do |e|
-        log_and_raise_error e
-      end
-    end
-
     event :send_to_unopened do
       transitions from: [:submitted, :in_review], to: :unopened, guard: :unopened_allowed?
 

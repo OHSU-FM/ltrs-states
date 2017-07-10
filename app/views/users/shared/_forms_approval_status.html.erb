@@ -64,7 +64,11 @@
             <%= reviewer.full_name %>
           </td>
           <td>
-            <%= verdict %>
+            <% if reviewer.approval_order == record.approval_state.approval_order %>
+              <%= render partial: 'users/shared/approvals_reviewer_actions', locals: { approval_state: record.approval_state, user: current_user, record: record } %>
+            <% else %>
+              <%= verdict %>
+            <% end %>
           </td>
         </tr>
       <% end %>

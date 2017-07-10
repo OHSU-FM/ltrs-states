@@ -73,7 +73,7 @@ class LeaveRequestsController < ApplicationController
   def destroy
     @leave_request.destroy
     respond_to do |format|
-      format.html { redirect_to leave_requests_url, notice: 'Leave request was successfully destroyed.' }
+      format.html { redirect_to @back_path, notice: 'Leave request was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -83,10 +83,20 @@ class LeaveRequestsController < ApplicationController
     def load_resources
       @user = current_user
       @leave_request = LeaveRequest.includes(:leave_request_extra, :travel_request).find(params[:id])
+      if current_ability.can?(params[:action].to_sym, @leave_request) && current_user.id != @leave_request.user_id
+        @back_path = user_approvals_path(current_user)
+      else
+        @back_path = user_forms_path(current_user)
+      end
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def leave_request_params
-      params.require(:leave_request).permit(:user_id, :start_date)
+      params.require(:leave_request)
+        .permit(:user_id, :start_date, :form_user, :form_email, :start_hour,
+      :start_min, :end_date, :end_hour, :end_min, :desc, :hours_vacation,
+               :hours_sick, :hours_other, :hours_other_desc, :hours_training,
+               :hours_training_desc, :hours_comp, :hours_comp_desc, :hours_cme,
+               :need_travel, :mail_sent, :mail_final_sent)
     end
 end
