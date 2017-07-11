@@ -96,7 +96,7 @@
         <td colspan='2'>
           <%= f.label :expense_card_type,'Account to charge:'%>
           <br/>
-          <%= f.select :expense_card_type, grouped_options_for_select(funding_options(), f.object.expense_card_type), prompt: 'Select' %>
+          <%= f.select :expense_card_type, grouped_options_for_select(hf_funding_options, f.object.expense_card_type), prompt: 'Select' %>
         </td>
       </tr>
       <tr>
@@ -223,7 +223,7 @@
           <%= f.label :lodging_card_type, 'Account to charge:' %>
         </td>
         <td>
-          <%= f.select :lodging_card_type, grouped_options_for_select(funding_options(),f.object.lodging_card_type), prompt=> 'Select' %>
+          <%= f.select :lodging_card_type, grouped_options_for_select(hf_funding_options,f.object.lodging_card_type), prompt: 'Select' %>
         </td>
       </tr>
       <tr>
