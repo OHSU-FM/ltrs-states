@@ -1,13 +1,13 @@
-<% if can?(:edit, record) && record.approval_state.ready_to_submit? %>
+<% if can?(:edit, record.approval_state) && record.approval_state.ready_to_submit? %>
   <div class="bs-callout bs-callout-danger">
-    <h3 class="dangerous"> Request saved, don't forget to submit it! </h3>
+    <h3 class="dangerous very-dangerous"> Request saved, don't forget to submit it! </h3>
     <p>
       Your request has been saved, but please review your information below before submitting it. If you are satisfied with
       the information you have entered please click the button below to <b>submit</b> the request
       and notify your contacts.
     </p>
-    <% if user.user_default_emails.size > 0 %>
-      <%= render partial: 'users/show_user_contacts', locals: { user: record.user } %>
+    <% if user.user_approvers.size > 0 %>
+      <%#= render partial: 'users/show_user_contacts', locals: { user: record.user } %>
     <% else %>
       <h4 class="dangerous">
         No contacts present
@@ -55,7 +55,7 @@
           <%= record.user.full_name %>
         </td>
         <td>
-          <%= record.approval_state.submitted_or_higher? ? 'Submitted' : '<b style="color:red;">Unsubmitted</b>'.html_safe %>
+          <%= record.approval_state.submitted_or_higher? ? 'Submitted' : '<b style="color:#d9534f;">Unsubmitted</b>'.html_safe %>
         </td>
       </tr>
       <% record.approval_state.process_state.each do |reviewer, verdict| %>

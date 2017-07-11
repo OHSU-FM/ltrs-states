@@ -49,7 +49,7 @@ class ApprovalState < ApplicationRecord
     end
 
     event :reject do
-      transitions from: :in_review, to: :rejected
+      transitions from: [:in_review, :unopened], to: :rejected
 
       error do |e|
         log_and_raise_error e
@@ -57,7 +57,7 @@ class ApprovalState < ApplicationRecord
     end
 
     event :accept do
-      transitions from: :in_review, to: :accepted
+      transitions from: [:in_review, :unopened], to: :accepted
 
       error do |e|
         log_and_raise_error e
