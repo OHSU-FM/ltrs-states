@@ -1,7 +1,7 @@
 <h1 id="approvals_title">
   <%= hf_filter.titleize %>
   Approvals
-  <%= "For #{@user.name}" unless current_user.id == @user.id %>
+  <%= "For #{@user.full_name}" unless current_user.id == @user.id %>
 </h1>
 <div class='container-fluid'>
   <div class="row">
