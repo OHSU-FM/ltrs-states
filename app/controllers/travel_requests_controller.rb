@@ -1,5 +1,6 @@
 class TravelRequestsController < ApplicationController
   before_action :set_travel_request, only: [:show, :edit, :update, :destroy]
+  include StateEvents
 
   # GET /travel_requests
   # GET /travel_requests.json
@@ -14,7 +15,10 @@ class TravelRequestsController < ApplicationController
 
   # GET /travel_requests/new
   def new
+    @back_path = user_forms_path(current_user)
     @travel_request = TravelRequest.new
+    @travel_request.form_user = current_user.full_name
+    @travel_request.form_email = current_user.email
   end
 
   # GET /travel_requests/1/edit
@@ -69,6 +73,17 @@ class TravelRequestsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def travel_request_params
-      params.fetch(:travel_request, {})
+      params.require(:travel_request)
+        .permit(:form_user, :form_email, :dest_desc, :air_use, :air_desc, :ffid,
+      :dest_depart_date, :dest_depart_hour, :dest_depart_min, :dest_arrive_hour,
+      :dest_arrive_min, :preferred_airline, :menu_notes, :additional_travelers,
+      :ret_depart_date, :ret_depart_hour, :ret_depart_min, :ret_arrive_hour,
+      :ret_arrive_min, :other_notes, :car_rental, :car_arrive, :car_arrive_hour,
+      :car_arrive_min, :car_depart, :car_depart_hour, :car_depart_min,
+      :car_rental_co, :lodging_use, :lodging_card_type, :lodging_card_desc,
+      :lodging_name, :lodging_phone, :lodging_arrive_date, :lodging_depart_date,
+      :lodging_additional_people, :lodging_other_notes, :conf_prepayment,
+      :conf_desc, :expense_card_use, :expense_card_type, :expense_card_desc,
+      :status, :user_id, :leave_request_id, :mail_sent, :mail_final_sent)
     end
 end

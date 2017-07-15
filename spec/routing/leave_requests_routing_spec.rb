@@ -15,20 +15,20 @@ RSpec.describe LeaveRequestsController, type: :routing do
       expect(:get => "/leave_requests/1").to route_to("leave_requests#show", :id => "1")
     end
 
-    it "routes to #edit" do
-      expect(:get => "/leave_requests/1/edit").to route_to("leave_requests#edit", :id => "1")
+    it "doesn't route to #edit" do
+      expect(:get => "/leave_requests/1/edit").not_to route_to("leave_requests#edit", :id => "1")
     end
 
     it "routes to #create" do
       expect(:post => "/leave_requests").to route_to("leave_requests#create")
     end
 
-    it "routes to #update via PUT" do
-      expect(:put => "/leave_requests/1").to route_to("leave_requests#update", :id => "1")
+    it "doesn't route to #update via PUT" do
+      expect(:put => "/leave_requests/1").not_to route_to("leave_requests#update", :id => "1")
     end
 
-    it "routes to #update via PATCH" do
-      expect(:patch => "/leave_requests/1").to route_to("leave_requests#update", :id => "1")
+    it "doesn't route to #update via PATCH" do
+      expect(:patch => "/leave_requests/1").not_to route_to("leave_requests#update", :id => "1")
     end
 
     it "routes to #destroy" do

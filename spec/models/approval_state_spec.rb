@@ -105,7 +105,7 @@ RSpec.describe ApprovalState, type: :model do
     end
   end
 
-  fdescribe 'the reject event' do
+  describe 'the reject event' do
     context 'with state in_review' do
       let(:as) { create :leave_approval_state, aasm_state: 'in_review' }
 
@@ -142,7 +142,7 @@ RSpec.describe ApprovalState, type: :model do
         as.accept
         expect(as).to be_accepted
       end
-    end 
+    end
 
     context 'with state in unopened' do
       let(:as) { create :leave_approval_state, aasm_state: 'unopened' }
@@ -151,7 +151,7 @@ RSpec.describe ApprovalState, type: :model do
         as.accept
         expect(as).to be_accepted
       end
-    end 
+    end
 
     it 'should only transition from in_review or unopened' do
       (ApprovalState.aasm.states.map(&:name) - [:in_review, :unopened]).each do |state|
@@ -160,7 +160,7 @@ RSpec.describe ApprovalState, type: :model do
           create(:leave_approval_state, aasm_state: state).accept
         }.to raise_error AASM::InvalidTransition
       end
-    end  
+    end
   end
 
   describe 'methods' do

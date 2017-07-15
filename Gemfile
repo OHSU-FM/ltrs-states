@@ -18,6 +18,8 @@ gem 'jbuilder', '~> 2.5'
 # utils
 gem 'aasm'
 
+gem 'paperclip'
+
 gem 'rails_admin'
 gem 'paper_trail'
 gem 'devise'

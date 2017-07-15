@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170710234555) do
+ActiveRecord::Schema.define(version: 20170712175322) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -78,6 +78,13 @@ ActiveRecord::Schema.define(version: 20170710234555) do
     t.datetime "deleted_at"
     t.index ["deleted_at"], name: "index_leave_requests_on_deleted_at"
     t.index ["user_id"], name: "index_leave_requests_on_user_id"
+  end
+
+  create_table "travel_files", force: :cascade do |t|
+    t.bigint "travel_request_id"
+    t.bigint "user_file_id"
+    t.index ["travel_request_id"], name: "index_travel_files_on_travel_request_id"
+    t.index ["user_file_id"], name: "index_travel_files_on_user_file_id"
   end
 
   create_table "travel_requests", force: :cascade do |t|
@@ -153,6 +160,17 @@ ActiveRecord::Schema.define(version: 20170710234555) do
     t.index ["user_id"], name: "index_user_delegations_on_user_id"
   end
 
+  create_table "user_files", force: :cascade do |t|
+    t.string "uploaded_file_name", limit: 255
+    t.string "uploaded_file_content_type", limit: 255
+    t.integer "uploaded_file_file_size"
+    t.datetime "uploaded_file_uploaded_at"
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_user_files_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "login", limit: 255, null: false
@@ -191,5 +209,7 @@ ActiveRecord::Schema.define(version: 20170710234555) do
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
+  add_foreign_key "travel_files", "travel_requests"
+  add_foreign_key "travel_files", "user_files"
   add_foreign_key "user_approvers", "users"
 end

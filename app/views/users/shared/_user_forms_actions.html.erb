@@ -12,9 +12,6 @@
         :method=>:post,
         :class=>'btn btn-success' %>
   <% end %>
-  <%= link_to 'Edit', edit_polymorphic_url(record),
-    :disabled=>!can?(:edit, record),
-    class: "btn btn-info" %>
   <%= link_to 'Delete', polymorphic_path(record),
     :method=>:delete,
     :data=>{ :confirm => 'Are you sure you want to cancel this request?' },

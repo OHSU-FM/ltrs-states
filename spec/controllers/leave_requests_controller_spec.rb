@@ -1,28 +1,19 @@
 require 'rails_helper'
 
 RSpec.describe LeaveRequestsController, type: :controller do
-  describe "GET #index" do
-    login_user
-    it "assigns all leave_requests as @leave_requests" do
-      leave_request = create :leave_request
-      get :index
-      expect(assigns(:leave_requests)).to eq([leave_request])
-    end
-  end
-
   describe "GET #show" do
     context 'as user' do
-      before(:each) do
-        @user = create :user
-      end
+      login_user
+      let(:user) { controller.current_user }
 
       it "assigns the requested leave_request as @leave_request" do
-        leave_request = create :leave_request, user: @user
+        leave_request = create :leave_request, user: user
         get :show, params: { id: leave_request.to_param }
         expect(assigns(:leave_request)).to eq(leave_request)
       end
     end
 
+    # TODO
     context 'as reviewer' do
 
     end
@@ -36,35 +27,72 @@ RSpec.describe LeaveRequestsController, type: :controller do
     end
   end
 
-  describe "GET #edit" do
-    login_user
-    it "assigns the requested leave_request as @leave_request" do
-      leave_request = create :leave_request
-      get :edit, params: {id: leave_request.to_param}
-      expect(assigns(:leave_request)).to eq(leave_request)
-    end
-  end
-
   describe "POST #create" do
     context "with valid params" do
       login_user
-      let(:valid_attributes) { build(:leave_request).attributes }
+      let(:user) { controller.current_user }
+      let(:valid_attributes) { build(:leave_request, user: user).attributes }
 
       it "creates a new LeaveRequest" do
         expect {
-          post :create, params: {leave_request: valid_attributes}
+          post :create, params: { leave_request: valid_attributes }
         }.to change(LeaveRequest, :count).by(1)
       end
 
       it "assigns a newly created leave_request as @leave_request" do
-        post :create, params: {leave_request: valid_attributes}
+        post :create, params: { leave_request: valid_attributes }
         expect(assigns(:leave_request)).to be_a(LeaveRequest)
         expect(assigns(:leave_request)).to be_persisted
       end
 
       it "redirects to the created leave_request" do
-        post :create, params: {leave_request: valid_attributes}
+        post :create, params: { leave_request: valid_attributes }
         expect(response).to redirect_to(LeaveRequest.last)
+      end
+
+      it "form_user should be the current_user's full_name" do
+        post :create, params: { leave_request: valid_attributes }
+        expect(LeaveRequest.last.form_user).to eq user.full_name
+      end
+
+      it "form_email should be the current_user's email" do
+        post :create, params: { leave_request: valid_attributes }
+        expect(LeaveRequest.last.form_email).to eq user.email
+      end
+
+      it "user should be current_user" do
+        post :create, params: { leave_request: valid_attributes }
+        expect(LeaveRequest.last.user).to eq controller.current_user
+      end
+    end
+
+    context "with valid params and a delegate user" do
+      login_user
+      let(:d_user) { controller.current_user }
+      let(:user) { create :user }
+      let(:delegation) { create :user_delegation, user: user, delegate_user: d_user }
+      let(:valid_attributes) { build(:leave_request, user: user).attributes }
+
+      it "creates a new LeaveRequest" do
+        expect {
+          post :create, params: { leave_request: valid_attributes }
+        }.to change(LeaveRequest, :count).by(1)
+      end
+
+      it "form_user should be delegate user's full_name" do
+        post :create, params: { leave_request: valid_attributes }
+        expect(LeaveRequest.last.form_user).to eq controller.current_user.full_name
+      end
+
+      it "form_email should be delegate user's email" do
+        post :create, params: { leave_request: valid_attributes }
+        expect(LeaveRequest.last.form_email).to eq controller.current_user.email
+      end
+
+      it "#user should not be current_user" do
+        post :create, params: { leave_request: valid_attributes }
+        expect(LeaveRequest.last.user).not_to eq controller.current_user
+        expect(LeaveRequest.last.user).to eq user
       end
     end
 
@@ -86,78 +114,6 @@ RSpec.describe LeaveRequestsController, type: :controller do
     end
   end
 
-  describe "PUT #update" do
-    login_user
-    context "with valid params" do
-      let(:valid_attributes) { build(:leave_request).attributes }
-
-      it "updates the requested leave_request" do
-        leave_request = create :leave_request
-        new_attributes = valid_attributes.update("start_date" => Time.new().at_midnight + 10.days)
-        put :update, params: {id: leave_request.id, leave_request: new_attributes}
-        leave_request.reload
-        expect(leave_request.start_date).to eq Time.new().at_midnight + 10.days
-      end
-
-      it "assigns the requested leave_request as @leave_request" do
-        leave_request = create :leave_request
-        put :update, params: {id: leave_request.to_param, leave_request: valid_attributes}
-        expect(assigns(:leave_request)).to eq(leave_request)
-      end
-
-      it "redirects to the leave_request" do
-        leave_request = create :leave_request
-        put :update, params: {id: leave_request.to_param, leave_request: valid_attributes}
-        expect(response).to redirect_to(leave_request)
-      end
-
-      describe "state transition during update" do
-        it "resets submitted approval_state to unsubmitted" do
-          leave_request = create :leave_request, :submitted
-          new_attributes = valid_attributes.update("start_date" => Time.new().at_midnight + 10.days)
-          put :update, params: {id: leave_request.id, leave_request: new_attributes}
-          leave_request.reload
-          expect(leave_request.approval_state).to be_unsubmitted
-        end
-
-        it "unsubmitted approval_state remains unsubmitted without error" do
-          leave_request = create :leave_request
-          new_attributes = leave_request.attributes
-          put :update, params: {id: leave_request.id, leave_request: new_attributes}
-          leave_request.reload
-          expect(leave_request.approval_state).to be_unsubmitted
-        end
-
-        it "submitted approval_state remains submitted if request not updated" do
-          leave_request = create :leave_request, :submitted
-          new_attributes = leave_request.attributes # so @leave_request.changed? == false
-          put :update, params: {id: leave_request.id, leave_request: new_attributes}
-          leave_request.reload
-          expect(leave_request.approval_state).to be_submitted
-        end
-
-      end
-    end
-
-    context "with invalid params" do
-      let(:invalid_attributes) {
-        build(:leave_request).attributes.except("user_id").merge("user_id" => nil)
-      }
-
-      it "assigns the leave_request as @leave_request" do
-        leave_request = create :leave_request
-        put :update, params: {id: leave_request.to_param, leave_request: invalid_attributes}
-        expect(assigns(:leave_request)).to eq(leave_request)
-      end
-
-      it "re-renders the 'edit' template" do
-        leave_request = create :leave_request
-        put :update, params: {id: leave_request.to_param, leave_request: invalid_attributes}
-        expect(response).to render_template("edit")
-      end
-    end
-  end
-
   describe "DELETE #destroy" do
     login_user
     it "destroys the requested leave_request" do
@@ -167,10 +123,10 @@ RSpec.describe LeaveRequestsController, type: :controller do
       }.to change(LeaveRequest, :count).by(-1)
     end
 
-    it "redirects to the leave_requests list" do
+    it "redirects to the forms list" do
       leave_request = create :leave_request
       delete :destroy, params: {id: leave_request.to_param}
-      expect(response).to redirect_to(leave_requests_url)
+      expect(response).to redirect_to(user_forms_path(controller.current_user))
     end
   end
 

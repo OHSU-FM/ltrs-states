@@ -1,13 +1,3 @@
-<% unless @travel_request.new_record? %>
-  <h3>Request changes</h3>
-  <div class='row'>
-    <div class="col-md-6 col-lg-6">
-      <%= f.label :request_change, 'If this is a change to a previous request, describe the change below' %> <br />
-      <%= f.text_area :request_change, size: '40x3' %>
-    </div>
-  </div>
-  <hr >
-<% end %>
 <div class="ui-widget-content ui-corner-all wide partial_form">
   <table>
     <tbody>
@@ -52,13 +42,13 @@
           <%= f.label :dest_depart_hour, 'Departure time: (optional)' %>
           <br />
           <%= f.select :dest_depart_hour, hf_hour_options, { prompt: 'Hour' } %>:
-          <%= f.select :dest_depart_min, ['0','15','30','45'], { prompt: 'Min' } %>
+          <%= f.select :dest_depart_min, ['0', '15', '30', '45'], { prompt: 'Min' } %>
         </td>
         <td>
           <%= f.label :dest_arrive_hour, 'Arrival time: (optional)' %>
           <br />
           <%= f.select :dest_arrive_hour, hf_hour_options, { prompt: 'Hour' } %>
-          <%= f.select :dest_arrive_min, ['0','15','30','45'] , { prompt: 'Min' } %>
+          <%= f.select :dest_arrive_min, ['0', '15', '30', '45'], { prompt: 'Min' } %>
         </td>
       </tr>
       <tr>
@@ -72,13 +62,13 @@
           <%= f.label :ret_depart_hour, 'Departure time: (optional)' %>
           <br />
           <%= f.select :ret_depart_hour, hf_hour_options, { prompt: 'Hour' } %>
-          <%= f.select :ret_depart_min, ['0','15','30','45'], { prompt: 'Min' } %>
+          <%= f.select :ret_depart_min, ['0', '15', '30', '45'], { prompt: 'Min' } %>
         </td>
         <td>
           <%= f.label :ret_arrive_hour,'Arrival time: (optional)' %>
           <br />
           <%= f.select :ret_arrive_hour, hf_hour_options, { prompt: 'Hour' } %>
-          <%= f.select :ret_arrive_min, ['0','15','30','45'], { prompt: 'Min' } %>
+          <%= f.select :ret_arrive_min, ['0', '15', '30', '45'], { prompt: 'Min' } %>
         </td>
       </tr>
     </tbody>
@@ -94,7 +84,7 @@
     <tbody>
       <tr>
         <td colspan='2'>
-          <%= f.label :expense_card_type,'Account to charge:'%>
+          <%= f.label :expense_card_type, 'Account to charge:'%>
           <br/>
           <%= f.select :expense_card_type, grouped_options_for_select(hf_funding_options, f.object.expense_card_type), prompt: 'Select' %>
         </td>
@@ -114,12 +104,12 @@
   <%= f.label :air_use, 'Would you like assistance obtaining airline reservations?' %>
   <%= f.select :air_use,
     options_for_select([['yes', true], ['no', false]], f.object.air_use),
-    { prompt: 'Select' }, data: { target: '#air_use_form' }  %>
+    { prompt: 'Select' }, data: { target: '#air_use_form' } %>
   <table id="air_use_form" class="stop_flouc">
     <tbody>
       <tr>
         <td>
-          <%= f.label :air_desc, 'Flight Destination:'  %>
+          <%= f.label :air_desc, 'Flight Destination:' %>
         </td>
         <td>
           <%= f.text_field :air_desc %>
@@ -172,7 +162,7 @@
   <h4>Rental Car </h4>
   <%= f.label :car_rental, 'Would you like to have us rent a car for you?' %>
   <%= f.select :car_rental,
-    options_for_select([['yes', true],['no', false]], f.object.car_rental),
+    options_for_select([['yes', true], ['no', false]], f.object.car_rental),
     { prompt: 'Select' }, data: { target: '#rental_car_form' } %>
   <table id="rental_car_form" class="stop_flouc">
     <tbody>
@@ -192,7 +182,7 @@
           <%= f.date_field :car_arrive, class: 'datepicker dest_depart_date',
             min: '2000-01-01', max: '2100-01-1' %>
           <%= f.select :car_arrive_hour, hf_hour_options, { prompt: 'Hour' }, { style: 'margin-left:20px;', class: 'dest_arrive_hour' } %>
-          <%= f.select :car_arrive_min, ['0','15','30','45'], { prompt: 'Min' }, { class: 'dest_arrive_min' } %>
+          <%= f.select :car_arrive_min, ['0', '15', '30', '45'], { prompt: 'Min' }, { class: 'dest_arrive_min' } %>
           <div class="same_time button">Same as travel dates</div>
         </td>
       </tr>
@@ -204,7 +194,7 @@
           <%= f.date_field :car_depart, class: 'datepicker ret_depart_date',
             min: '2000-01-01', max: '2100-01-1' %>
           <%= f.select :car_depart_hour, hf_hour_options, { prompt: 'Hour' }, { style: 'margin-left:20px;', class: 'ret_depart_hour' } %>
-          <%= f.select :car_depart_min, ['0','15','30','45'], { prompt: 'Min' }, { class: 'ret_depart_min' } %>
+          <%= f.select :car_depart_min, ['0', '15', '30', '45'], { prompt: 'Min' }, { class: 'ret_depart_min' } %>
         </td>
       </tr>
     </tbody>
@@ -294,7 +284,8 @@
   <%= f.select :conf_prepayment,
     options_for_select([['yes', true], ['no', false]], f.object.conf_prepayment),
     { prompt: 'Select' }, data: { target: '#conf_prepayment_form' }  %>
-  <table id="conf_prepayment_form" class="stop_flouc"><tbody>
+  <table id="conf_prepayment_form" class="stop_flouc">
+    <tbody>
       <tr>
         <td>
           <%= f.label :conf_desc, 'Other Notes:' %>
@@ -322,9 +313,12 @@
           </div>
         </td>
       </tr>
-  </tbody></table>
+    </tbody>
+  </table>
   <ul>
-    <li>Please include any files that will assist us in the conference registration process.</li>
+    <li>
+      Please include any files that will assist us in the conference registration process.
+    </li>
     <li>
       File size limit is 10MB
     </li>
