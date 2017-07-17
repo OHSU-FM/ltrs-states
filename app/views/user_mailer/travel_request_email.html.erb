@@ -6,11 +6,11 @@
   <body>
     <h1><%= @msg %></h1>
     <p>
-        <b>Status:</b><%= @approval_state.verdict %>
-    </p>
-    <p>
-        <%= link_to 'Click here to view the travel request', travel_request_url(@travel_request, :protocol => 'https://' ,:only_path=> false) %>
-    </p>
-    <%= render :partial => 'travel_requests/show_form', :locals=>{ :current_user => @travel_request.user } %>
-  </body>
+      <b>Status:</b><%= @approval_state.verdict %>
+  </p>
+  <p>
+    <%= link_to('Click here to view the travel request', @approval_state.approvable, protocol: 'https://', only_path: false) %>
+  </p>
+  <%= render partial: 'travel_requests/show_form', locals: { current_user: @approval_state.user, travel_request: @approval_state.approvable } %>
+</body>
 </html>

@@ -5,11 +5,27 @@ RSpec.describe TravelRequestsController, type: :controller do
     # there is no travelrequest#index
   end
 
-  describe "GET #show" do
-    it "assigns the requested travel_request as @travel_request" do
-      travel_request = TravelRequest.create! valid_attributes
-      get :show, params: {id: travel_request.to_param}, session: valid_session
-      expect(assigns(:travel_request)).to eq(travel_request)
+  fdescribe "GET #show" do
+    context 'as user' do
+      login_user
+      let(:user) { controller.current_user }
+
+      it "assigns the requested travel_request as @travel_request" do
+        travel_request = create :travel_request
+        get :show, params: {id: travel_request.to_param}
+        expect(assigns(:travel_request)).to eq travel_request
+      end
+
+      it "assigns the user as @user" do
+        travel_request = create :travel_request
+        get :show, params: {id: travel_request.to_param}
+        expect(assigns(:user)).to eq user
+      end
+    end
+
+    # TODO
+    context 'as reviewer' do
+
     end
   end
 
@@ -24,31 +40,57 @@ RSpec.describe TravelRequestsController, type: :controller do
     end
   end
 
-  describe "GET #edit" do
-    it "assigns the requested travel_request as @travel_request" do
-      travel_request = TravelRequest.create! valid_attributes
-      get :edit, params: {id: travel_request.to_param}, session: valid_session
-      expect(assigns(:travel_request)).to eq(travel_request)
-    end
-  end
-
   describe "POST #create" do
     context "with valid params" do
+      login_user
+      let(:user) { controller.current_user }
+      let(:valid_attributes) { build(:travel_request, user: user) .attributes }
+
       it "creates a new TravelRequest" do
         expect {
-          post :create, params: {travel_request: valid_attributes}, session: valid_session
+          post :create, params: { travel_request: valid_attributes }
         }.to change(TravelRequest, :count).by(1)
       end
 
       it "assigns a newly created travel_request as @travel_request" do
-        post :create, params: {travel_request: valid_attributes}, session: valid_session
+        post :create, params: { travel_request: valid_attributes }
         expect(assigns(:travel_request)).to be_a(TravelRequest)
         expect(assigns(:travel_request)).to be_persisted
       end
 
       it "redirects to the created travel_request" do
-        post :create, params: {travel_request: valid_attributes}, session: valid_session
+        post :create, params: { travel_request: valid_attributes }
         expect(response).to redirect_to(TravelRequest.last)
+      end
+    end
+
+    context 'with valid params and a deleate user' do
+      login_user
+      let(:d_user) { controller.current_user }
+      let(:user) { create :user }
+      let(:delegation) { create :user_delegation, user: user, delegate_user: d_user }
+      let(:valid_attributes) { build(:travel_request, user: user).attributes }
+
+      it "creates a new TravelRequest" do
+        expect {
+          post :create, params: { travel_request: valid_attributes }
+        }.to change(TravelRequest, :count).by(1)
+      end
+
+      it "form_user should be delegate user's full_name" do
+        post :create, params: { travel_request: valid_attributes }
+        expect(TravelRequest.last.form_user).to eq controller.current_user.full_name
+      end
+
+      it "form_email should be delegate user's email" do
+        post :create, params: { travel_request: valid_attributes }
+        expect(TravelRequest.last.form_email).to eq controller.current_user.email
+      end
+
+      it "#user should not be current_user" do
+        post :create, params: { travel_request: valid_attributes }
+        expect(TravelRequest.last.user).not_to eq controller.current_user
+        expect(TravelRequest.last.user).to eq user
       end
     end
 

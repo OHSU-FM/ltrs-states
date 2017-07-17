@@ -20,7 +20,7 @@
         controller: "#{record.class.table_name}",
         action: 'submit',
         user_id: record.user_id,
-        id: record.approval_state.id
+        id: record.approval_state.approvable_id
       }),
         html: {},
         method: 'post' do |f| %>

@@ -1,5 +1,4 @@
 class TravelRequest < ApplicationRecord
-  belongs_to :leave_request
   belongs_to :user
 
   has_many :travel_files, dependent: :destroy, inverse_of: :travel_request
@@ -18,15 +17,30 @@ class TravelRequest < ApplicationRecord
   accepts_nested_attributes_for :travel_files, allow_destroy: true
   accepts_nested_attributes_for :user_files, allow_destroy: true
 
+  after_create :build_approval_state
+
   has_paper_trail
   acts_as_paranoid
-
-  def related_record
-    leave_request
-  end
 
   # use this for research/clinical later
   def form_type
     ''
+  end
+
+  # TODO impl in the case that there are things to check outside validations
+  # checks the presence of some attributes and returns true if they're there
+  # @return [Boolean] true if attributes present, else false
+  def ready_for_submission?
+    true
+  end
+
+  def approval_state
+    ApprovalState.find_by(approvable: self)
+  end
+
+  private
+
+  def build_approval_state
+    ApprovalState.create(user: user, approvable: self)
   end
 end

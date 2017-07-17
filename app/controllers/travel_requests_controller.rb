@@ -1,5 +1,5 @@
 class TravelRequestsController < ApplicationController
-  before_action :set_travel_request, only: [:show, :edit, :update, :destroy]
+  before_action :load_resources, only: [:show, :edit, :update, :destroy]
   include StateEvents
 
   # GET /travel_requests
@@ -29,6 +29,7 @@ class TravelRequestsController < ApplicationController
   # POST /travel_requests.json
   def create
     @travel_request = TravelRequest.new(travel_request_params)
+    @travel_request.user = current_user
 
     respond_to do |format|
       if @travel_request.save
@@ -60,15 +61,21 @@ class TravelRequestsController < ApplicationController
   def destroy
     @travel_request.destroy
     respond_to do |format|
-      format.html { redirect_to travel_requests_url, notice: 'Travel request was successfully destroyed.' }
+      format.html { redirect_to @back_path, notice: 'Travel request was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
-    def set_travel_request
+    def load_resources
+      @user = current_user
       @travel_request = TravelRequest.find(params[:id])
+      if current_ability.can?(params[:action].to_sym, @travel_request) && current_user.id != @travel_request.user_id
+        @back_path = user_approvals_path(current_user)
+      else
+        @back_path = user_forms_path(current_user)
+      end
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

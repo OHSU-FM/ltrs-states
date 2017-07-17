@@ -5,6 +5,5 @@ FactoryGirl.define do
     form_email 'email'
     form_user 'user'
     user
-    leave_request
   end
 end

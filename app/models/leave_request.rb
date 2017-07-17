@@ -18,10 +18,10 @@ class LeaveRequest < ApplicationRecord
   validate :hours_present
   validate :date_sequence
 
+  # TODO impl in the case that there are things to check outside validations
   # checks the presence of some attributes and returns true if they're there
   # @return [Boolean] true if attributes present, else false
   def ready_for_submission?
-    # TODO impl
     true
   end
 

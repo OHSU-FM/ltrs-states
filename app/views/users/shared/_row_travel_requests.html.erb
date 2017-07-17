@@ -1,31 +1,32 @@
 <% show_approver_form = false unless defined?(show_approver_form) %>
 <% show_user_form = false unless defined?(show_user_form) %>
+
 <tr class='<%= hf_row_status(record.approval_state) %>'>
-        <td>
-            <%= request_type_icon("icon-request-travel").html_safe %>
-        </td>
-        <td class='ellipsis'>
-            <b>By: </b><%= record.user.nil? ? 'Unknown' : record.user.name %><br/>
-            <b>Created at: </b><%= tz_convert( record.created_at, current_user.timezone)  %><br/>
-            <b>Updated at: </b><%= tz_convert( record.approval_state.updated_at, current_user.timezone)  %><br/>
-            <b>Departing: </b><%= record.dest_depart_date %><br/>
-            <b>Returning: </b><%= record.ret_depart_date %><br/>
-            <b>Description: </b><%= record.dest_desc %><br/>
-            <%= link_to 'View record', record, :class=>'modal_show' if show_approver_form %><br/>
-        </td>
-        <td>
-            <% if show_approver_form %>
-                <%= render :partial=>'users/shared/approvals_reviewer_actions',
-                    :locals=>{
-                        :approval_state=>record.approval_state,
-                        :user=>user} %>
-            <% end %>
-            <% if show_user_form %>
-                <%= render :partial=>'users/shared/user_forms_actions',
-                    :locals=>{
-                        :record=>record,
-                        :approval_state=>record.approval_state,
-                        :user=>user} %>
-            <% end %>
-        </td>
+  <td>
+    <%= request_type_icon("icon-request-travel").html_safe %>
+  </td>
+  <td class='ellipsis'>
+    <b>By: </b><%= record.user.nil? ? 'Unknown' : record.user.full_name %><br/>
+    <b>Created at: </b><%= tz_convert( record.created_at, current_user.timezone)  %><br/>
+    <b>Updated at: </b><%= tz_convert( record.approval_state.updated_at, current_user.timezone)  %><br/>
+    <b>Departing: </b><%= record.dest_depart_date %><br/>
+    <b>Returning: </b><%= record.ret_depart_date %><br/>
+    <b>Description: </b><%= record.dest_desc %><br/>
+    <%= link_to 'View record', record, class: 'modal_show' if show_approver_form %><br/>
+  </td>
+  <td>
+    <% if show_approver_form %>
+      <%= render partial: 'users/shared/approvals_reviewer_actions',
+        locals: {
+        approval_state: record.approval_state,
+        user: user } %>
+    <% end %>
+    <% if show_user_form %>
+      <%= render partial: 'users/shared/user_forms_actions',
+        locals: {
+        record: record,
+        approval_state: record.approval_state,
+        user: user } %>
+    <% end %>
+  </td>
 </tr>
