@@ -5,6 +5,7 @@ class TravelRequest < ApplicationRecord
   has_many :user_files, through: :travel_files, dependent: :destroy
   has_one :approval_state, as: :approvable, dependent: :destroy
 
+  delegate :current_user_approver, :next_user_approver, to: :approval_state
 
   validates_associated :approval_state
   validates_presence_of :dest_depart_date,

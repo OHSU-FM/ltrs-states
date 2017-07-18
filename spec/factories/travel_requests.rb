@@ -5,5 +5,19 @@ FactoryGirl.define do
     form_email 'email'
     form_user 'user'
     user
+
+    trait :submitted do
+      after :create do |travel_request|
+        travel_request.approval_state.submit!
+      end
+    end
+    factory :submitted_travel_request, traits: [:submitted]
+
+    trait :unopened do
+      after :create do |travel_request|
+        travel_request.approval_state.submit!
+        travel_request.approval_state.send_to_unopened!
+      end
+    end
   end
 end

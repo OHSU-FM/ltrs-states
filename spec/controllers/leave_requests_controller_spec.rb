@@ -5,17 +5,49 @@ RSpec.describe LeaveRequestsController, type: :controller do
     context 'as user' do
       login_user
       let(:user) { controller.current_user }
+      let(:leave_request) { create :leave_request, user: user }
+
+      it "assigns the current_user as @user" do
+        get :show, params: { id: leave_request.to_param }
+        expect(assigns(:user)).to eq user
+      end
 
       it "assigns the requested leave_request as @leave_request" do
-        leave_request = create :leave_request, user: user
         get :show, params: { id: leave_request.to_param }
-        expect(assigns(:leave_request)).to eq(leave_request)
+        expect(assigns(:leave_request)).to eq leave_request
+      end
+
+      it "assigns the current_user's user_forms_path as @back_path" do
+        get :show, params: { id: leave_request.to_param }
+        expect(assigns(:back_path)).to eq user_forms_path(user)
       end
     end
 
-    # TODO
     context 'as reviewer' do
+      login_user
+      let(:r_user) { controller.current_user }
+      let(:user) { create :user_with_approvers, reviewer_user: r_user }
+      let(:leave_request) { create :leave_request, :unopened, user: user }
 
+      it "assigns the current_user as @user" do
+        get :show, params: { id: leave_request.to_param }
+        expect(assigns(:user)).to eq r_user
+      end
+
+      it "assigns the requested leave_request as @leave_request" do
+        get :show, params: { id: leave_request.to_param }
+        expect(assigns(:leave_request)).to eq leave_request
+      end
+
+      it "assigns the current_user's user_approvals_path as @back_path" do
+        get :show, params: { id: leave_request.to_param }
+        expect(assigns(:back_path)).to eq user_approvals_path(r_user)
+      end
+
+      it "sends the :review event to the leave_request" do
+        get :show, params: { id: leave_request.to_param }
+        expect(leave_request.approval_state).to be_in_review
+      end
     end
   end
 

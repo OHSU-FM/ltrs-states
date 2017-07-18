@@ -11,6 +11,9 @@ class TravelRequestsController < ApplicationController
   # GET /travel_requests/1
   # GET /travel_requests/1.json
   def show
+    if hf_transition_to_in_review?(@travel_request, @user) # defined in StateEvents
+      @travel_request.approval_state.review!
+    end
   end
 
   # GET /travel_requests/new

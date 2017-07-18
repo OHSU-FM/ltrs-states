@@ -12,7 +12,9 @@ class LeaveRequestsController < ApplicationController
   # GET /leave_requests/1
   # GET /leave_requests/1.json
   def show
-    # TODO open event if current_user if next_user_approver
+    if hf_transition_to_in_review?(@leave_request, @user) # defined in StateEvents
+      @leave_request.approval_state.review!
+    end
   end
 
   # GET /leave_requests/new

@@ -4,7 +4,6 @@ module StateEvents
   included do
     before_action :set_approvable_and_state,
       only: [:update_state, :submit, :send_to_unopened, :review, :reject, :accept]
-    helper_method :submit
   end
 
   def update_state
@@ -114,6 +113,25 @@ module StateEvents
       else
         format.html { redirect_to @approvable,
                       notice: "This request has already been accepted, so nothing happened." }
+      end
+    end
+  end
+
+  # Should this record.approval_state be sent the review event?
+  #
+  # compares state of a request with a user to see if record is in the unopened
+  # state and the use is the next_user_approver. if so, return true, else false
+  #
+  # @param record [LeaveRequest || TravelRequest]
+  # @param user [User]
+  # @return [Boolean] whether record should be sent review transition
+  def hf_transition_to_in_review? record, user
+    if record.approval_state.unopened?
+      if record.next_user_approver.approver == user &&
+          record.approval_state.may_review?
+        true
+      else
+        false
       end
     end
   end

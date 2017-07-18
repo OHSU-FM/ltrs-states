@@ -2,7 +2,7 @@ class LeaveRequest < ApplicationRecord
   belongs_to :user
   has_one :approval_state, as: :approvable, dependent: :destroy
   has_one :travel_request
-  delegate :next_user_approver, to: :approval_state
+  delegate :current_user_approver, :next_user_approver, to: :approval_state
 
   has_one :leave_request_extra, dependent: :destroy
   accepts_nested_attributes_for :leave_request_extra, allow_destroy: true
