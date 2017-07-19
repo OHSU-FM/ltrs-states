@@ -64,7 +64,7 @@
             <%= reviewer.full_name %>
           </td>
           <td>
-            <% if reviewer.approval_order == record.approval_state.approval_order %>
+            <% if reviewer.approval_order == record.approval_state.approval_order && current_user == reviewer.approver %>
               <%= render partial: 'users/shared/approvals_reviewer_actions', locals: { approval_state: record.approval_state, user: current_user, record: record } %>
             <% else %>
               <%= verdict %>

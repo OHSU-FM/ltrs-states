@@ -100,7 +100,7 @@ class ApprovalState < ApplicationRecord
   end
 
   def is_complete?
-    expired? or rejected? or approval_complete?
+    expired? or rejected? or accepted?
   end
 
   def submitted_or_higher?
@@ -141,7 +141,7 @@ class ApprovalState < ApplicationRecord
     elsif approval_order > ua.approval_order
       return 'Accepted'
     elsif approval_order == ua.approval_order
-      return aasm_state
+      return "Waiting on response from #{ua.approver.full_name}"
     end
   end
 end
