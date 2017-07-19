@@ -74,6 +74,13 @@ class LeaveRequestsController < ApplicationController
       :start_min, :end_date, :end_hour, :end_min, :desc, :hours_vacation,
                :hours_sick, :hours_other, :hours_other_desc, :hours_training,
                :hours_training_desc, :hours_comp, :hours_comp_desc, :hours_cme,
-               :need_travel, :mail_sent, :mail_final_sent)
+               :need_travel, :mail_sent, :mail_final_sent,
+               :leave_request_extra_attributes =>
+               [:work_days, :work_hours, :basket_coverage, :covering,
+      :hours_professional, :hours_professional_desc, :hours_professional_role,
+      :hours_administrative, :hours_administrative_desc,
+      :hours_administrative_role, :funding_no_cost, :funding_no_cost_desc,
+      :funding_approx_cost, :funding_split, :funding_split_desc, :funding_grant]
+               )
     end
 end

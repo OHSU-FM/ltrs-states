@@ -12,7 +12,7 @@ FactoryGirl.define do
       end
 
       after(:create) do |user, evaluator|
-        reviewer = evaluator.reviewer_user || create(:user, first_name: 'reviewer', email: "reviewer@example.com")
+        reviewer = evaluator.reviewer_user || create(:user, first_name: 'reviewer', email: "reviewer4u#{user.id}@example.com")
         notifier = create :user, first_name: 'notifier', email: "notifier4u#{user.id}@example.com"
         create :user_approver, user: user, approver_id: notifier.id, approver_type: 'notifier', approval_order: 2
         create :user_approver, user: user, approver_id: reviewer.id, approver_type: 'reviewer', approval_order: 1

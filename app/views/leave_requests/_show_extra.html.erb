@@ -1,68 +1,74 @@
-<tr>
-    <td><b>Professional Hours</b></td>
-    <td><%= leave_request.hours_professional %></td>
-</tr>
-<tr>
-    <td><b> Role at professional event:</b></td>
-    <td><%= leave_request.hours_professional_role%></td>
-</tr>
-<tr>
-    <td><b> Description of activities for Professional hours</b></td>
-    <td><%= leave_request.hours_professional_desc %></td>
-</tr>
-<tr>
-    <td><b> Administrative hours:</b></td>
-    <td><%= leave_request.hours_administrative %></td>
-</tr>
-<tr>
-    <td><b> Role during administrative event:</b></td>
-    <td><%= leave_request.hours_administrative_role %></td>
-</tr>
-<tr>
-    <td><b> Description of activities for administrative hours</b></td>
-    <td><%= leave_request.hours_administrative_desc %></td>
-</tr>
-<tr>
-  <td><b> Number of work days on leave: </b></td>
-  <td><%= leave_request.work_days %>  days and  <%= leave_request.work_hours %> hours</td>
-</tr>
-</tbody></table></div>
+      <tr>
+        <td><b>Professional Hours</b></td>
+        <td><%= leave_request.hours_professional %></td>
+      </tr>
+      <tr>
+        <td><b>Role at professional event:</b></td>
+        <td><%= leave_request.hours_professional_role %></td>
+      </tr>
+      <tr>
+        <td><b>Description of activities for Professional hours</b></td>
+        <td><%= leave_request.hours_professional_desc %></td>
+      </tr>
+      <tr>
+        <td><b>Administrative hours:</b></td>
+        <td><%= leave_request.hours_administrative %></td>
+      </tr>
+      <tr>
+        <td><b>Role during administrative event:</b></td>
+        <td><%= leave_request.hours_administrative_role %></td>
+      </tr>
+      <tr>
+        <td><b>Description of activities for administrative hours</b></td>
+        <td><%= leave_request.hours_administrative_desc %></td>
+      </tr>
+      <tr>
+        <td><b>Number of work days on leave: </b></td>
+        <td><%= leave_request.work_days %> days and <%= leave_request.work_hours %> hours</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
 <div class="ui-widget-content ui-corner-all wide partial_form">
-<h4>Clinical Faculty</h4>
-<table class="table_view"><tbody>
+  <h4>Clinical Faculty</h4>
+  <table class="table_view">
+    <tbody>
 
-<tr>
-  <td> <b> I need basket coverage</b> </td>
-  <td><%= boolean_to_words(leave_request.basket_coverage) %></td>
-</tr>
-<tr>
-  <td><b> Designated covering MD/NP?</b></td>
-  <td><%= leave_request.covering %></td>
-</tr>
-</tbody></table></div>
+      <tr>
+        <td><b> I need basket coverage</b></td>
+        <td><%= hf_boolean_to_words(leave_request.basket_coverage) %></td>
+      </tr>
+      <tr>
+        <td><b> Designated covering MD/NP?</b></td>
+        <td><%= leave_request.covering %></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
 <div class="ui-widget-content ui-corner-all wide partial_form">
-<h4>Expenses</h4>
-<table class="table_view"><tbody>
+  <h4>Expenses</h4>
+  <table class="table_view">
+    <tbody>
 
-<tr>
-    <td><b> Will there be cost to the department?</b></td>
-    <td><%= (!leave_request.funding_no_cost) ? 'Yes' : 'No' %></td>
-</tr>
-<tr>
-    <td><b> If yes, approximate cost to the department:</b></td>
-    <td><%= leave_request.funding_approx_cost || 0 %></td>
-</tr>
-<tr>
-    <td><b> Description of funding source:</b></td>
-    <td><%= leave_request.funding_no_cost_desc || 'None'%></td>
-</tr>
-<tr>
-    <td><b> Split the cost to the department</b> </td>
-    <td><%= leave_request.funding_split %></td>
-</tr>
-<tr>
-    <td><b> Description of seperate funding source:</b></td>
-    <td><%= leave_request.funding_split_desc %></td>
-</tr>
+      <tr>
+        <td><b> Will there be cost to the department?</b></td>
+        <td><%= (!leave_request.funding_no_cost) ? 'Yes' : 'No' %></td>
+      </tr>
+      <tr>
+        <td><b> If yes, approximate cost to the department:</b></td>
+        <td><%= leave_request.funding_approx_cost || 0 %></td>
+      </tr>
+      <tr>
+        <td><b> Description of funding source:</b></td>
+        <td><%= leave_request.funding_no_cost_desc || 'None'%></td>
+      </tr>
+      <tr>
+        <td><b> Split the cost to the department</b> </td>
+        <td><%= leave_request.funding_split %></td>
+      </tr>
+      <tr>
+        <td><b> Description of seperate funding source:</b></td>
+        <td><%= leave_request.funding_split_desc %></td>
+      </tr>
