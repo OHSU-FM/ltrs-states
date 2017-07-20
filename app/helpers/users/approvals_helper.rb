@@ -23,11 +23,11 @@ module Users::ApprovalsHelper
   end
 
   def hf_sort_by_options
-    options_for_select(SORT_BY_OPTS, hf_sort_by)
+    options_for_select SORT_BY_OPTS, hf_sort_by
   end
 
   def hf_sort_order_options
-    options_for_select(SORT_ORDER_OPTS, hf_sort_order)
+    options_for_select SORT_ORDER_OPTS, hf_sort_order
   end
 
   def hf_sort_order
