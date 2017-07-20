@@ -8,7 +8,7 @@ module Users::FormsHelper
       'rejected'     => 'danger',
       'expired'      => 'danger',
       'approved'     => 'info',
-      'complete'     => 'success',
+      'accepted'     => 'success',
       'error'        => 'danger'
   }
 

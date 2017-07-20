@@ -1,8 +1,9 @@
 require "rails_helper"
 
-RSpec.feature "leave_request states", :type => :feature do
-  scenario "user creates a new leave_request" do
-    user = create :user
+RSpec.feature "leave_request states", type: :feature do
+  fscenario "user creates a new leave_request" do
+    # user = create :user
+    login_user
     visit new_leave_request_path
 
     select user.full_name, from: 'leave_request[user_id]'

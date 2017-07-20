@@ -15,7 +15,7 @@
 
   <div class='col-xs-3'>
     <!-- only on show -->
-    <% if record.approval_state && record.approval_state.ready_to_submit? %>
+    <% if record.approval_state && can?(:submit, record) && record.approval_state.ready_to_submit? %>
       <%= form_for record.approval_state, url: url_for({
         controller: "#{record.class.table_name}",
         action: 'submit',

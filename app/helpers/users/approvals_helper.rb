@@ -8,6 +8,38 @@ module Users::ApprovalsHelper
     Unsubmitted: 'unsubmitted'
   }
 
+  SORT_BY_OPTS = {
+    'Created at': 'created_at',
+    'Updated at': 'updated_at'
+  }
+
+  SORT_ORDER_OPTS = {
+    Ascending: 'asc',
+    Descending: 'desc'
+  }
+
+  def hf_filter_options
+    options_for_select FILTER_OPTS, hf_filter
+  end
+
+  def hf_sort_by_options
+    options_for_select(SORT_BY_OPTS, hf_sort_by)
+  end
+
+  def hf_sort_order_options
+    options_for_select(SORT_ORDER_OPTS, hf_sort_order)
+  end
+
+  def hf_sort_order
+    val = params[:sort_order].to_s
+    SORT_ORDER_OPTS.values.include?(val) ? val : 'desc'
+  end
+
+  def hf_sort_by
+    val = params[:sort_by].to_s
+    SORT_BY_OPTS.values.include?(val) ? val : 'created_at'
+  end
+
   def hf_filter
     val = params[:filter].to_s
     title = FILTER_OPTS.values.include?(val) ? val : 'all'

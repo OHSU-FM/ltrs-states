@@ -63,6 +63,10 @@ class User < ApplicationRecord
     [reviewable_users.map(&:leave_requests) + reviewable_users.map(&:travel_requests)].flatten
   end
 
+  def active_reviewables
+    reviewables.select{|r| as = r.approval_state; !(as.unsubmitted? or as.is_complete?) }
+  end
+
   # cancancan utility functions
 
   # @return Array[User] users that this user is able to control

@@ -1,6 +1,8 @@
 class TravelRequestsController < ApplicationController
   before_action :load_resources, only: [:show, :edit, :update, :destroy]
   include StateEvents
+  authorize_resource
+  skip_authorize_resource only: :update_state
 
   # GET /travel_requests
   # GET /travel_requests.json

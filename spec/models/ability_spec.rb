@@ -22,6 +22,12 @@ RSpec.describe Ability, type: :model do
       it { is_expected.to be_able_to(:create, LeaveRequest) }
       it { is_expected.to be_able_to(:create, TravelRequest) }
     end
+
+    describe 'owned requests' do
+      let(:leave_request) { create :leave_request, user: user }
+
+      it { is_expected.to be_able_to(:submit, leave_request.approval_state) }
+    end
   end
 
   describe 'reviewer' do
@@ -34,6 +40,9 @@ RSpec.describe Ability, type: :model do
       it { is_expected.to be_able_to(:read, request) }
       it { is_expected.to be_able_to(:destroy, request) }
       it { is_expected.to be_able_to(:update, state) }
+      it { is_expected.to be_able_to(:review, state) }
+      it { is_expected.to be_able_to(:accept, state) }
+      it { is_expected.to be_able_to(:reject, state) }
     end
   end
 

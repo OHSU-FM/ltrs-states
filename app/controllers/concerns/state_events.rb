@@ -91,6 +91,7 @@ module StateEvents
     respond_to do |format|
       if @approval_state.next_user_approver.reviewer? and @approval_state.may_send_to_unopened?
         if @approval_state.send_to_unopened!
+          @approval_state.increment_approval_order
           # TODO mailer
           # UserMailer.request_accepted(@approval_state).deliver_now
           format.html { redirect_to @approvable,

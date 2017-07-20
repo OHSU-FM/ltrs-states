@@ -39,6 +39,22 @@ class Ability
     can :update, ApprovalState do |as|
       as.user == user || user.reviewable_users.include?(as.user)
     end
+
+    can :submit, LeaveRequest do |lr|
+      lr.user == user
+    end
+
+    can [:review, :accept, :reject], LeaveRequest do |lr|
+      as.user.reviewers.map(&:approver).include? user
+    end
+
+    can :submit, TravelRequest do |tr|
+      tr.user == user
+    end
+
+    can [:review, :accept, :reject], TravelRequest do |tr|
+      tr.user.reviewers.map(&:approver).include? user
+    end
   end
 #     controllable_user_ids = user.controllable_users.map{|u|u.id}
 #     controllable_user_emails = user.controllable_users.map{|u|u.email}
