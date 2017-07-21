@@ -31,6 +31,51 @@ class User < ApplicationRecord
   has_paper_trail
   acts_as_paranoid
 
+  rails_admin do
+    group 'User Information' do
+      field :full_name
+      field :empid
+      field :emp_class
+      field :emp_home
+      field :email
+      field :login
+      field :sn
+      field :is_admin
+      field :is_ldap
+      field :password
+      field :password_confirmation
+      field :timezone
+    end
+
+    group 'Login History' do
+      active false
+      field :sign_in_count
+      field :current_sign_in_at
+      field :last_sign_in_at
+      field :current_sign_in_ip
+      field :last_sign_in_ip
+      field :remember_created_at
+    end
+
+    group 'Notifications Config' do
+      active false
+      field :reviewers
+      field :others_notified
+      field :user_delegations
+    end
+
+    group 'Forms' do
+      active false
+      field :leave_requests
+      field :travel_requests
+    end
+
+    include_all_fields
+    list do
+      scopes [nil, :deleted]
+    end
+  end
+
   def is_admin?
     is_admin
   end
@@ -79,17 +124,28 @@ class User < ApplicationRecord
   #   @viewable_users ||=
   # end
 
+  def reviewable_users_ids
+    User.includes(:user_approvers).where(
+      ["user_approvers.approver_id = ?
+       AND user_approvers.approver_type LIKE 'reviewer'", id]
+    ).references(:user_approvers).pluck(:id)
+  end
+
   # @return Array[User] users that this user is able to review
   def reviewable_users
-    ru = UserApprover.where(approver_id: id,
-                            approver_type: 'reviewer').map(&:user)
+    ru = User.includes(:user_approvers).where(
+      ["user_approvers.approver_id = ?
+       AND user_approvers.approver_type LIKE 'reviewer'", id]
+    ).references(:user_approvers)
     @reviewable_users ||= (controllable_users + ru).flatten.uniq
   end
 
   # @return Array[User] users that this user is notified about
   def notifiable_users
-    nu = UserApprover.where(approver_id: id,
-                            approver_type: 'notifier').map(&:user)
+    nu = User.includes(:user_approvers).where(
+      ["user_approvers.approver_id = ?
+       AND user_approvers.approver_type LIKE 'notifier'", id]
+    ).references(:user_approvers)
     @notifiable_users ||= (controllable_users + nu).flatten.uniq
   end
 end

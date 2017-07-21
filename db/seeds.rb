@@ -11,5 +11,4 @@ UserApprover.create(user: u2, approver_id: r2.id, approver_type: 'reviewer', app
 UserApprover.create(user: u2, approver_id: n.id, approver_type: 'notifier', approval_order: 3)
 LeaveRequest.create(user: User.first)
 
-
-
+User.create(first_name: 'admin', last_name: 'user', email: 'admin@test.org', login: 'admin', password: "password", is_ldap: false, is_admin: true)

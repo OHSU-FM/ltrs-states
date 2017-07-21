@@ -2,7 +2,8 @@ class Users::ApprovalsController < ApplicationController
   before_action :load_user
 
   def index
-    reviewable = @user.reviewables
+    # reviewable = @user.reviewables
+    reviewable = ApprovalSearch.by_params(@user, params)
     @approvals = WillPaginate::Collection.create(@page, @per_page, reviewable.length) do |pager|
       pager.replace reviewable
     end
