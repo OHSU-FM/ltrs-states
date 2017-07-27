@@ -23,3 +23,4 @@
 //= require user_forms
 //= require approvals
 //= require survey
+//= require grant_funded_travel_requests

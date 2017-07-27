@@ -26,7 +26,7 @@ RSpec.describe TravelRequest, type: :model do
   end
 
   it 'requires a user' do
-    expect(build :travel_request, user:nil).not_to be_valid
+    expect(build :travel_request, user: nil).not_to be_valid
   end
 
 end

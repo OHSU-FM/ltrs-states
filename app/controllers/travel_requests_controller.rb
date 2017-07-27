@@ -4,12 +4,6 @@ class TravelRequestsController < ApplicationController
   authorize_resource
   skip_authorize_resource only: :update_state
 
-  # GET /travel_requests
-  # GET /travel_requests.json
-  def index
-    @travel_requests = TravelRequest.all
-  end
-
   # GET /travel_requests/1
   # GET /travel_requests/1.json
   def show

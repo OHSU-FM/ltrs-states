@@ -12,3 +12,7 @@ UserApprover.create(user: u2, approver_id: n.id, approver_type: 'notifier', appr
 LeaveRequest.create(user: User.first)
 
 User.create(first_name: 'admin', last_name: 'user', email: 'admin@test.org', login: 'admin', password: "password", is_ldap: false, is_admin: true)
+
+g=User.create(first_name: 'grant_funded', last_name: 'user', email: 'grant@test.org', login: 'grant', password: "password", is_ldap: false, grant_funded: true)
+UserApprover.create(user: g, approver_id: r.id, approver_type: 'reviewer', approval_order: 1)
+UserApprover.create(user: g, approver_id: n.id, approver_type: 'notifier', approval_order: 2)

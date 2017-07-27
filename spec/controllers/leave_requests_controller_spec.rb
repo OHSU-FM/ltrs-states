@@ -148,17 +148,18 @@ RSpec.describe LeaveRequestsController, type: :controller do
 
   describe "DELETE #destroy" do
     login_user
+    let(:user) { controller.current_user }
     it "destroys the requested leave_request" do
-      leave_request = create :leave_request
+      leave_request = create :leave_request, user: user
       expect {
-        delete :destroy, params: {id: leave_request.to_param}
+        delete :destroy, params: { id: leave_request.to_param }
       }.to change(LeaveRequest, :count).by(-1)
     end
 
     it "redirects to the forms list" do
-      leave_request = create :leave_request
-      delete :destroy, params: {id: leave_request.to_param}
-      expect(response).to redirect_to(user_forms_path(controller.current_user))
+      leave_request = create :leave_request, user: user
+      delete :destroy, params: { id: leave_request.to_param }
+      expect(response).to redirect_to(user_forms_path(user))
     end
   end
 
@@ -305,7 +306,7 @@ RSpec.describe LeaveRequestsController, type: :controller do
 
       it "shows an error message" do
         post :review, params: { id: leave_request.to_param }
-        expect(flash[:notice]).not_to be_empty
+        expect(flash[:notice]).to be_present
       end
     end
   end

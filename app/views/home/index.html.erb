@@ -39,7 +39,11 @@
             <%= link_to 'New Faculty Leave Request', new_leave_request_path(extra: true)%>
           </li>
           <li>
-            <%= link_to 'New Travel Request', new_travel_request_path %>
+            <% if current_user.grant_funded? %>
+              <%= link_to "New Travel Request", new_grant_funded_travel_request_path %>
+            <% else %>
+              <%= link_to 'New Travel Request', new_travel_request_path %>
+            <% end %>
           </li>
 
         </ul>

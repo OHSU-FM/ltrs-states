@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+  </head>
+  <body>
+    <h1><%= @msg %></h1>
+    <p>
+      <b>Status:</b><%= @approval_state.verdict %>
+    </p>
+    <p>
+      <%= link_to('Click here to view the travel request', @approval_state.approvable, protocol: 'https://', only_path: false) %>
+    </p>
+    <%= render partial: 'grant_funded_travel_requests/show_form', locals: { current_user: @approval_state.user, grant_funded_travel_request: @approval_state.approvable } %>
+  </body>
+</html>

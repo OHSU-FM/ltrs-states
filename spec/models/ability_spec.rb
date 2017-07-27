@@ -15,18 +15,39 @@ RSpec.describe Ability, type: :model do
   end
 
   describe 'user' do
-    let(:user) { create :user_with_approvers }
+    let(:user) { create :user }
 
     describe 'actions' do
       it { is_expected.to be_able_to(:modify, user) }
       it { is_expected.to be_able_to(:create, LeaveRequest) }
       it { is_expected.to be_able_to(:create, TravelRequest) }
+      it { is_expected.to be_able_to(:create, GrantFundedTravelRequest) }
     end
 
     describe 'owned requests' do
-      let(:leave_request) { create :leave_request, user: user }
+      context "LeaveRequest" do
+        let(:request) { create :leave_request, user: user }
 
-      it { is_expected.to be_able_to(:submit, leave_request.approval_state) }
+        it { is_expected.to be_able_to(:submit, request.approval_state) }
+        it { is_expected.to be_able_to(:read, request) }
+        it { is_expected.to be_able_to(:destroy, request) }
+      end
+
+      context "TravelRequest" do
+        let(:request) { create :travel_request, user: user }
+
+        it { is_expected.to be_able_to(:submit, request.approval_state) }
+        it { is_expected.to be_able_to(:read, request) }
+        it { is_expected.to be_able_to(:destroy, request) }
+      end
+
+      context "GrantFundedTravelRequest" do
+        let(:request) { create :gf_travel_request, user: user }
+
+        it { is_expected.to be_able_to(:submit, request.approval_state) }
+        it { is_expected.to be_able_to(:read, request) }
+        it { is_expected.to be_able_to(:destroy, request) }
+      end
     end
   end
 

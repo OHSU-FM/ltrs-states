@@ -43,14 +43,11 @@ class CreateTravelRequests < ActiveRecord::Migration[5.1]
       t.boolean  "expense_card_use",                      default: false
       t.string   "expense_card_type",         limit: 255
       t.string   "expense_card_desc",         limit: 255
-      t.integer  "status",                                default: 0
       t.integer  "user_id"
-      t.integer  "leave_request_id"
       t.boolean  "mail_sent",                             default: false
       t.boolean  "mail_final_sent",                       default: false
       t.datetime "created_at"
       t.datetime "updated_at"
-      t.text     "request_change"
     end
   end
 end

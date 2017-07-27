@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170712175322) do
+ActiveRecord::Schema.define(version: 20170726171048) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,6 +25,44 @@ ActiveRecord::Schema.define(version: 20170712175322) do
     t.integer "approval_order", default: 0
     t.index ["approvable_type", "approvable_id"], name: "index_approval_states_on_approvable_type_and_approvable_id"
     t.index ["user_id"], name: "index_approval_states_on_user_id"
+  end
+
+  create_table "grant_funded_travel_requests", force: :cascade do |t|
+    t.string "form_user", limit: 255
+    t.string "form_email", limit: 255
+    t.boolean "other_fmr_attending", default: false
+    t.text "dest_desc"
+    t.text "business_purpose_desc"
+    t.text "business_purpose_url"
+    t.text "business_purpose_other"
+    t.date "depart_date"
+    t.date "return_date"
+    t.boolean "expense_card_use", default: false
+    t.string "expense_card_type", limit: 255
+    t.string "meal_reimb", limit: 255
+    t.boolean "traveler_mileage_reimb", default: false
+    t.boolean "traveler_ground_reimb", default: false
+    t.boolean "air_use", default: false
+    t.boolean "air_assistance", default: false
+    t.text "ffid"
+    t.text "tsa_pre"
+    t.boolean "car_rental", default: false
+    t.boolean "car_assistance", default: false
+    t.string "cell_number", limit: 255
+    t.string "drivers_licence_num", limit: 255
+    t.boolean "lodging_reimb", default: false
+    t.boolean "lodging_assistance", default: false
+    t.string "lodging_url", limit: 255
+    t.boolean "registration_reimb", default: false
+    t.boolean "registration_assistance", default: false
+    t.string "registration_url", limit: 255
+    t.integer "user_id"
+    t.boolean "mail_sent", default: false
+    t.boolean "mail_final_sent", default: false
+    t.datetime "deleted_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["deleted_at"], name: "index_grant_funded_travel_requests_on_deleted_at"
   end
 
   create_table "leave_request_extras", force: :cascade do |t|
@@ -81,9 +119,10 @@ ActiveRecord::Schema.define(version: 20170712175322) do
   end
 
   create_table "travel_files", force: :cascade do |t|
-    t.bigint "travel_request_id"
+    t.bigint "filable_id"
     t.bigint "user_file_id"
-    t.index ["travel_request_id"], name: "index_travel_files_on_travel_request_id"
+    t.string "filable_type"
+    t.index ["filable_id"], name: "index_travel_files_on_filable_id"
     t.index ["user_file_id"], name: "index_travel_files_on_user_file_id"
   end
 
@@ -194,6 +233,7 @@ ActiveRecord::Schema.define(version: 20170712175322) do
     t.string "emp_home"
     t.boolean "is_ldap", default: true
     t.datetime "deleted_at"
+    t.boolean "grant_funded"
     t.index ["deleted_at"], name: "index_users_on_deleted_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
@@ -209,7 +249,7 @@ ActiveRecord::Schema.define(version: 20170712175322) do
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
-  add_foreign_key "travel_files", "travel_requests"
+  add_foreign_key "travel_files", "travel_requests", column: "filable_id"
   add_foreign_key "travel_files", "user_files"
   add_foreign_key "user_approvers", "users"
 end

@@ -36,5 +36,16 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :grant_funded_travel_requests, except: [:index, :edit, :update] do
+    member do
+      post 'submit' => 'grant_funded_travel_requests#submit'
+      post 'send_to_unopened' => 'grant_funded_travel_requests#send_to_unopened'
+      post 'review' => 'grant_funded_travel_requests#review'
+      post 'reject' => 'grant_funded_travel_requests#reject'
+      post 'accept' => 'grant_funded_travel_requests#accept'
+      post 'update_state' => 'grant_funded_travel_requests#update_state'
+    end
+  end
+
   match :ldap_search, to: 'users#ldap_search', via: :get, as: :ldap_search
 end
