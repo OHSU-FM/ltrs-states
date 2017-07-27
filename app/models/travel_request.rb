@@ -1,7 +1,7 @@
 class TravelRequest < ApplicationRecord
   belongs_to :user
 
-  has_many :travel_files, dependent: :destroy, inverse_of: :travel_request
+  has_many :travel_files, as: :filable, dependent: :destroy
   has_many :user_files, through: :travel_files, dependent: :destroy
   has_one :approval_state, as: :approvable, dependent: :destroy
 

@@ -7,6 +7,7 @@ class GrantFundedTravelRequestsController < ApplicationController
   # GET /grant_funded_travel_requests/1
   # GET /grant_funded_travel_requests/1.json
   def show
+    authorize! :show, @gf_travel_request
     if hf_transition_to_in_review?(@gf_travel_request, @user) # defined in StateEvents
       @gf_travel_request.approval_state.review!
     end
@@ -70,7 +71,7 @@ class GrantFundedTravelRequestsController < ApplicationController
     # create reimbusement request if this is the end of the line for this request
     if @approval_state.current_user_approver and \
         @approval_state.current_user_approver.notifier? and \
-        @approval_state.accepted?
+        @approval_state.accepted? and @approval_state.errors.empty?
       # ReimbusementRequest.create(user: @approval_state.user
     end
   end

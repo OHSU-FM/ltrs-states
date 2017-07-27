@@ -49,6 +49,16 @@ RSpec.describe Ability, type: :model do
         it { is_expected.to be_able_to(:destroy, request) }
       end
     end
+
+    describe 'other requests' do
+      let(:lr) { create :leave_request }
+      let(:tr) { create :travel_request }
+      let(:gftr) { create :gf_travel_request }
+
+      it { is_expected.not_to be_able_to(:read, lr) }
+      it { is_expected.not_to be_able_to(:read, tr) }
+      it { is_expected.not_to be_able_to(:read, gftr) }
+    end
   end
 
   describe 'reviewer' do

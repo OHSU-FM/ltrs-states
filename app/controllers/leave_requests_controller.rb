@@ -14,6 +14,7 @@ class LeaveRequestsController < ApplicationController
   # GET /leave_requests/1
   # GET /leave_requests/1.json
   def show
+    authorize! :show, @leave_request
     if hf_transition_to_in_review?(@leave_request, @user) # defined in StateEvents
       @leave_request.approval_state.review!
     end
