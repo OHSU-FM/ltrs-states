@@ -9,11 +9,11 @@ RSpec.describe GrantFundedTravelRequest, type: :model do
     expect((create :gf_travel_request).approval_state).to be_an ApprovalState
   end
 
-  it 'requires a dest_depart_date' do
+  it 'requires a depart_date' do
     expect(build :gf_travel_request, depart_date: nil).not_to be_valid
   end
 
-  it 'requires a ret_depart_date' do
+  it 'requires a return_date' do
     expect(build :gf_travel_request, return_date: nil).not_to be_valid
   end
 

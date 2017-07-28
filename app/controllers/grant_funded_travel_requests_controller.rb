@@ -72,11 +72,12 @@ class GrantFundedTravelRequestsController < ApplicationController
     if @approval_state.current_user_approver and \
         @approval_state.current_user_approver.notifier? and \
         @approval_state.accepted? and @approval_state.errors.empty?
-      # ReimbusementRequest.create(user: @approval_state.user
+      build_reimbursement_request_for @approval_state.user, @approval_state.approvable
     end
   end
 
   private
+
     # Use callbacks to share common setup or constraints between actions.
     def load_resources
       @user = current_user

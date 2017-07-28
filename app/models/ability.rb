@@ -27,6 +27,7 @@ class Ability
       can [:create, :submit], LeaveRequest
       can [:create, :submit], TravelRequest
       can [:create, :submit], GrantFundedTravelRequest
+      can [:create, :submit], ReimbursementRequest
     end
 
     can [:read, :destroy], LeaveRequest do |lr|
@@ -38,6 +39,10 @@ class Ability
     end
 
     can [:read, :destroy], GrantFundedTravelRequest do |gftr|
+      gftr.user == user || user.reviewable_users.include?(gftr.user)
+    end
+
+    can [:read, :destroy], ReimbursementRequest do |gftr|
       gftr.user == user || user.reviewable_users.include?(gftr.user)
     end
 
@@ -62,6 +67,10 @@ class Ability
     end
 
     can [:review, :accept, :reject], GrantFundedTravelRequest do |gftr|
+      gftr.user.reviewers.map(&:approver).include? user
+    end
+
+    can [:review, :accept, :reject], ReimbursementRequest do |gftr|
       gftr.user.reviewers.map(&:approver).include? user
     end
   end

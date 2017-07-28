@@ -1,0 +1,134 @@
+<div class="ui-widget-content ui-corner-all wide partial_form">
+  <table class="table_view">
+    <tbody>
+      <tr>
+        <td>
+          Are there other FMR Staff/Faculty attending this event?
+        </td>
+        <td>
+          <%#= reimbursement_request.other_fmr_attending %>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="ui-widget-content ui-corner-all wide partial_form">
+  <h3>Travel Dates</h3>
+  <table class="table_view">
+    <tbody>
+      <tr>
+        <td>
+          Departure Date:
+        </td>
+        <td>
+          <%#= reimbursement_request.depart_date %>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Return Date:
+        </td>
+        <td>
+        <%#= reimbursement_request.return_date %>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="ui-widget-content ui-corner-all wide partial_form">
+<h3> Expense <%#= if not reimbursement_request.expense_card_use then ': None' end %>  </h3>
+    <table class="table_view" style="<%#= if not reimbursement_request.expense_card_use then 'display:none;' end %>">
+    <tbody>
+      <tr>
+        <td>
+          Will travel expenses be charged to an account?
+        </td>
+        <td>
+        <%#= hf_boolean_to_words reimbursement_request.expense_card_use %>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Account to charge:
+        </td>
+        <td>
+        <%#= reimbursement_request.expense_card_type %>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="ui-widget-content ui-corner-all wide partial_form">
+<h3> Airline Reservation<%#= if not reimbursement_request.air_use then ': None' end %></h3>
+    <table class="table_view" style="<%#= if not reimbursement_request.air_use then 'display:none;' end %>">
+    <tbody>
+      <tr>
+        <td>
+          Frequent Flyer ID:
+        </td>
+        <td>
+        <%#= reimbursement_request.ffid %>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="ui-widget-content ui-corner-all wide partial_form">
+<h3>Rental Car<%#= if not reimbursement_request.car_rental then ': None' end %></h3>
+    <table class="table_view" style="<%#= if not reimbursement_request.car_rental then 'display:none;' end %>">
+    <tbody>
+      <tr>
+        <td>
+          Do you need to rent a car?:
+        </td>
+        <td>
+        <%#= reimbursement_request.car_rental %>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="ui-widget-content ui-corner-all wide partial_form">
+<h3>Lodging <%#= if not reimbursement_request.lodging_reimb then ': None' end %></h3>
+    <table class="table_view" style="<%#= if not reimbursement_request.lodging_reimb then 'display:none;' end %>" >
+    <tbody>
+      <tr>
+        <td>
+          Do you need lodging accomodations?
+        </td>
+        <td>
+        <%#= reimbursement_request.lodging_reimb %>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="ui-widget-content ui-corner-all wide partial_form">
+<h3> Conference Registration<%#= if not reimbursement_request.registration_reimb then ': None' end %> </h3>
+  <%# if reimbursement_request.registration_reimb %>
+    <table class="table_view">
+      <tbody>
+        <tr>
+          <td>
+            Do you need to prepay for conference registration?
+          </td>
+          <td>
+          <%#= hf_boolean_to_words reimbursement_request.registration_reimb %>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            File:
+          </td>
+          <!-- <td> -->
+          <!--   <%# reimbursement_request.user_files.each do |g|  %> -->
+          <!--     <%#= link_to g.uploaded_file_file_name, user_file_url(g, protocol: 'https://', only_path: false) %><br /> -->
+          <!--   <%# end %> -->
+          <!-- </td> -->
+        </tr>
+      </tbody>
+    </table>
+    <%# end %>
+  </div>
+

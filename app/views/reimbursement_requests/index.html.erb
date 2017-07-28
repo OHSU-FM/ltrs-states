@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Reimbursement Requests</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @reimbursement_requests.each do |reimbursement_request| %>
+      <tr>
+        <td><%= link_to 'Show', reimbursement_request %></td>
+        <td><%= link_to 'Edit', edit_reimbursement_request_path(reimbursement_request) %></td>
+        <td><%= link_to 'Destroy', reimbursement_request, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Reimbursement Request', new_reimbursement_request_path %>

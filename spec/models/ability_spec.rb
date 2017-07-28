@@ -22,6 +22,7 @@ RSpec.describe Ability, type: :model do
       it { is_expected.to be_able_to(:create, LeaveRequest) }
       it { is_expected.to be_able_to(:create, TravelRequest) }
       it { is_expected.to be_able_to(:create, GrantFundedTravelRequest) }
+      it { is_expected.to be_able_to(:create, ReimbursementRequest) }
     end
 
     describe 'owned requests' do
@@ -48,16 +49,26 @@ RSpec.describe Ability, type: :model do
         it { is_expected.to be_able_to(:read, request) }
         it { is_expected.to be_able_to(:destroy, request) }
       end
+
+      context "ReimbursementRequest" do
+        let(:request) { create :reimbursement_request, user: user }
+
+        it { is_expected.to be_able_to(:submit, request.approval_state) }
+        it { is_expected.to be_able_to(:read, request) }
+        it { is_expected.to be_able_to(:destroy, request) }
+      end
     end
 
     describe 'other requests' do
       let(:lr) { create :leave_request }
       let(:tr) { create :travel_request }
       let(:gftr) { create :gf_travel_request }
+      let(:rr) { create :reimbursement_request }
 
       it { is_expected.not_to be_able_to(:read, lr) }
       it { is_expected.not_to be_able_to(:read, tr) }
       it { is_expected.not_to be_able_to(:read, gftr) }
+      it { is_expected.not_to be_able_to(:read, rr) }
     end
   end
 

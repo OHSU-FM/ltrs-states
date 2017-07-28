@@ -9,6 +9,8 @@ class User < ApplicationRecord
     source: :approvable, source_type: "TravelRequest"
   has_many :gf_travel_requests, through: :approval_states,
     source: :approvable, source_type: "GrantFundedTravelRequest"
+  has_many :reimbursement_requests, through: :approval_states,
+    source: :approvable, source_type: "ReimbursementRequest"
 
   has_many :user_delegations, dependent: :delete_all, inverse_of: :user
 
@@ -103,7 +105,7 @@ class User < ApplicationRecord
   end
 
   def approvables
-    leave_requests + travel_requests + gf_travel_requests
+    leave_requests + travel_requests + gf_travel_requests + reimbursement_requests
   end
 
   def reviewables

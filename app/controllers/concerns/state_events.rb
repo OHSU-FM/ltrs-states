@@ -103,6 +103,9 @@ module StateEvents
         end
       elsif @approval_state.may_accept?
         if @approval_state.accept!
+          if @approvable.is_a? GrantFundedTravelRequest
+            build_reimbursement_request_for @approval_state.user, @approvable
+          end
           UserMailer.request_accepted(@approval_state).deliver_now
           format.html { redirect_to @approvable,
                         notice: "#{@approvable.model_name.human} was successfully accepted." }
@@ -138,6 +141,14 @@ module StateEvents
   end
 
   private
+
+  def build_reimbursement_request_for u, tr
+    ReimbursementRequest.create!(user: u,
+                                depart_date: tr.depart_date,
+                                return_date: tr.return_date,
+                                form_user: current_user.full_name,
+                                form_email: current_user.email)
+  end
 
   def set_approvable_and_state
     @approvable = params[:controller].classify.constantize.find(params[:id])

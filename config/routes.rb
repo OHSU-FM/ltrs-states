@@ -47,5 +47,16 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :reimbursement_requests, except: [:index, :edit, :update] do
+    member do
+      post 'submit' => 'reimbursement_requests#submit'
+      post 'send_to_unopened' => 'reimbursement_requests#send_to_unopened'
+      post 'review' => 'reimbursement_requests#review'
+      post 'reject' => 'reimbursement_requests#reject'
+      post 'accept' => 'reimbursement_requests#accept'
+      post 'update_state' => 'reimbursement_requests#update_state'
+    end
+  end
+
   match :ldap_search, to: 'users#ldap_search', via: :get, as: :ldap_search
 end
