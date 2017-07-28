@@ -31,6 +31,7 @@ class GrantFundedTravelRequestsController < ApplicationController
     @gf_travel_request.form_user = current_user.full_name
     @gf_travel_request.form_email = current_user.email
 
+    byebug
     respond_to do |format|
       if @gf_travel_request.save
         format.html { redirect_to @gf_travel_request, notice: 'Grant funded travel request was successfully created.' }

@@ -14,20 +14,20 @@ RSpec.describe ReimbursementRequestsController, type: :routing do
       expect(:get => "/reimbursement_requests/1").to route_to("reimbursement_requests#show", :id => "1")
     end
 
-    it "doesn't route to #edit" do
-      expect(:get => "/reimbursement_requests/1/edit").not_to route_to("reimbursement_requests#edit", :id => "1")
+    it "routes to #edit" do
+      expect(:get => "/reimbursement_requests/1/edit").to route_to("reimbursement_requests#edit", :id => "1")
     end
 
     it "routes to #create" do
       expect(:post => "/reimbursement_requests").to route_to("reimbursement_requests#create")
     end
 
-    it "doesn't route to #update via PUT" do
-      expect(:put => "/reimbursement_requests/1").not_to route_to("reimbursement_requests#update", :id => "1")
+    it "routes to #update via PUT" do
+      expect(:put => "/reimbursement_requests/1").to route_to("reimbursement_requests#update", :id => "1")
     end
 
-    it "doesn't route to #update via PATCH" do
-      expect(:patch => "/reimbursement_requests/1").not_to route_to("reimbursement_requests#update", :id => "1")
+    it "routes to #update via PATCH" do
+      expect(:patch => "/reimbursement_requests/1").to route_to("reimbursement_requests#update", :id => "1")
     end
 
     it "routes to #destroy" do

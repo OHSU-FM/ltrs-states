@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170727222623) do
+ActiveRecord::Schema.define(version: 20170728205326) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,7 +39,7 @@ ActiveRecord::Schema.define(version: 20170727222623) do
     t.date "return_date"
     t.boolean "expense_card_use", default: false
     t.string "expense_card_type", limit: 255
-    t.string "meal_reimb", limit: 255
+    t.boolean "meal_reimb"
     t.boolean "traveler_mileage_reimb", default: false
     t.boolean "traveler_ground_reimb", default: false
     t.boolean "air_use", default: false

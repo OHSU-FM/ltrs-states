@@ -126,6 +126,16 @@
     </tbody>
   </table>
 </div>
+<div class="">
+  <%= f.label :meal_reimb, 'Meal Reimbursement' %>
+  <p>If traveler has a Department issued purchasing card, all allowable meal (and other) expenses must be purchased with card. Only select Per Diem if traveler does not have a purchasing card.</p>
+  <br >
+  <%= f.radio_button :meal_reimb, true %>
+  <%= f.label :meal_reimb_per_diem, "Per Diem" %>
+  <br >
+  <%= f.radio_button :meal_reimb, false %>
+  <%= f.label :meal_reimb_per_diem, "None" %>
+</div>
 <div class="toggle_form">
   <%= f.label :air_use, 'Will traveler be flying?' %>
   <%= f.select :air_use,
@@ -161,8 +171,8 @@
 <div class="toggle_form">
   <%= f.label :car_rental, 'Will traveler be renting a car?' %>
   <%= f.select :car_rental,
-    options_for_select([['yes', true], ['no', false]], f.object.car_rental),
-    { prompt: 'Select' }, data: { target: '#rental_car_form' } %>
+    options_for_select([['Select', 'error'], ['yes', true], ['no', false]], selected: 'select'),
+    data: { target: '#rental_car_form' } %>
   <div id="rental_car_form">
     <%= f.label :car_assistance, 'Does traveler need assistance in obtaining rental car reservations?' %>
     <%= f.select :car_assistance,

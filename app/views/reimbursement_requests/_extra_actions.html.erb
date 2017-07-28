@@ -1,15 +1,15 @@
 <% content_for :extra_actions do %>
 
-    <%  if record.can_edit?(current_user) && record.new_record? == false && record.leave_request.nil? %>
-        <div class="ui-widget-content ui-corner-all wide partial_form">
-            <%= submit_tag('Create Staff Leave Request',:name=>:create_related_request,:class=>'button')%> 
-            <%= submit_tag('Create Clinician Leave Request',:name=>:create_related_request_extra,:class=>'button')%>
-        </div>
-    <% elsif record.leave_request  %>  
-        <div class="ui-widget-content ui-corner-all wide partial_form">
-            <%= link_to 'View Leave Request', record.leave_request, :class=>'button'%>
-        </div>
-    <% end %>
+  <% if record.can_edit?(current_user) && record.new_record? == false && record.leave_request.nil? %>
+    <div class="ui-widget-content ui-corner-all wide partial_form">
+      <%= submit_tag('Create Staff Leave Request',:name=>:create_related_request,:class=>'button')%>
+      <%= submit_tag('Create Clinician Leave Request',:name=>:create_related_request_extra,:class=>'button')%>
+    </div>
+  <% elsif record.leave_request  %>
+    <div class="ui-widget-content ui-corner-all wide partial_form">
+      <%= link_to 'View Leave Request', record.leave_request, :class=>'button'%>
+    </div>
+  <% end %>
 
 <% end %>
 

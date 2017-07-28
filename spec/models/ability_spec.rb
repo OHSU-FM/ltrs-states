@@ -50,11 +50,13 @@ RSpec.describe Ability, type: :model do
         it { is_expected.to be_able_to(:destroy, request) }
       end
 
-      context "ReimbursementRequest" do
+      fcontext "ReimbursementRequest" do
         let(:request) { create :reimbursement_request, user: user }
 
         it { is_expected.to be_able_to(:submit, request.approval_state) }
         it { is_expected.to be_able_to(:read, request) }
+        it { is_expected.to be_able_to(:edit, request) }
+        it { is_expected.to be_able_to(:update, request) }
         it { is_expected.to be_able_to(:destroy, request) }
       end
     end

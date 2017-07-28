@@ -47,7 +47,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :reimbursement_requests, except: [:index, :edit, :update] do
+  resources :reimbursement_requests, except: :index do
     member do
       post 'submit' => 'reimbursement_requests#submit'
       post 'send_to_unopened' => 'reimbursement_requests#send_to_unopened'
