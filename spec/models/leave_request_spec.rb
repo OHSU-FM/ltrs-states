@@ -40,11 +40,4 @@ RSpec.describe LeaveRequest, type: :model do
         .not_to be_valid
     end
   end
-
-  describe 'method' do
-    it '#related_record references associated travel_request' do
-      expect((create :leave_request, :with_travel_request).related_record)
-        .to be_a TravelRequest
-    end
-  end
 end

@@ -219,12 +219,12 @@ RSpec.describe ApprovalState, type: :model do
     context 'two reviewers' do
       before(:each) do
         @user = create :user_two_reviewers
-        @request = create :leave_request, user: @user
+        @request = create :leave_request, :in_review, user: @user
       end
 
-      it "value for a given reviewer is 'accepted' if \
-        approval_order < state approval order" do
-        expect(@request.approval_state.process_state[@user.reviewers.first]).to eq 'accepted'
+      it "value for a given reviewer is 'accepted' if approval_order < state approval order" do
+        @request.approval_state.accept!
+        expect(@request.approval_state.process_state[@user.reviewers.first]).to eq 'Accepted'
       end
     end
   end

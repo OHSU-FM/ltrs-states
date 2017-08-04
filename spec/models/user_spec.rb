@@ -28,6 +28,28 @@ RSpec.describe User, type: :model do
 
       expect(reviewer.is_reviewer?).to be_truthy
     end
+
+    it '#has_delegators? returns true if user has delegators' do
+      d = create :user_with_delegate
+      u = d.delegates.first
+
+      expect(u.has_delegators?).to be_truthy
+    end
+
+    describe 'reviewer approvables' do
+      let(:u) { create :user_with_approvers }
+      let(:reviewer) { u.reviewers.first.approver }
+      let!(:lr) { create :leave_request, user: u }
+      let!(:tr) { create :travel_request, :submitted, user: u }
+
+      it '#reviewables is a list of reviewable requests' do
+        expect(reviewer.reviewables).to eq [tr, lr]
+      end
+
+      it '#active_reviewables is a list of !%w{unsubmitted complete} requests' do
+        expect(reviewer.active_reviewables).to eq [tr]
+      end
+    end
   end
 
   describe 'relationships' do

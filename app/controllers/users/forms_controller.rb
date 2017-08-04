@@ -8,15 +8,15 @@ class Users::FormsController < ApplicationController
     end
     respond_to do |format|
       format.html # forms.html.erb
-      format.json {render :json => @approvals }
+      format.json { render :json => @approvals }
     end
   end
 
   def delegate_forms
     @approvables = nil
     respond_to do |format|
-      format.html {render template: 'users/forms/index'}
-      format.json {render :json => @approvals }
+      format.html { render template: 'users/forms/index'}
+      format.json { render :json => @approvals }
     end
   end
 

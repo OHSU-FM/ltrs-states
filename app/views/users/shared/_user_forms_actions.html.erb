@@ -5,17 +5,14 @@
 <div class="btn-group">
   <%= link_to 'View', record, :class=>'btn btn-default' %>
   <% if record.approval_state.ready_to_submit? %>
-    <%= link_to 'Submit',
-      submit_user_form_path(
-        :user_id=>record.user_id,
-        :id=>record.approval_state.id),
-        :method=>:post,
-        :class=>'btn btn-success' %>
+    <%= link_to 'Submit', polymorphic_path(record, action: 'submit'),
+      method: :post,
+      class: 'btn btn-success' %>
   <% end %>
   <%= link_to 'Delete', polymorphic_path(record),
-    :method=>:delete,
-    :data=>{ :confirm => 'Are you sure you want to cancel this request?' },
-    :disabled=>!can?(:destroy, record),
-    :class=>'btn btn-danger' %>
+    method: :delete,
+    data: { confirm:  'Are you sure you want to cancel this request?' },
+    disabled: !can?(:destroy, record),
+    class: 'btn btn-danger' %>
 </div>
 

@@ -1,0 +1,11 @@
+.daily_meal_reimb > .row {
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.daily_meal_reimb > .row > .col-xs-3 {
+  display: inline-block;
+  float: none;
+  border: 1px solid black;
+  border-radius: 5px;
+}

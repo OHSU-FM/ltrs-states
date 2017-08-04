@@ -1,7 +1,6 @@
 class LeaveRequest < ApplicationRecord
   belongs_to :user
   has_one :approval_state, as: :approvable, dependent: :destroy
-  has_one :travel_request
   delegate :current_user_approver, :next_user_approver, to: :approval_state
 
   has_one :leave_request_extra, dependent: :destroy
@@ -36,10 +35,6 @@ class LeaveRequest < ApplicationRecord
   # Virtual attribute: returns string stating form type
   def form_type
     has_extra ? 'Faculty' : 'Staff'
-  end
-
-  def related_record
-    travel_request
   end
 
   private

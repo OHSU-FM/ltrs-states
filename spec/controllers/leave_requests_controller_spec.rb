@@ -218,53 +218,6 @@ RSpec.describe LeaveRequestsController, type: :controller do
     end
   end
 
-  describe "POST send_to_unopened" do
-    context "with submitted request" do
-      login_user
-      let(:leave_request) { create :leave_request, :submitted  }
-      let(:approval_state) { leave_request.approval_state }
-
-      it "assigns the leave_request as @approvable" do
-        post :send_to_unopened, params: { id: leave_request.to_param }
-        expect(assigns[:approvable]).to be_a(LeaveRequest)
-        expect(assigns[:approvable]).to eq leave_request
-        expect(assigns[:approvable]).to be_persisted
-      end
-
-      it "assigns the approval_state as @approval_state" do
-        post :send_to_unopened, params: { id: leave_request.to_param }
-        expect(assigns[:approval_state]).to eq approval_state
-        expect(assigns[:approval_state]).to be_persisted
-      end
-
-      it "sends the send_to_unopened event to the approval_state" do
-        post :send_to_unopened, params: { id: leave_request.to_param }
-        expect(assigns[:approval_state].aasm_state).to eq "unopened"
-      end
-
-      it "redirects to the leave_request_path" do
-        post :send_to_unopened, params: { id: leave_request.to_param }
-        expect(response).to redirect_to leave_request_path(leave_request)
-      end
-    end
-
-    context "with unsubmitted request" do
-      login_user
-      let(:leave_request) { create :leave_request }
-      let(:approval_state) { leave_request.approval_state }
-
-      it "redirects to the leave_request" do
-        post :send_to_unopened, params: { id: leave_request.to_param }
-        expect(response).to redirect_to leave_request_path(leave_request)
-      end
-
-      it "shows an error message" do
-        post :send_to_unopened, params: { id: leave_request.to_param }
-        expect(flash[:notice]).not_to be_empty
-      end
-    end
-  end
-
   describe "POST review" do
     login_user
     context "with unopened request" do

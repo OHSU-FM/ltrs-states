@@ -17,7 +17,6 @@ Rails.application.routes.draw do
   resources :leave_requests, except: [:index, :edit, :update] do
     member do
       post 'submit' => 'leave_requests#submit'
-      post 'send_to_unopened' => 'leave_requests#send_to_unopened'
       post 'review' => 'leave_requests#review'
       post 'reject' => 'leave_requests#reject'
       post 'accept' => 'leave_requests#accept'
@@ -28,7 +27,6 @@ Rails.application.routes.draw do
   resources :travel_requests, except: [:index, :edit, :update] do
     member do
       post 'submit' => 'travel_requests#submit'
-      post 'send_to_unopened' => 'travel_requests#send_to_unopened'
       post 'review' => 'travel_requests#review'
       post 'reject' => 'travel_requests#reject'
       post 'accept' => 'travel_requests#accept'
@@ -39,7 +37,6 @@ Rails.application.routes.draw do
   resources :grant_funded_travel_requests, except: [:index, :edit, :update] do
     member do
       post 'submit' => 'grant_funded_travel_requests#submit'
-      post 'send_to_unopened' => 'grant_funded_travel_requests#send_to_unopened'
       post 'review' => 'grant_funded_travel_requests#review'
       post 'reject' => 'grant_funded_travel_requests#reject'
       post 'accept' => 'grant_funded_travel_requests#accept'
@@ -50,7 +47,6 @@ Rails.application.routes.draw do
   resources :reimbursement_requests, except: :index do
     member do
       post 'submit' => 'reimbursement_requests#submit'
-      post 'send_to_unopened' => 'reimbursement_requests#send_to_unopened'
       post 'review' => 'reimbursement_requests#review'
       post 'reject' => 'reimbursement_requests#reject'
       post 'accept' => 'reimbursement_requests#accept'

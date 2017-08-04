@@ -20,4 +20,10 @@ RSpec.describe ReimbursementRequest, type: :model do
   it 'requires a user' do
     expect(build :reimbursement_request, user: nil).not_to be_valid
   end
+
+  it 'generates a MealReimbursementRequest for each day of travel' do
+    rr = create :reimbursement_request, depart_date: 1.day.ago, return_date: 1.day.from_now
+    expect(rr.meal_reimbursement_requests.first).to be_a MealReimbursementRequest
+    expect(rr.meal_reimbursement_requests.count).to eq 3
+  end
 end

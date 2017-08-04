@@ -9,7 +9,6 @@ class UsersController < ApplicationController
   end
 
   def ldap_search
-    byebug
     scanner = LdapQuery::Scanner.search params[:q]
     @ude = scanner.as_ude_attributes
     @ude[:errors] = scanner.errors

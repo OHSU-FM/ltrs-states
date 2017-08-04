@@ -18,6 +18,7 @@ class GrantFundedTravelRequestsController < ApplicationController
     @gf_travel_request = GrantFundedTravelRequest.new
     @gf_travel_request.form_user = current_user.full_name
     @gf_travel_request.form_email = current_user.email
+    @gf_travel_request.user = current_user unless current_user.has_delegators?
   end
 
   # GET /grant_funded_travel_requests/1/edit
@@ -31,7 +32,6 @@ class GrantFundedTravelRequestsController < ApplicationController
     @gf_travel_request.form_user = current_user.full_name
     @gf_travel_request.form_email = current_user.email
 
-    byebug
     respond_to do |format|
       if @gf_travel_request.save
         format.html { redirect_to @gf_travel_request, notice: 'Grant funded travel request was successfully created.' }
@@ -64,16 +64,6 @@ class GrantFundedTravelRequestsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to @back_path, notice: 'Grant funded travel request was successfully destroyed.' }
       format.json { head :no_content }
-    end
-  end
-
-  def accept
-    super
-    # create reimbusement request if this is the end of the line for this request
-    if @approval_state.current_user_approver and \
-        @approval_state.current_user_approver.notifier? and \
-        @approval_state.accepted? and @approval_state.errors.empty?
-      build_reimbursement_request_for @approval_state.user, @approval_state.approvable
     end
   end
 

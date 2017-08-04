@@ -38,8 +38,8 @@ RSpec.describe ReimbursementRequestsController, type: :routing do
       expect(:post => "/reimbursement_requests/1/submit").to route_to("reimbursement_requests#submit", :id => "1")
     end
 
-    it "routes to #send_to_unopened via POST" do
-      expect(:post=> "/reimbursement_requests/1/send_to_unopened").to route_to("reimbursement_requests#send_to_unopened", :id => "1")
+    it "doesn't route to #send_to_unopened via POST" do
+      expect(:post=> "/reimbursement_requests/1/send_to_unopened").not_to route_to("reimbursement_requests#send_to_unopened", :id => "1")
     end
 
     it "routes to #review via POST" do

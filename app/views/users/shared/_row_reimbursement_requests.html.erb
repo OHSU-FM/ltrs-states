@@ -3,7 +3,7 @@
 
 <tr class='<%= hf_row_status(record.approval_state) %>'>
   <td>
-    <%= request_type_icon("icon-request-travel").html_safe %>
+    <%= request_type_icon("icon-request-reimbursement").html_safe %>
   </td>
   <td class='ellipsis'>
     <b>By: </b><%= record.user.nil? ? 'Unknown' : record.user.full_name %><br/>

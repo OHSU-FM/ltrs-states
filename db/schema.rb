@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170728205326) do
+ActiveRecord::Schema.define(version: 20170804175358) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -62,6 +62,12 @@ ActiveRecord::Schema.define(version: 20170728205326) do
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "rental_needs_desc"
+    t.text "ground_transport"
+    t.text "ground_transport_assistance"
+    t.text "ground_transport_desc"
+    t.string "flight_airline"
+    t.string "flight_seat_pref"
     t.index ["deleted_at"], name: "index_grant_funded_travel_requests_on_deleted_at"
   end
 
@@ -118,6 +124,20 @@ ActiveRecord::Schema.define(version: 20170728205326) do
     t.index ["user_id"], name: "index_leave_requests_on_user_id"
   end
 
+  create_table "meal_reimbursement_requests", force: :cascade do |t|
+    t.date "reimb_date"
+    t.boolean "breakfast"
+    t.text "breakfast_desc"
+    t.boolean "lunch"
+    t.text "lunch_desc"
+    t.boolean "dinner"
+    t.text "dinner_desc"
+    t.bigint "reimbursement_request_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["reimbursement_request_id"], name: "index_meal_reimbursement_requests_on_reimbursement_request_id"
+  end
+
   create_table "reimbursement_requests", force: :cascade do |t|
     t.string "form_user", limit: 255
     t.string "form_email", limit: 255
@@ -133,6 +153,7 @@ ActiveRecord::Schema.define(version: 20170728205326) do
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "meal_host_reimb"
     t.index ["deleted_at"], name: "index_reimbursement_requests_on_deleted_at"
   end
 

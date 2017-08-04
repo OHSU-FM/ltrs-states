@@ -186,7 +186,7 @@ RSpec.describe GrantFundedTravelRequestsController, type: :controller do
       end
 
       # user has single reviewer, so we can test ReimbursementRequest creation here
-      fit "creates a new reimbusement request on success" do
+      it "creates a new reimbusement request on success" do
         expect {
           post :accept, params: { id: gf_travel_request.to_param }
         }.to change(ReimbursementRequest, :count).by(1)

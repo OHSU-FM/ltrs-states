@@ -23,7 +23,7 @@
       <li>
         <% url = user_approvals_path(current_user.id, filter: :pending) %>
         <%= link_to(url, class: (request.path == url) ? 'active' : '' ) do %>
-          <% approvals_count = current_user.active_reviewables.count  %>
+          <% approvals_count = current_user.active_reviewables.count %>
 
           <span> Approvals </span>
           <% if approvals_count > 0 %>

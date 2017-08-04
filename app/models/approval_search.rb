@@ -9,12 +9,12 @@ class ApprovalSearch
     'unsubmitted': ['unsubmitted']
   }
 
-  def self.by_params user, parameters
+  def self.by_params user, parameters={}
     ids = user.reviewable_users_ids
     sort_by = SORT_BY_OPTS.values
       .include?(parameters[:sort_by]) ? parameters[:sort_by] : 'created_at'
     sort_order = SORT_ORDER_OPTS.values
-      .include?(parameters[:sort_order]) ? parameters[:sort_order] : 'asc'
+      .include?(parameters[:sort_order]) ? parameters[:sort_order] : 'desc'
     f_val = parameters[:filter] || 'pending'
     qq = parameters[:q]
     if qq == "" or qq.nil?

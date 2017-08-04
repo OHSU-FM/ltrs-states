@@ -104,16 +104,22 @@ class User < ApplicationRecord
     user_approvers.where(approver_type: 'notifier')
   end
 
+  def has_delegators?
+    delegators.count > 0
+  end
+
   def approvables
-    leave_requests + travel_requests + gf_travel_requests + reimbursement_requests
+    (leave_requests + travel_requests + gf_travel_requests + reimbursement_requests)
+      .sort_by {|r| r.updated_at }.reverse
   end
 
   def reviewables
-    [reviewable_users.map(&:leave_requests) + reviewable_users.map(&:travel_requests)].flatten
+    ApprovalSearch.by_params(self, { filter: 'none' })
   end
 
+  # no defined filter -> !%{unsubmitted complete}
   def active_reviewables
-    reviewables.select{|r| as = r.approval_state; !(as.unsubmitted? or as.is_complete?) }
+    ApprovalSearch.by_params self
   end
 
   # cancancan utility functions

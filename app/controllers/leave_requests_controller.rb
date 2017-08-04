@@ -62,7 +62,7 @@ class LeaveRequestsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def load_resources
       @user = current_user
-      @leave_request = LeaveRequest.includes(:leave_request_extra, :travel_request).find(params[:id])
+      @leave_request = LeaveRequest.includes(:leave_request_extra).find(params[:id])
       if current_ability.can?(params[:action].to_sym, @leave_request) && current_user.id != @leave_request.user_id
         @back_path = user_approvals_path(current_user)
       else

@@ -8,20 +8,20 @@ RSpec.describe ApprovalSearch, type: :model do
     let!(:tr) { create :travel_request, :submitted, user: u }
     let!(:gftr) { create :gf_travel_request, user: u }
 
-    it 'should order by created_at ASC by default' do
-      expect(ApprovalSearch.by_params(r, {'filter': 'none'})).to eq [lr, tr, gftr]
+    it 'should order by created_at DESC by default' do
+      expect(ApprovalSearch.by_params(r, {'filter': 'none'})).to eq [gftr, tr, lr]
     end
 
-    it 'should sort DESC if params[:sort_order] == desc' do
-      expect(ApprovalSearch.by_params(r, {'sort_order': 'desc', 'filter': 'none'}))
-        .to eq [gftr, tr, lr]
+    it 'should sort ASC if params[:sort_order] == asc' do
+      expect(ApprovalSearch.by_params(r, {'sort_order': 'asc', 'filter': 'none'}))
+        .to eq [lr, tr, gftr]
     end
 
     it 'should order by updated_at if params[:sort_by] == updated_at' do
       # touch lr so that lr.updated_at > tr.updated_at
       lr.update!(desc: "I've been updated!")
       expect(ApprovalSearch.by_params(r, {'sort_by': 'updated_at', 'filter': 'none'}))
-        .to eq [tr, gftr, lr]
+        .to eq [lr, gftr, tr]
     end
 
     it 'should display return only leave_requests if q == leave' do
@@ -29,14 +29,14 @@ RSpec.describe ApprovalSearch, type: :model do
     end
 
     it 'should display return travel_requests and grant_funded_travel_requests if q == travel' do
-      expect(ApprovalSearch.by_params(r, {'q': 'travel', 'filter': 'none'})).to eq [tr, gftr]
+      expect(ApprovalSearch.by_params(r, {'q': 'travel', 'filter': 'none'})).to eq [gftr, tr]
     end
 
     it 'should search fields for query terms' do
       lr.update!(desc: 'going to the moon')
       expect(ApprovalSearch.by_params(r, {'q': 'moon', 'filter': 'none'})).to eq [lr]
       tr.update!(dest_desc: 'also the moon?')
-      expect(ApprovalSearch.by_params(r, {'q': 'moon', 'filter': 'none'})).to eq [lr, tr]
+      expect(ApprovalSearch.by_params(r, {'q': 'moon', 'filter': 'none'})).to eq [tr, lr]
     end
 
     it 'should default to showing only pending requests' do

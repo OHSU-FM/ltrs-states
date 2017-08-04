@@ -1,253 +1,217 @@
-<% if @gf_travel_request.new_record? %>
-  <div class="ui-widget-content ui-corner-all wide partial_form">
-    <h4>Submitter Details</h4>
-    <%= f.label :user_id, 'Submit as:' %><br/>
-    <%= f.select :user_id, options_from_collection_for_select([current_user] + current_user.delegators, "id", "full_name", current_user.id) %>
-    <table>
-      <tbody>
-        <tr>
-          <td>
-            <b>
-            </b>
-          </td>
-          <td>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-<% else %>
-  <div class="ui-widget-content ui-corner-all wide partial_form">
-    <h4>Submitter Details</h4>
-    Submitted as:<br/>
-    <table>
-      <tbody>
-        <tr>
-          <td>
-            <b>
-            </b>
-          </td>
-
-          <td>
-            <%= @gf_travel_request.user.nil? ? current_user.full_name : @gf_travel_request.user.full_name %>
-          </td>
-        </tr>
-        <% unless @gf_travel_request.form_user.nil? || @gf_travel_request.form_user != current_user.full_name %>
-          <tr>
-            <td>
-              <b>
-                Submitted by:
-              </b>
-            </td>
-
-            <td>
-              <%= @gf_travel_request.form_user %>
-            </td>
-          </tr>
+<div class="container" style="width: inherit;">
+  <div class="row">
+    <div class="col-lg-12">
+      <h4>Traveler Details</h4>
+      <% if @gf_travel_request.new_record? %>
+        <% if current_user.has_delegators? %>
+        <div class="ui-widget-content ui-corner-all wide partial_form">
+          <%= f.label :user_id, 'Submit request for:' %><br/>
+          <%= f.select :user_id, options_from_collection_for_select([current_user] + current_user.delegators, "id", "full_name", current_user.id) %>
+        </div>
+        <% else %>
+          <p>Submitting Travel Request as: <%= current_user.full_name %></p>
         <% end %>
-      </tbody>
-    </table>
-  </div>
-<% end %>
-
-<div class="ui-widget-content ui-corner-all wide partial_form">
-  <div class=""><%= f.label "Other FMR attending?" %></div>
-  <div class="">
-    <%= f.select :other_fmr_attending,
-    options_for_select([['yes', true], ['no', false]], f.object.other_fmr_attending),
-    { prompt: 'Select' }, data: { target: '#other_fmr_attending' }, id: 'other_fmr_attending'%>
-  </div>
-  <div data-depends-on="#other_fmr_attending" data-depends-on-value="true" style="background-color: lavender; height: 20em; width: 50em;">
-    request linking stub
+      <% else %>
+        <% if @gf_travel_request.form_email != @gf_travel_request.user.email %>
+          <div class="ui-widget-content ui-corner-all wide partial_form">
+            Submitted for:
+            <%= @gf_travel_request.user.full_name %>
+            <br/>
+            <b>Submitted by</b>
+            <%= @gf_travel_request.form_user %>
+          </div>
+        <% else %>
+          <p>Travel Request for <%= @gf_travel_request.user.full_name %></p>
+        <% end %>
+      <% end %>
+    </div>
   </div>
 </div>
-
-<div class="ui-widget-content ui-corner-all wide partial_form">
-  <table>
-    <tbody>
-      <tr>
-        <td>
-          <%= f.label :dest_desc, 'Travel Destination:' %>
+<div class="container" style="width: inherit;">
+  <div class="row">
+    <div class="col-lg-6">
+      <div class="row">
+      </div>
+      <div class="row">
+        <div class="dest_desc">
+          <div class="col-lg-6">
+            <%= f.label :dest_desc, 'Travel Destination:' %>
+            <br />
+            <%= f.text_field :dest_desc, required: true %>
+          </div>
+          <div class="col-lg-6">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="dates">
+          <div class="col-lg-6">
+            <%= f.label :depart_date, 'Departure date:' %>
+            <br />
+            <%= f.date_field :depart_date, required: :required,
+              min: '2000-01-01', max: '2100-01-1' %>
+          </div>
+          <div class="col-lg-6">
+            <%= f.label :return_date, 'Return date:' %>
+            <br />
+            <%= f.date_field :return_date, required: :required,
+              min: '2000-01-01', max: '2100-01-1' %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="business_purpose">
+        <div class="row">
+          <%= f.label :business_purpose_desc, 'Business Purpose:' %>
           <br />
-          <%= f.text_field :dest_desc %>
-        </td>
-        <td>
-          <%= f.label :business_purpose_desc, 'Description of Business Purpose:' %>
-          <br />
-          <%= f.select :business_purpose_desc, [['Site Visit', 'site_visit'], ['Conference', 'conference'], ['In Person Interview', 'in_person_interview'], ['Other', 'other']], id: 'business_purpose_desc' %>
-        </td>
-        <td>
+          <%= f.select :business_purpose_desc, [['Site Visit', 'site_visit'], ['Conference', 'conference'], ['In Person Interview', 'in_person_interview'], ['Other', 'other']], include_blank: 'Select', required: true, id: 'business_purpose_desc' %>
+        </div>
+        <div class="row">
           <%= f.label :business_purpose_url, 'Conference URL:', 'data-depends-on' => '#grant_funded_travel_request_business_purpose_desc', 'data-depends-on-value' => 'conference' %>
           <br />
           <%= f.text_field :business_purpose_url, 'data-depends-on' => '#grant_funded_travel_request_business_purpose_desc', 'data-depends-on-value' => 'conference' %>
-        </td>
-        <td>
           <%= f.label :business_purpose_other, 'Please describe:', 'data-depends-on' => '#grant_funded_travel_request_business_purpose_desc', 'data-depends-on-value' => 'other' %>
           <br />
           <%= f.text_field :business_purpose_other, 'data-depends-on' => '#grant_funded_travel_request_business_purpose_desc', 'data-depends-on-value' => 'other' %>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  <table>
-    <tbody>
-      <tr>
-        <td>
-          <%= f.label :depart_date, 'Departure date:' %>
+        </div>
+      </div>
+      <div class="expense_card toggle_form">
+        <div class="row">
+          <%= f.label :expense_card_use, 'Will travel expenses be charged to an account?' %>
+          <%= f.select :expense_card_use,
+            options_for_select([['yes', true], ['no', false]]), { prompt: 'Select' }, data: { target: '#expense_card_type_form' }, required: true %>
+        </div>
+        <div id="expense_card_type_form" class="stop_flouc">
+          <div class="row">
+            <%= f.label :expense_card_type, 'Account to charge:' %>
+            <%= f.select :expense_card_type, grouped_options_for_select(hf_funding_options) %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <h4>Event & Travel Expenses</h4>
+    <div class="col-lg-6">
+      <div class="row">
+        <div class="toggle_form">
+          <%= f.label :air_use, 'Will traveler be flying for this event?' %>
+          <%= f.select :air_use,
+            options_for_select([['yes', true], ['no', false]]),
+            { prompt: 'Select' }, data: { target: '#air_use_form' }, required: true %>
+          <div id="air_use_form" class="stop_flouc">
+            <%= f.label :air_assistance, 'Would you like assistance obtaining airline reservations?' %>
+            <%= f.select :air_assistance,
+              options_for_select([['yes', true], ['no', false]]), { prompt: 'Select' }, data: { target: '#air_assistance_form' } %>
+            <div id="air_assistance_form" class="stop_flouc">
+              <%= f.label :ffid, 'Frequent Flyer ID:' %>
+              <%= f.text_field :ffid %>
+              <br />
+              <%= f.label :tsa_pre, 'TSA Precheck #:' %>
+              <%= f.text_field :tsa_pre %>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+
+        <div class="toggle_form">
+          <%= f.label :car_rental, 'Will traveler be renting a car for this event?' %>
+          <%= f.select :car_rental,
+            options_for_select([['yes', true], ['no', false]]), { prompt: 'Select' }, data: { target: '#rental_car_form' }, required: true %>
+          <div id="rental_car_form">
+            <%= f.label :car_assistance, 'Does traveler need assistance in obtaining rental car reservations?' %>
+            <%= f.select :car_assistance,
+              options_for_select([['yes', true], ['no', false]]), { prompt: 'Select' }, data: { target: '#rental_car_assistance_form' } %>
+            <div id="rental_car_assistance_form">
+              <%= f.label :rental_needs_desc, 'Describe rental needs' %>
+              (e.g. dates, vehicle size, etc.)
+              <br >
+              <%= f.text_area :rental_needs_desc, size: '60x40' %>
+              <br />
+              <%= f.label :cell_number, 'Cell Phone Number' %>
+              <%= f.text_field :cell_number %>
+              <br />
+              <%= f.label :drivers_licence_num, 'Driver License Number' %>
+              <%= f.text_field :drivers_licence_num %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="toggle_form">
+          <%= f.label :registration_reimb, 'Will traveler need to pay for event registration?' %>
+          <%= f.select :registration_reimb,
+            options_for_select([['yes', true], ['no', false]]), { prompt: 'Select' }, data: { target: '#registration_form' }, required: true %>
+          <div id="registration_form">
+            <%= f.label :registration_assistance, 'Does traveler need assistance in paying for registering?' %>
+            <%= f.select :registration_assistance,
+              options_for_select([['yes', true], ['no', false]]), { prompt: 'Select' }, data: { target: '#registration_assistance_form' } %>
+            <div id="registration_assistance_form">
+              <%= f.label :registration_url, 'URL of registration site' %>
+              <%= f.text_field :registration_url %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6">
+      <div class="row">
+        <div class="toggle_form">
+          <%= f.label :lodging_reimb, 'Will traveler use paid lodging for this event?' %>
           <br />
-          <%= f.date_field :depart_date, required: :required,
-            min: '2000-01-01', max: '2100-01-1' %>
-        </td>
-        <td>
-          <%= f.label :return_date, 'Return date:' %>
+          <%= f.select :lodging_reimb,
+            options_for_select([['yes', true], ['no', false]]), { prompt: 'Select' }, data: { target: '#lodging_form' }, required: true %>
+          <div id="lodging_form">
+            <%= f.label :lodging_assistance, 'Does traveler need assistance in obtaining lodging reservations?' %>
+            <br />
+            <%= f.select :lodging_assistance,
+              options_for_select([['yes', true], ['no', false]]), { prompt: 'Select' }, data: { target: '#lodging_assistance_form' } %>
+            <div id="lodging_assistance_form" class="table_form stop_flouc">
+              <%= f.label :lodging_url, 'URL of desired lodging' %>
+              <%= f.text_field :lodging_url %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="toggle_form">
+          <%= f.label :ground_transport, 'Will traveler use paid ground transportation for this event?' %>
           <br />
-          <%= f.date_field :return_date, required: :required,
-            min: '2000-01-01', max: '2100-01-1' %>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-<div class="toggle_form">
-  <h4> Expense </h4>
-  <%= f.label :expense_card_use, 'Will travel expenses be charged to an account?' %>
-  <%= f.select :expense_card_use,
-    options_for_select([['yes', true], ['no', false]], f.object.expense_card_use),
-    { prompt: 'Select' }, data: { target: '#expense_card_form' } %>
-  <table id="expense_card_form" class="stop_flouc">
-    <tbody>
-      <tr>
-        <td colspan='2'>
-          <%= f.label :expense_card_type, 'Account to charge:'%>
-          <br/>
-          <%= f.select :expense_card_type, grouped_options_for_select(hf_funding_options, f.object.expense_card_type), prompt: 'Select' %>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-<div class="">
-  <%= f.label :meal_reimb, 'Meal Reimbursement' %>
-  <p>If traveler has a Department issued purchasing card, all allowable meal (and other) expenses must be purchased with card. Only select Per Diem if traveler does not have a purchasing card.</p>
-  <br >
-  <%= f.radio_button :meal_reimb, true %>
-  <%= f.label :meal_reimb_per_diem, "Per Diem" %>
-  <br >
-  <%= f.radio_button :meal_reimb, false %>
-  <%= f.label :meal_reimb_per_diem, "None" %>
-</div>
-<div class="toggle_form">
-  <%= f.label :air_use, 'Will traveler be flying?' %>
-  <%= f.select :air_use,
-    options_for_select([['yes', true], ['no', false]], f.object.air_use),
-    { prompt: 'Select' }, data: { target: '#air_use_form' } %>
-  <div id="air_use_form" class="stop_flouc">
-    <%= f.label :air_assistance, 'Would you like assistance obtaining airline reservations?' %>
-    <%= f.select :air_assistance,
-      options_for_select([['yes', true], ['no', false]], f.object.air_assistance),
-      { prompt: 'Select' }, data: { target: '#air_assistance_form' } %>
-    <table id="air_assistance_form" class="stop_flouc">
-      <tbody>
-        <tr>
-          <td>
-            <%= f.label :ffid, 'Frequent Flyer ID:' %>
-          </td>
-          <td>
-            <%= f.text_field :ffid %>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <%= f.label :tsa_pre, 'TSA Precheck #:' %>
-          </td>
-          <td>
-            <%= f.text_field :tsa_pre %>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+          <%= f.select :ground_transport,
+            options_for_select([['yes', true], ['no', false]]), { prompt: 'Select' }, data: { target: '#ground_transport_form' }, required: true %>
+          <div id="ground_transport_form">
+            <%= f.label :ground_transport_assistance, 'Does traveler need assistance in obtaining paid  ground transportation?' %>
+            <%= f.select :ground_transport_assistance,
+              options_for_select([['yes', true], ['no', false]]), { prompt: 'Select' }, data: { target: '#ground_transport_assistance_form' } %>
+            <div id="ground_transport_assistance_form">
+              <%= f.label :ground_transport_desc, 'Describe transportation needs' %>
+              (e.g. shuttle URL, dates, etc)
+              <br >
+              <%= f.text_area :ground_transport_desc, size: '60x40' %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
-<div class="toggle_form">
-  <%= f.label :car_rental, 'Will traveler be renting a car?' %>
-  <%= f.select :car_rental,
-    options_for_select([['Select', 'error'], ['yes', true], ['no', false]], selected: 'select'),
-    data: { target: '#rental_car_form' } %>
-  <div id="rental_car_form">
-    <%= f.label :car_assistance, 'Does traveler need assistance in obtaining rental car reservations?' %>
-    <%= f.select :car_assistance,
-      options_for_select([['yes', true], ['no', false]], f.object.car_assistance),
-      { prompt: 'Select' }, data: { target: '#rental_car_assistance_form' } %>
-    <table id="rental_car_assistance_form" class="stop_flouc">
-      <tbody>
-        <tr>
-          <td>
-            <%= f.label :cell_number, 'Cell Phone Number' %>
-          </td>
-          <td>
-            <%= f.text_field :cell_number %>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <%= f.label :drivers_licence_num, 'Driver License Number' %>
-          </td>
-          <td>
-            <%= f.text_field :drivers_licence_num %>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
-<div class="toggle_form">
-  <%= f.label :lodging_reimb, 'Will traveler need lodging reimbursement?' %>
-  <%= f.select :lodging_reimb,
-    options_for_select([['yes', true], ['no', false]], f.object.lodging_reimb),
-    { prompt: 'Select' }, data: { target: '#lodging_form' } %>
-  <div id="lodging_form">
-    <%= f.label :lodging_assistance, 'Does traveler need assistance in obtaining lodging reservations?' %>
-    <%= f.select :lodging_assistance,
-      options_for_select([['yes', true], ['no', false]], f.object.lodging_assistance),
-      { prompt: 'Select' }, data: { target: '#lodging_assistance_form' } %>
-    <table id="lodging_assistance_form" class="table_form stop_flouc">
-      <tbody>
-        <tr>
-          <td>
-            <%= f.label :lodging_url, 'URL of desired lodging' %>
-          </td>
-          <td>
-            <%= f.text_area :lodging_url %>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
-<div class="toggle_form">
-  <%= f.label :registration_reimb, 'Will traveler need to pay for event registration?' %>
-  <%= f.select :registration_reimb,
-    options_for_select([['yes', true], ['no', false]], f.object.registration_reimb),
-    { prompt: 'Select' }, data: { target: '#registration_form' } %>
-  <div id="registration_form">
-    <%= f.label :registration_assistance, 'Does traveler need assistance in paying for registering?' %>
-    <%= f.select :registration_assistance,
-      options_for_select([['yes', true], ['no', false]], f.object.registration_assistance),
-      { prompt: 'Select' }, data: { target: '#registration_assistance_form' } %>
-    <table id="registration_assistance_form" class="table_form stop_flouc">
-      <tbody>
-        <tr>
-          <td>
-            <%= f.label :registration_url, 'URL of registration site' %>
-          </td>
-          <td>
-            <%= f.text_area :registration_url %>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+
+<!-- <div class=""> -->
+  <%# <%= f.label :meal_reimb, 'Meal Reimbursement' %>
+  <!-- <p>If traveler has a Department issued purchasing card, all allowable meal (and other) expenses must be purchased with card. Only select Per Diem if traveler does not have a purchasing card.</p> -->
+  <!-- <br > -->
+  <%# <%= f.radio_button :meal_reimb, true %>
+  <%# <%= f.label :meal_reimb_per_diem, "Per Diem" %>
+  <!-- <br > -->
+  <%# <%= f.radio_button :meal_reimb, false %>
+  <%# <%= f.label :meal_reimb_per_diem, "None" %>
+<!-- </div> -->
 <!-- <div> -->
 <!--   <h4>File Attachments</h4> -->
 <!--   <table> -->

@@ -7,7 +7,8 @@ module ApplicationHelper
   def request_type_icon request_type
     request_types = {
       'icon-request-leave'  => 'rural18_32x28.png',
-      'icon-request-travel' => 'air6_32x28.png'
+      'icon-request-travel' => 'air6_32x28.png',
+      'icon-request-reimbursement' => 'money48_32x28.png'
     }
     image_tag(request_types[request_type], class: 'icon-request')
   end
