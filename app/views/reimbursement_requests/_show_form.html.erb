@@ -1,88 +1,105 @@
 <div class="container" style="width: inherit;">
   <div class="row">
-    <div class="col-lg-12">
-      <h3>Traveler Details</h3>
-      <% if reimbursement_request.new_record? %>
-        <% if current_user.has_delegators? %>
+    <div class="col-lg-6">
+      <h4>Traveler Details</h4>
+      <% if @reimbursement_request.form_email != @reimbursement_request.user.email %>
         <div class="ui-widget-content ui-corner-all wide partial_form">
-          <%= f.label :user_id, 'Submit request for:' %><br/>
-          <%= f.select :user_id, options_from_collection_for_select([current_user] + current_user.delegators, "id", "full_name", current_user.id) %>
+          Submitted for:
+          <%= @reimbursement_request.user.full_name %>
+          <br/>
+          <b>Submitted by</b>
+          <%= @reimbursement_request.form_user %>
         </div>
-        <% else %>
-          <p>Submitting Travel Request as: <%= current_user.full_name %></p>
-        <% end %>
       <% else %>
-        <% if reimbursement_request.form_email != reimbursement_request.user.email %>
-          <div class="ui-widget-content ui-corner-all wide partial_form">
-            Submitted for:
-            <%= reimbursement_request.user.full_name %>
-            <br/>
-            <b>Submitted by</b>
-            <%= reimbursement_request.form_user %>
-          </div>
-        <% else %>
-          <p>Travel Request for <%= reimbursement_request.user.full_name %></p>
-        <% end %>
+        <p>Travel Request for <%= @reimbursement_request.user.full_name %></p>
+      <% end %>
+    </div>
+    <div class="col-lg-6"></div>
+  </div>
+</div>
+
+<div class="container" style="width: inherit;">
+  <h4>Travel Event Details</h4>
+  <div class="row">
+    <div class="col-lg-6">
+      <p>Are there other Family Medicine Research staff/faculty attending this event? <%= reimbursement_request.other_fmr_attending %></p>
+      <div class="itinerary_attachment">
+        <h5>Itinerary for Travel</h5>
+        <p>Please see Travel and Reibursement Policy for itinerary requirements</p>
+      </div>
+    </div>
+    <div class="col-lg-3">
+      <div class="depart_date">
+        Departure date: <%=reimbursement_request.depart_date %>
+      </div>
+      <div class="itinerary_attachment">
+        <h5>Agenda of Event</h5>
+        <p>Please see Travel and Reibursement Policy for agenda requirements</p>
+      </div>
+    </div>
+    <div class="col-lg-3">
+      <div class="return_date">
+        Return date: <%= reimbursement_request.return_date %>
+    </div>
+  </div>
+</div>
+
+  <h4>Event & Travel Expenses</h4>
+  <div class="daily_meal_reimb">
+    <div class="row">
+      <% reimbursement_request.meal_reimbursement_requests.each do |mrr| %>
+        <%= render partial: 'meal_reimbursement_requests/show_form', locals: { mrr: mrr } %>
       <% end %>
     </div>
   </div>
-</div>
 
-<div class="container" style="width: inherit;">
   <div class="row">
-      <h3>Travel Event Details</h3>
-      <div class="col-lg-6">
-        <div class="row">
-          other FMR?
-        </div>
+    <div class="col-lg-6">
+      Is traveler submitting for airline reimbursement? <%= hf_reimb_tf_to_words reimbursement_request.air_use %>
+      <br />
+      Is traveler submitting for lodging reimbursement? <%= hf_reimb_tf_to_words reimbursement_request.lodging_reimb %>
+      <br />
+      Is traveler submitting for mileage reimbursement? <%= hf_reimb_tf_to_words reimbursement_request.traveler_mileage_reimb %>
+    </div>
 
-        <div class="row">
-          attachments
-        </div>
-      </div>
-      <div class="col-lg-6">
-        <div class="row">
-          <p>Departure date: <%= reimbursement_request.depart_date %></p>
-          <br />
-          <p>Return date: <%= reimbursement_request.return_date %></p>
-        </div>
-
-        <div class="row"></div>
-      </div>
+    <div class="col-lg-6">
+      Is traveler submitting for rental car reimbursement? <%= hf_reimb_tf_to_words reimbursement_request.car_rental %>
+      <br />
+      Is traveler submitting for meal hosting reimbursement? <%= hf_reimb_tf_to_words reimbursement_request.meal_host_reimb %>
     </div>
   </div>
 </div>
 
-<div class="container" style="width: inherit;">
-  <div class="row">
-      <h3>Event & Travel Reimbursements</h3>
-      <div class="col-lg-12">
-        meal reimb
-      </div>
-
-      <div class="col-lg-6">
-        <div class="row">
-          <p>Is traveler submitting for airline reimbursement? <% reimbursement_request.air_use %></p>
-        </div>
-
-        <div class="row">
-          <p>Is traveler submitting for lodging reimbursement? <% reimbursement_request.lodging_reimb %></p>
-        </div>
-
-        <div class="row">
-          <p>Is traveler submitting for mileage reimbursement? <% reimbursement_request.traveler_mileage_reimb %></p>
-        </div>
-      </div>
-      <div class="col-lg-6">
-        <div class="row">
-          <p>Is traveler submitting for rental car reimbursement? <% reimbursement_request.car_rental %></p>
-        </div>
-
-        <div class="row">
-          <p>Is traveler submitting for meal hosting reimbursement? <em>TODO</em></p>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
+<!--   <h4>File Attachments</h4> -->
+<!--   <table> -->
+  <!--     <tbody> -->
+    <!--       <tr> -->
+      <!--         <td colspan=2 style="text&#45;align:initial;"> -->
+        <!--           <div> -->
+          <!--             <%#= f.fields_for :user_files  do |g| %> -->
+            <!--               <%#= render partial: 'user_file_fields', locals: { f: g } %> -->
+            <!--             <%# end %> -->
+            <!--           </div> -->
+          <!--           <div> -->
+            <!--             <%#= link_to_add_association '+ Add File', f, :user_files %> -->
+            <!--           </div> -->
+          <!--         </td> -->
+        <!--       </tr> -->
+      <!--     </tbody> -->
+    <!--   </table> -->
+  <!--   <ul> -->
+    <!--     <li> -->
+      <!--       Please include any files that will assist us in the conference registration process. -->
+      <!--     </li> -->
+    <!--     <li> -->
+      <!--       File size limit is 10MB -->
+      <!--     </li> -->
+    <!--     <li> -->
+      <!--       Accepted File Types: -->
+      <!--       <span title="Adobe Acrobat compatible PDF">pdf</span>, -->
+      <!--       <span title="Supported image types include: png, gif, jpeg">image</span>, -->
+      <!--       <span title="Microsoft Word Documents (doc, docx)">word document</span> -->
+      <!--     </li> -->
+    <!--   </ul> -->
+  <!-- </div> -->
+<!--  -->

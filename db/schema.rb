@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170804175358) do
+ActiveRecord::Schema.define(version: 20170809152101) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -30,31 +30,31 @@ ActiveRecord::Schema.define(version: 20170804175358) do
   create_table "grant_funded_travel_requests", force: :cascade do |t|
     t.string "form_user", limit: 255
     t.string "form_email", limit: 255
-    t.boolean "other_fmr_attending", default: false
+    t.boolean "other_fmr_attending"
     t.text "dest_desc"
     t.text "business_purpose_desc"
     t.text "business_purpose_url"
     t.text "business_purpose_other"
     t.date "depart_date"
     t.date "return_date"
-    t.boolean "expense_card_use", default: false
+    t.boolean "expense_card_use"
     t.string "expense_card_type", limit: 255
     t.boolean "meal_reimb"
-    t.boolean "traveler_mileage_reimb", default: false
-    t.boolean "traveler_ground_reimb", default: false
-    t.boolean "air_use", default: false
-    t.boolean "air_assistance", default: false
+    t.boolean "traveler_mileage_reimb"
+    t.boolean "traveler_ground_reimb"
+    t.boolean "air_use"
+    t.boolean "air_assistance"
     t.text "ffid"
     t.text "tsa_pre"
-    t.boolean "car_rental", default: false
-    t.boolean "car_assistance", default: false
+    t.boolean "car_rental"
+    t.boolean "car_assistance"
     t.string "cell_number", limit: 255
     t.string "drivers_licence_num", limit: 255
-    t.boolean "lodging_reimb", default: false
-    t.boolean "lodging_assistance", default: false
+    t.boolean "lodging_reimb"
+    t.boolean "lodging_assistance"
     t.string "lodging_url", limit: 255
-    t.boolean "registration_reimb", default: false
-    t.boolean "registration_assistance", default: false
+    t.boolean "registration_reimb"
+    t.boolean "registration_assistance"
     t.string "registration_url", limit: 255
     t.integer "user_id"
     t.boolean "mail_sent", default: false
@@ -141,15 +141,15 @@ ActiveRecord::Schema.define(version: 20170804175358) do
   create_table "reimbursement_requests", force: :cascade do |t|
     t.string "form_user", limit: 255
     t.string "form_email", limit: 255
-    t.boolean "other_fmr_attending", default: false
+    t.boolean "other_fmr_attending"
     t.date "depart_date"
     t.date "return_date"
     t.integer "user_id"
-    t.boolean "air_use", default: false
-    t.boolean "car_rental", default: false
-    t.boolean "meal_host", default: false
-    t.boolean "lodging_reimb", default: false
-    t.boolean "traveler_mileage_reimb", default: false
+    t.boolean "air_use"
+    t.boolean "car_rental"
+    t.boolean "meal_host"
+    t.boolean "lodging_reimb"
+    t.boolean "traveler_mileage_reimb"
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

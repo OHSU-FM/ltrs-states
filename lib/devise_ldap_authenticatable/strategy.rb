@@ -14,7 +14,7 @@ module Devise
         return fail(:invalid) unless resource
         return false unless resource.is_ldap?
 
-        if Devise::LDAP::Adapter.valid_credentials?(resource.username, password)
+        if Devise::LDAP::Adapter.valid_credentials?(resource.login, password)
           success!(resource)
         else
           # Cause the processing of the strategies to stop and cascade no further :api: public.

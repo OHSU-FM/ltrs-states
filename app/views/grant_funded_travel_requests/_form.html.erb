@@ -79,6 +79,7 @@
       <div class="expense_card toggle_form">
         <div class="row">
           <%= f.label :expense_card_use, 'Will travel expenses be charged to an account?' %>
+          <br />
           <%= f.select :expense_card_use,
             options_for_select([['yes', true], ['no', false]]), { prompt: 'Select' }, data: { target: '#expense_card_type_form' }, required: true %>
         </div>
@@ -92,12 +93,15 @@
     </div>
   </div>
 
+  <hr />
+
   <div class="row">
     <h4>Event & Travel Expenses</h4>
     <div class="col-lg-6">
       <div class="row">
         <div class="toggle_form">
           <%= f.label :air_use, 'Will traveler be flying for this event?' %>
+          <br />
           <%= f.select :air_use,
             options_for_select([['yes', true], ['no', false]]),
             { prompt: 'Select' }, data: { target: '#air_use_form' }, required: true %>
@@ -119,6 +123,7 @@
 
         <div class="toggle_form">
           <%= f.label :car_rental, 'Will traveler be renting a car for this event?' %>
+          <br />
           <%= f.select :car_rental,
             options_for_select([['yes', true], ['no', false]]), { prompt: 'Select' }, data: { target: '#rental_car_form' }, required: true %>
           <div id="rental_car_form">
@@ -144,6 +149,7 @@
       <div class="row">
         <div class="toggle_form">
           <%= f.label :registration_reimb, 'Will traveler need to pay for event registration?' %>
+          <br />
           <%= f.select :registration_reimb,
             options_for_select([['yes', true], ['no', false]]), { prompt: 'Select' }, data: { target: '#registration_form' }, required: true %>
           <div id="registration_form">

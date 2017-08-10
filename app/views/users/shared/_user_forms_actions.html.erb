@@ -1,7 +1,6 @@
 <strong>Status: </strong><%= record.approval_state.aasm_state.humanize %>
 <br/>
 
-
 <div class="btn-group">
   <%= link_to 'View', record, :class=>'btn btn-default' %>
   <% if record.approval_state.ready_to_submit? %>

@@ -1,0 +1,29 @@
+<div class="col-xs-3">
+  <div class="">
+    <%= mrr.reimb_date.strftime("%A %B %d, %Y") %>
+  </div>
+
+  <div class="">
+    <p>breakfast</p>
+    <br />
+    <%= hf_reimb_tf_to_words mrr.breakfast %>
+    <br />
+    <%= mrr.breakfast_desc unless mrr.breakfast_desc.nil? %>
+  </div>
+
+  <div class="">
+    <p>lunch</p>
+    <br />
+    <%= hf_reimb_tf_to_words mrr.lunch %>
+    <br />
+    <%= mrr.lunch_desc unless mrr.lunch_desc.nil? %>
+  </div>
+
+  <div class="">
+    <p>dinner</p>
+    <br />
+    <%= hf_reimb_tf_to_words mrr.dinner %>
+    <br />
+    <%= mrr.dinner_desc unless mrr.dinner_desc.nil? %>
+  </div>
+</div>

@@ -33,10 +33,19 @@
   <h4>Travel Event Details</h4>
   <div class="row">
     <div class="col-lg-6">
-      <div class="other_fmr">
+      <div class="toggle_form">
+        <%= f.label :other_fmr_attending, "Are there other Family Medicine Research staff/faculty attending this event?" %>
         <%= f.select :other_fmr_attending,
-          options_for_select([['yes', true], ['no', false]], f.object.air_use.to_s),
-          { prompt: 'Select' }, data: { target: '#air_use_form' }, required: true %>
+          options_for_select([['yes', true], ['no', false]], f.object.other_fmr_attending.to_s),
+          { prompt: 'Select' }, data: { target: '#other_fmr_attending_form' }, required: true %>
+        <div id="other_fmr_attending_form" style="background: lavender;">
+          linking stub
+        </div>
+      </div>
+      <div class="itinerary_attachment">
+        <h5>Itinerary for Travel</h5>
+        <p>Please see Travel and Reibursement Policy for itinerary requirements</p>
+        <%= link_to_add_association '+ Add File', f, :user_files %>
       </div>
     </div>
     <div class="col-lg-3">
@@ -45,6 +54,11 @@
         <br />
         <%= f.date_field :depart_date, required: :required,
           min: '2000-01-01', max: '2100-01-1' %>
+      </div>
+      <div class="itinerary_attachment">
+        <h5>Agenda of Event</h5>
+        <p>Please see Travel and Reibursement Policy for agenda requirements</p>
+        <%= link_to_add_association '+ Add File', f, :user_files %>
       </div>
     </div>
     <div class="col-lg-3">
@@ -59,9 +73,10 @@
 
   <h4>Event & Travel Expenses</h4>
   <div class="daily_meal_reimb">
+    <p>For each day of travel, select which meals were a part of the itinerary (e.g. on departure day, departed at 1pm so eligible for lunch and dinner). Then, for each meal, select Per Diem or NA (e.g. NA due to meal provided by host), and provide brief explanation for selection of NA.</p>
     <div class="row">
       <%= f.fields_for :meal_reimbursement_requests do |mrrf| %>
-        <%= render partial: 'meal_reimbursement_requests/form', locals: { f: mrrf} %>
+        <%= render partial: 'meal_reimbursement_requests/form', locals: { f: mrrf } %>
       <% end %>
     </div>
   </div>
@@ -108,17 +123,6 @@
   </div>
 </div>
 
-<!-- <div class=""> -->
-  <%# <%= f.label :meal_reimb, 'Meal Reimbursement' %>
-  <!-- <p>If traveler has a Department issued purchasing card, all allowable meal (and other) expenses must be purchased with card. Only select Per Diem if traveler does not have a purchasing card.</p> -->
-  <!-- <br > -->
-  <%# <%= f.radio_button :meal_reimb, true %>
-  <%# <%= f.label :meal_reimb_per_diem, "Per Diem" %>
-  <!-- <br > -->
-  <%# <%= f.radio_button :meal_reimb, false %>
-  <%# <%= f.label :meal_reimb_per_diem, "None" %>
-  <!-- </div> -->
-<!-- <div> -->
   <!--   <h4>File Attachments</h4> -->
   <!--   <table> -->
     <!--     <tbody> -->
