@@ -1,0 +1,19 @@
+<div class="nested-fields">
+  <div class="row">
+    <div class="col-xs-2">
+      <%= link_to_remove_association f do %>
+        <span class="glyphicon glyphicon-minus-sign" style='color:red;'></span>
+      <% end %>
+    </div>
+    <div class="col-xs-5">
+      <%= f.label :airline, 'Airline' %>
+      <br />
+      <%= f.text_field :airline %>
+    </div>
+    <div class="col-xs-5">
+      <%= f.label :ffid, 'Frequent Flier Number' %>
+      <br />
+      <%= f.text_field :ffid %>
+    </div>
+  </div>
+</div>

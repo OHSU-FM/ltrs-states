@@ -11,6 +11,9 @@
     <li role="presentation">
       <a href="#delegates" aria-controls="delegates" role="tab" data-toggle="tab">Delegates</a>
     </li>
+    <li role="presentation">
+      <a href="#traveler-profile" aria-controls="traveler-profile" role="tab" data-toggle="tab">Traveler Profile</a>
+    </li>
   </ul>
 
   <!-- Tab panes -->
@@ -24,6 +27,8 @@
     <div role="tabpanel" class="tab-pane" id="delegates">
       <%= render partial: 'users/form_delegates' %>
     </div>
+    <div role="tabpanel" class="tab-pane" id="traveler-profile">
+      <%= render partial: 'users/form_traveler_profile' %>
+    </div>
   </div>
-
 </div>

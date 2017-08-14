@@ -24,8 +24,11 @@ class User < ApplicationRecord
     association_foreign_key: :user_id,
     class_name: 'User'
 
+  has_many :ff_numbers, dependent: :destroy
+
   accepts_nested_attributes_for :user_approvers, allow_destroy: true
   accepts_nested_attributes_for :user_delegations, allow_destroy: true
+  accepts_nested_attributes_for :ff_numbers, allow_destroy: true
 
   validates_presence_of :login, :first_name, :last_name, :email
 

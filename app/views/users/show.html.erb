@@ -1,9 +1,9 @@
-<%= render partial: 'layouts/info', locals: {record: @user} %>
+<%= render partial: 'layouts/info', locals: { record: @user } %>
 <h1>Account Settings</h1>
-<div style="padding:1em;">
+<div style="padding: 1em;">
   <%= render partial: 'users/form' %>
 </div>
 
-<%= form_tag ldap_search_path, method: :post, remote: true, id: :ldap_search, style: 'display:none;' do |f| %>
+<%= form_tag ldap_search_path, method: :post, remote: true, id: :ldap_search, style: 'display: none;' do |f| %>
   <%= text_field_tag(:q) %>
 <% end %>

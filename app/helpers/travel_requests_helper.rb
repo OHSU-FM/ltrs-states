@@ -1,11 +1,5 @@
 module TravelRequestsHelper
   def hf_funding_options
-  	[
-      ['N/A',[
-       'None of these - Describe below',
-       'Department Funding - Org. 63601',
-       'Bridge Funding']
-      ]
-    ]
+    FundingSource.active.group_by{|fs| fs.pi}.map{|k,v| [k, v.map{|a| a.display_name}]}
   end
 end

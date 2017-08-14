@@ -24,3 +24,4 @@
 //= require approvals
 //= require survey
 //= require grant_funded_travel_requests
+//= require rails.validations

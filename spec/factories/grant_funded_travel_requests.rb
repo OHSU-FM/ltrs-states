@@ -1,7 +1,15 @@
 FactoryGirl.define do
   factory :gf_travel_request, class: GrantFundedTravelRequest do
+    dest_desc 'description'
     depart_date { 1.day.from_now }
     return_date { 2.days.from_now }
+    business_purpose_desc 'site visit'
+    expense_card_use false
+    air_use false
+    car_rental false
+    registration_reimb false
+    lodging_reimb false
+    ground_transport false
     form_email 'email'
     form_user 'user'
     user

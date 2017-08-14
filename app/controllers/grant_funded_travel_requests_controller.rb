@@ -90,6 +90,8 @@ class GrantFundedTravelRequestsController < ApplicationController
                :air_assistance, :ffid, :tsa_pre, :car_rental, :car_assistance,
                :cell_number, :drivers_licence_num, :lodging_reimb,
                :lodging_assistance, :lodging_url, :registration_reimb,
-               :registration_assistance, :registration_url, :user_id)
+               :registration_assistance, :registration_url, :user_id,
+               :flight_seat_pref, :rental_needs_desc, :ground_transport,
+               :ground_transport_assistance, :ground_transport_desc)
     end
 end

@@ -19,7 +19,14 @@ class UsersController < ApplicationController
 
   private
   def user_params
-    params.require(:user).permit(user_approvers_attributes: [
+    params.require(:user)
+      .permit(:dob, :cell_number, :travel_email, :ecn1, :ecp1, :ecn2, :ecp2,
+    :dietary_restrictions, :ada_accom, :air_seat_pref, :hotel_room_pref,
+    :tsa_pre,
+    ff_numbers_attributes: [
+      :id, :airline, :ffid, :_destroy
+    ],
+    user_approvers_attributes: [
       :id, :approver_id, :approver_type, :approval_order, :_destroy
     ])
   end

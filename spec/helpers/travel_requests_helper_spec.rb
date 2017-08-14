@@ -1,15 +1,14 @@
 require 'rails_helper'
 
-# Specs in this file have access to a helper object that includes
-# the TravelRequestsHelper. For example:
-#
-# describe TravelRequestsHelper do
-#   describe "string concat" do
-#     it "concats two strings with spaces" do
-#       expect(helper.concat_strings("this","that")).to eq("this that")
-#     end
-#   end
-# end
 RSpec.describe TravelRequestsHelper, type: :helper do
-  pending "add some examples to (or delete) #{__FILE__}"
+  it '#hf_funding_options returns a list of awards grouped by pi' do
+    fs1 = create :funding_source, pi: 'joe'
+    fs2 = create :funding_source, pi: 'susan'
+    inactive = create :funding_source, start_date: Date.tomorrow
+
+    expect(helper.hf_funding_options).to be_an Array
+    expect(helper.hf_funding_options).to eq [[fs1.pi, [fs1.display_name]],
+                                             [fs2.pi, [fs2.display_name]]]
+    expect(helper.hf_funding_options).not_to include inactive
+  end
 end

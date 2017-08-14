@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170809152101) do
+ActiveRecord::Schema.define(version: 20170814221243) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,6 +25,27 @@ ActiveRecord::Schema.define(version: 20170809152101) do
     t.integer "approval_order", default: 0
     t.index ["approvable_type", "approvable_id"], name: "index_approval_states_on_approvable_type_and_approvable_id"
     t.index ["user_id"], name: "index_approval_states_on_user_id"
+  end
+
+  create_table "ff_numbers", force: :cascade do |t|
+    t.string "ffid"
+    t.string "string"
+    t.string "airline"
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_ff_numbers_on_user_id"
+  end
+
+  create_table "funding_sources", force: :cascade do |t|
+    t.string "pi"
+    t.string "title"
+    t.string "nickname"
+    t.string "award_number"
+    t.date "start_date"
+    t.date "end_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "grant_funded_travel_requests", force: :cascade do |t|
@@ -63,8 +84,8 @@ ActiveRecord::Schema.define(version: 20170809152101) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "rental_needs_desc"
-    t.text "ground_transport"
-    t.text "ground_transport_assistance"
+    t.boolean "ground_transport"
+    t.boolean "ground_transport_assistance"
     t.text "ground_transport_desc"
     t.string "flight_airline"
     t.string "flight_seat_pref"
@@ -273,6 +294,18 @@ ActiveRecord::Schema.define(version: 20170809152101) do
     t.boolean "is_ldap", default: true
     t.datetime "deleted_at"
     t.boolean "grant_funded"
+    t.date "dob"
+    t.string "cell_number"
+    t.string "travel_email"
+    t.string "ecn1"
+    t.string "ecp1"
+    t.string "ecn2"
+    t.string "ecp2"
+    t.text "dietary_restrictions"
+    t.text "ada_accom"
+    t.string "air_seat_pref"
+    t.text "hotel_room_pref"
+    t.string "tsa_pre"
     t.index ["deleted_at"], name: "index_users_on_deleted_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
@@ -288,6 +321,7 @@ ActiveRecord::Schema.define(version: 20170809152101) do
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
+  add_foreign_key "ff_numbers", "users"
   add_foreign_key "travel_files", "travel_requests", column: "filable_id"
   add_foreign_key "travel_files", "user_files"
   add_foreign_key "user_approvers", "users"

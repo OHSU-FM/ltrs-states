@@ -3,7 +3,7 @@ $().ready( function(){
 
   // Automatically set the active user form tab
   whash = window.location.hash
-  if($.inArray(whash, ['#home', '#delegates', '#contacts']) >= 0 ){
+  if($.inArray(whash, ['#home', '#delegates', '#contacts', '#travler-profile']) >= 0 ){
     $('a[href="'+ whash  +'"]').trigger('click')
   }else{
     $('a[href="#home"]').trigger('click')
@@ -61,7 +61,9 @@ $().ready( function(){
     $(this).hide();
   });
 
-
+  $('#grant_funded_travel_request_user_id').click(function(){
+    console.log($(this).children(':selected').val());
+  });
 });
 
 // Use a modal dialog to show post wait form
