@@ -39,6 +39,10 @@ class TravelRequest < ApplicationRecord
     ApprovalState.find_by(approvable: self)
   end
 
+  def to_s
+    self.class.name + " " + self.id.to_s
+  end
+
   private
 
   def build_approval_state

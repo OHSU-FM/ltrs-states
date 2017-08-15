@@ -29,4 +29,10 @@ RSpec.describe TravelRequest, type: :model do
     expect(build :travel_request, user: nil).not_to be_valid
   end
 
+  describe 'methods' do
+    it '#to_s returns a string representation of the object' do
+      tr = create :travel_request
+      expect(tr.to_s).to eq "TravelRequest #{tr.id}"
+    end
+  end
 end

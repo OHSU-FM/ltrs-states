@@ -2,16 +2,16 @@
   <div class="row">
     <div class="col-lg-6">
       <h4>Traveler Details</h4>
-      <% if @reimbursement_request.form_email != @reimbursement_request.user.email %>
+      <% if reimbursement_request.form_email != reimbursement_request.user.email %>
         <div class="ui-widget-content ui-corner-all wide partial_form">
           Submitted for:
-          <%= @reimbursement_request.user.full_name %>
+          <%= reimbursement_request.user.full_name %>
           <br/>
           <b>Submitted by</b>
-          <%= @reimbursement_request.form_user %>
+          <%= reimbursement_request.form_user %>
         </div>
       <% else %>
-        <p>Travel Request for <%= @reimbursement_request.user.full_name %></p>
+        <p>Travel Request for <%= reimbursement_request.user.full_name %></p>
       <% end %>
     </div>
     <div class="col-lg-6"></div>
@@ -55,17 +55,27 @@
 
   <div class="row">
     <div class="col-lg-6">
-      Is traveler submitting for airline reimbursement? <%= hf_reimb_tf_to_words reimbursement_request.air_use %>
+      Is traveler submitting for airline reimbursement?
       <br />
-      Is traveler submitting for lodging reimbursement? <%= hf_reimb_tf_to_words reimbursement_request.lodging_reimb %>
+      <b><%= hf_reimb_tf_to_words reimbursement_request.air_use %></b>
       <br />
-      Is traveler submitting for mileage reimbursement? <%= hf_reimb_tf_to_words reimbursement_request.traveler_mileage_reimb %>
+      Is traveler submitting for lodging reimbursement?
+      <br />
+      <b><%= hf_reimb_tf_to_words reimbursement_request.lodging_reimb %></b>
+      <br />
+      Is traveler submitting for mileage reimbursement?
+      <br />
+      <b><%= hf_reimb_tf_to_words reimbursement_request.traveler_mileage_reimb %></b>
     </div>
 
     <div class="col-lg-6">
-      Is traveler submitting for rental car reimbursement? <%= hf_reimb_tf_to_words reimbursement_request.car_rental %>
+      Is traveler submitting for rental car reimbursement?
       <br />
-      Is traveler submitting for meal hosting reimbursement? <%= hf_reimb_tf_to_words reimbursement_request.meal_host_reimb %>
+      <b><%= hf_reimb_tf_to_words reimbursement_request.car_rental %></b>
+      <br />
+      Is traveler submitting for meal hosting reimbursement?
+      <br />
+      <b><%= hf_reimb_tf_to_words reimbursement_request.meal_host_reimb %></b>
     </div>
   </div>
 </div>

@@ -5,7 +5,7 @@
         <td><b>First day of leave:</b></td>
         <td>
           <%= leave_request.start_date %>
-          <%= (leave_request.start_hour || "N/A")  %>
+          <%= (leave_request.start_hour || "N/A") %>
           <%= (leave_request.start_min || "N/A" ) %>
         </td>
       </tr>
@@ -13,13 +13,13 @@
         <td><b>Last day of leave:</b></td>
         <td>
           <%= leave_request.end_date %>
-          <%= ( leave_request.end_hour || "N/A") %>
-          <%= ( leave_request.end_min || "N/A") %>
+          <%= (leave_request.end_hour || "N/A") %>
+          <%= (leave_request.end_min || "N/A") %>
         </td>
       </tr>
       <tr>
         <td>Description of Leave:</td>
-        <td><%= leave_request.desc%></td>
+        <td><%= leave_request.desc %></td>
       </tr>
 </tbody></table></div>
 

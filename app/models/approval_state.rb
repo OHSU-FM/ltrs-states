@@ -92,6 +92,7 @@ class ApprovalState < ApplicationRecord
   end
 
   def unopened_allowed?
+    return false if next_user_approver.nil?
     next_user_approver.notifier? ? false : true
   end
 

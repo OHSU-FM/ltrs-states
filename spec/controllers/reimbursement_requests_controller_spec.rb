@@ -184,11 +184,6 @@ RSpec.describe ReimbursementRequestsController, type: :controller do
         expect { post :accept, params: { id: reimbursement_request.to_param } }
           .to change { ActionMailer::Base.deliveries.count }.by(1)
       end
-
-      # user has single reviewer, so we can test ReimbursementRequest creation here
-      it "creates a new reimbusement request on success" do
-        post :accept, params: { id: reimbursement_request.to_param }
-      end
     end
 
     context "with non-in_review request" do

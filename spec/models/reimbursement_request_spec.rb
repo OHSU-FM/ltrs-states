@@ -21,9 +21,24 @@ RSpec.describe ReimbursementRequest, type: :model do
     expect(build :reimbursement_request, user: nil).not_to be_valid
   end
 
+  it 'requires a depart_date' do
+    expect(build :reimbursement_request, depart_date: nil).not_to be_valid
+  end
+
+  it 'requires a return_date' do
+    expect(build :reimbursement_request, return_date: nil).not_to be_valid
+  end
+
   it 'generates a MealReimbursementRequest for each day of travel' do
     rr = create :reimbursement_request, depart_date: 1.day.ago, return_date: 1.day.from_now
     expect(rr.meal_reimbursement_requests.first).to be_a MealReimbursementRequest
     expect(rr.meal_reimbursement_requests.count).to eq 3
+  end
+
+  describe 'methods' do
+    it '#to_s returns a string representation of the object' do
+      rr = create :reimbursement_request
+      expect(rr.to_s).to eq "ReimbursementRequest #{rr.id}"
+    end
   end
 end

@@ -130,4 +130,11 @@ RSpec.describe GrantFundedTravelRequest, type: :model do
     expect(build :gf_travel_request, ground_transport_assistance: true, ground_transport_desc: nil)
       .not_to be_valid
   end
+
+  describe 'methods' do
+    it '#to_s returns a string representation of the object' do
+      gftr = create :gf_travel_request
+      expect(gftr.to_s).to eq "GrantFundedTravelRequest #{gftr.id}"
+    end
+  end
 end

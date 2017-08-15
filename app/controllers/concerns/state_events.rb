@@ -113,8 +113,7 @@ module StateEvents
   # @return [Boolean] whether record should be sent review transition
   def hf_transition_to_in_review? record, user
     if record.approval_state.unopened?
-      if record.next_user_approver.approver == user &&
-          record.approval_state.may_review?
+      if record.user.reviewers.map(&:approver).include?(user) && record.approval_state.may_review?
         true
       else
         false

@@ -40,4 +40,11 @@ RSpec.describe LeaveRequest, type: :model do
         .not_to be_valid
     end
   end
+
+  describe 'methods' do
+    it '#to_s returns a string representation of the object' do
+      lr = create :leave_request
+      expect(lr.to_s).to eq "LeaveRequest #{lr.id}"
+    end
+  end
 end

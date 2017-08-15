@@ -2,7 +2,7 @@ class Users::ApprovalsController < ApplicationController
   before_action :load_user
 
   def index
-    # reviewable = @user.reviewables
+    redirect_to root_path unless current_user == @user
     reviewable = ApprovalSearch.by_params(@user, params)
     @approvals = WillPaginate::Collection.create(@page, @per_page, reviewable.length) do |pager|
       pager.replace reviewable

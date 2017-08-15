@@ -6,7 +6,7 @@ RSpec.describe UserMailer, type: :mailer do
     let(:mail) { described_class.request_submitted(leave_request.approval_state).deliver_now }
 
     it 'renders the subject' do
-      expect(mail.subject).to eq "request submitted"
+      expect(mail.subject).to eq "Leave request submitted"
     end
 
     it 'renders the receiver email' do
@@ -22,7 +22,7 @@ RSpec.describe UserMailer, type: :mailer do
     end
 
     it 'renders the correct body' do
-      expect(mail.body).to include 'has been submitted'
+      expect(mail.body).to include 'Waiting on response from '
     end
   end
 
@@ -32,7 +32,7 @@ RSpec.describe UserMailer, type: :mailer do
       let(:mail) { described_class.request_rejected(leave_request.approval_state).deliver_now }
 
       it 'renders the subject' do
-        expect(mail.subject).to eq "request rejected"
+        expect(mail.subject).to eq "Leave request rejected"
       end
 
       it 'renders the receiver email' do
@@ -44,7 +44,7 @@ RSpec.describe UserMailer, type: :mailer do
       end
 
       it 'renders the correct body' do
-        expect(mail.body).to include 'has been rejected'
+        expect(mail.body).to include 'Rejected'
       end
 
       it "cc's the user_approvers that have touched the request" do
@@ -75,7 +75,7 @@ RSpec.describe UserMailer, type: :mailer do
     let(:mail) { described_class.request_accepted(leave_request.approval_state).deliver_now }
 
     it 'renders the subject' do
-      expect(mail.subject).to eq "request accepted"
+      expect(mail.subject).to eq "Leave request accepted"
     end
 
     it 'renders the receiver email' do
@@ -87,7 +87,7 @@ RSpec.describe UserMailer, type: :mailer do
     end
 
     it 'renders the correct body' do
-      expect(mail.body).to include 'has been accepted'
+      expect(mail.body).to include 'Accepted'
     end
 
     # TODO send emails to all notifiers

@@ -37,6 +37,10 @@ class LeaveRequest < ApplicationRecord
     has_extra ? 'Faculty' : 'Staff'
   end
 
+  def to_s
+    self.class.name + " " + self.id.to_s
+  end
+
   private
 
   def build_approval_state
