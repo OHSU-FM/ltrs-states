@@ -81,6 +81,11 @@ class ApprovalState < ApplicationRecord
     logger.info("changing from #{aasm.from_state} to #{aasm.to_state} (event: #{aasm.current_event})")
   end
 
+  def previous_user_approver
+    user.user_approvers
+      .find{|appr| approval_order > appr.approval_order }
+  end
+
   def current_user_approver
     user.user_approvers
       .find{|appr| approval_order == appr.approval_order }
@@ -89,6 +94,10 @@ class ApprovalState < ApplicationRecord
   def next_user_approver
     user.user_approvers
       .select{|appr| approval_order < appr.approval_order }.first
+  end
+
+  def user_approver_for u
+    user.user_approvers.find{|ua| ua.approver == u }
   end
 
   def unopened_allowed?
@@ -109,34 +118,39 @@ class ApprovalState < ApplicationRecord
   end
 
   def verdict
-    if is_complete?
-      return aasm_state.titleize
-    elsif ready_to_submit?
-      return 'Ready to submit'
-    elsif missing_information?
-      return "Waiting on response from #{user.name || user.email} "
-    elsif unopened?
-      return "Waiting on response from #{next_user_approver.approver.full_name}"
-    elsif in_review?
-      return "Waiting on response from #{current_user_approver.approver.full_name}"
-    elsif next_user_approver.nil?
-      return "Error"
+    if unsubmitted? or submitted? or unopened?
+      verdict_for_ua next_user_approver
     else
-      return "Waiting on response from #{next_user_approver.approver.full_name}"
+      verdict_for_ua current_user_approver
     end
+    # if is_complete?
+    #   return aasm_state.titleize
+    # elsif ready_to_submit?
+    #   return 'Ready to submit'
+    # elsif missing_information?
+    #   return "Waiting on response from #{user.name || user.email} "
+    # elsif unopened?
+    #   return "Waiting on response from #{next_user_approver.approver.full_name}"
+    # elsif in_review?
+    #   return "Waiting on response from #{current_user_approver.approver.full_name}"
+    # elsif next_user_approver.nil?
+    #   return "Error"
+    # else
+    #   return "Waiting on response from #{next_user_approver.approver.full_name}"
+    # end
   end
 
   def process_state
     state = {}
     user.reviewers.each do |r|
-      state[r] = verdict_for_user(r)
+      state[r] = verdict_for_ua(r)
     end
     state
   end
 
   private
 
-  def verdict_for_user ua
+  def verdict_for_ua ua
     if approval_order < ua.approval_order
       return 'Not Started'
     elsif approval_order > ua.approval_order

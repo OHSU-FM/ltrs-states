@@ -45,6 +45,17 @@ FactoryGirl.define do
       end
     end
 
+    # for use w two_reviewers trait
+    trait :back_to_unopened do
+      after :create do |leave_request|
+        leave_request.approval_state.submit!
+        leave_request.approval_state.send_to_unopened!
+        leave_request.approval_state.review!
+        leave_request.approval_state.send_to_unopened!
+        leave_request.approval_state.increment_approval_order
+      end
+    end
+
     trait :two_reviewers do
       association :user, factory: :user_two_reviewers
     end

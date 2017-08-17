@@ -178,11 +178,34 @@ RSpec.describe ApprovalState, type: :model do
       expect(request.approval_state.current_user_approver).to eq user.user_approvers.first
     end
 
+    it "#previous_user_approver should return nil if we're still on the first approver" do
+      request = create :leave_request, :in_review
+      user = request.user
+
+      expect(request.approval_state.previous_user_approver).to be nil
+    end
+
+    it "#previous_user_approver should return previous_user_approver if there is one" do
+      request = create :leave_request, :accepted
+      user = request.user
+
+      expect(request.approval_state.previous_user_approver).to eq user.reviewers.first
+    end
+
     it '#submitted_or_higher? should return true if state has ever been submitted' do
       (ApprovalState.aasm.states.map(&:name) - [:unsubmitted, :missing_information, :expired, :approval_complete, :error]).each do |state|
         request = create :leave_request, state
         expect(request.approval_state.submitted_or_higher?).to be_truthy
       end
+    end
+
+    it '#user_approver_for_user returns the UserApprover for this user and approver or nil' do
+      request  = create :leave_request
+      user = request.user.reviewers.first.approver
+      rando = create :user
+
+      expect(request.approval_state.user_approver_for(user)).to eq request.user.reviewers.first
+      expect(request.approval_state.user_approver_for(rando)).to eq nil
     end
   end
 

@@ -71,11 +71,77 @@ RSpec.describe UserMailer, type: :mailer do
   end
 
   describe 'request_accepted' do
-    let(:leave_request) { create :leave_request, :accepted, :two_reviewers }
-    let(:mail) { described_class.request_accepted(leave_request.approval_state).deliver_now }
+    context 'user with one reviewer' do
+      let(:leave_request) { create :leave_request, :accepted }
+      let(:mail) { described_class.request_accepted(leave_request.approval_state).deliver_now }
+
+      it 'renders the subject' do
+        expect(mail.subject).to eq "Leave request accepted"
+      end
+
+      it 'renders the receiver email' do
+        expect(mail.to).to eq [leave_request.user.email]
+      end
+
+      it 'renders the sender email' do
+        expect(mail.from).to eq ['from@example.com']
+      end
+
+      it 'renders the correct body' do
+        expect(mail.body).to include 'Accepted'
+      end
+
+      it "cc's the user's notifier(s)" do
+        leave_request.user.notifiers.map{ |ua|
+          expect(mail.cc).to include ua.approver.email
+        }
+      end
+    end
+
+    context 'user with two reviewers' do
+      let(:leave_request) { create :leave_request, :in_review, :two_reviewers }
+      before(:each) do
+        leave_request.approval_state.send_to_unopened!
+        leave_request.approval_state.increment_approval_order
+        leave_request.approval_state.review!
+        leave_request.approval_state.accept!
+      end
+
+      it 'renders the subject' do
+        mail = described_class.request_accepted(leave_request.approval_state).deliver_now
+        expect(mail.subject).to eq "Leave request accepted"
+      end
+
+      it 'renders the receiver email' do
+        mail = described_class.request_accepted(leave_request.approval_state).deliver_now
+        expect(mail.to).to eq [leave_request.user.email]
+      end
+
+      it 'renders the sender email' do
+        mail = described_class.request_accepted(leave_request.approval_state).deliver_now
+        expect(mail.from).to eq ['from@example.com']
+      end
+
+      it 'renders the correct body' do
+        mail = described_class.request_accepted(leave_request.approval_state).deliver_now
+        expect(mail.body).to include 'Accepted'
+      end
+
+      it "cc's the user's notifier(s)" do
+        mail = described_class.request_accepted(leave_request.approval_state).deliver_now
+        leave_request.user.notifiers.map{ |ua|
+          expect(mail.cc).to include ua.approver.email
+        }
+      end
+    end
+  end
+
+  describe 'request_first_reviewer_accepted' do
+    let(:leave_request) { create :leave_request, :back_to_unopened, :two_reviewers }
+    let(:mail) { described_class.request_first_reviewer_accepted(leave_request.approval_state).deliver_now }
 
     it 'renders the subject' do
-      expect(mail.subject).to eq "Leave request accepted"
+      expect(mail.subject).to eq "Leave request accepted by #{leave_request.user.reviewers.first.full_name}"
     end
 
     it 'renders the receiver email' do
@@ -87,14 +153,17 @@ RSpec.describe UserMailer, type: :mailer do
     end
 
     it 'renders the correct body' do
-      expect(mail.body).to include 'Accepted'
+      expect(mail.body).to include "Waiting on response from #{leave_request.user.reviewers.last.full_name}"
     end
 
-    # TODO send emails to all notifiers
-    it "cc's the user's notifier(s)" do
+    it "doesn't cc the user's notifier(s)" do
       leave_request.user.notifiers.map{ |ua|
-        expect(mail.cc).to include ua.approver.email
+        expect(mail.cc).not_to include ua.approver.email
       }
+    end
+
+    it "cc's the user's next_user_approver" do
+      expect(mail.cc).to include leave_request.user.reviewers.last.email
     end
   end
 end

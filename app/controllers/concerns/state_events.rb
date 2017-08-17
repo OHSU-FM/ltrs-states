@@ -1,5 +1,6 @@
 module StateEvents
   extend ActiveSupport::Concern
+  include Concerns::StateEventsHelper
 
   included do
     before_action :set_approvable_and_state,
@@ -74,8 +75,7 @@ module StateEvents
       if @approval_state.next_user_approver.reviewer? and @approval_state.may_send_to_unopened?
         if @approval_state.send_to_unopened!
           @approval_state.increment_approval_order
-          # TODO mailer
-          # UserMailer.request_accepted(@approval_state).deliver_now
+          UserMailer.request_first_reviewer_accepted(@approval_state).deliver_now
           format.html { redirect_to @approvable,
                         notice: "#{@approvable.model_name.human} was successfully sent to the next approver." }
           format.json { render :show, status: :ok, location: @approvable }
@@ -99,24 +99,6 @@ module StateEvents
       else
         format.html { redirect_to @approvable,
                       notice: "This request has already been accepted, so nothing happened." }
-      end
-    end
-  end
-
-  # Should this record.approval_state be sent the review event?
-  #
-  # compares state of a request with a user to see if record is in the unopened
-  # state and the use is the next_user_approver. if so, return true, else false
-  #
-  # @param record [LeaveRequest || TravelRequest]
-  # @param user [User]
-  # @return [Boolean] whether record should be sent review transition
-  def hf_transition_to_in_review? record, user
-    if record.approval_state.unopened?
-      if record.user.reviewers.map(&:approver).include?(user) && record.approval_state.may_review?
-        true
-      else
-        false
       end
     end
   end
