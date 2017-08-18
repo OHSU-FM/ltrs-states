@@ -2,13 +2,16 @@ require 'rails_helper'
 
 RSpec.describe "grant_funded_travel_requests/edit", type: :view do
   before(:each) do
-    @grant_funded_travel_request = assign(:grant_funded_travel_request, GrantFundedTravelRequest.create!())
+    @user = create :user_with_approvers
+    allow(controller).to receive(:current_user) { @user }
+    @gf_travel_request = assign(:gf_travel_request, create(:gf_travel_request, user: @user))
   end
 
   it "renders the edit grant_funded_travel_request form" do
     render
 
-    assert_select "form[action=?][method=?]", grant_funded_travel_request_path(@grant_funded_travel_request), "post" do
+    expect(rendered).to have_content "Edit"
+    assert_select "form[action=?][method=?]", grant_funded_travel_request_path(@gf_travel_request), "post" do
     end
   end
 end

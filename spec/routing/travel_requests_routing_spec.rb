@@ -3,8 +3,9 @@ require "rails_helper"
 RSpec.describe TravelRequestsController, type: :routing do
   describe "routing" do
 
-    it "doesn't route to #index" do
-      expect(:get => "/travel_requests").not_to route_to("travel_requests#index")
+    # actually a redirect
+    it "routes to #index" do
+      expect(:get => "/travel_requests").to route_to("travel_requests#index")
     end
 
     it "routes to #new" do

@@ -90,6 +90,50 @@ RSpec.describe Ability, type: :model do
     end
   end
 
+  describe 'delegate user ability' do
+    let(:delegator_user) { create :user_with_delegate }
+    let(:user) { delegator_user.delegates.first }
+    let(:state) { request.approval_state }
+
+    context 'leave requests' do
+      let(:request) { create :leave_request, user: delegator_user }
+
+      it { is_expected.to be_able_to(:read, request) }
+      it { is_expected.to be_able_to(:destroy, request) }
+      it { is_expected.to be_able_to(:update, state) }
+      it { is_expected.to be_able_to(:submit, state) }
+    end
+
+    context 'travel requests' do
+      let(:request) { create :travel_request, user: delegator_user }
+
+      it { is_expected.to be_able_to(:read, request) }
+      it { is_expected.to be_able_to(:destroy, request) }
+      it { is_expected.to be_able_to(:update, state) }
+      it { is_expected.to be_able_to(:submit, state) }
+    end
+
+    context 'grant funded travel requests' do
+      let(:request) { create :gf_travel_request, user: delegator_user }
+
+      it { is_expected.to be_able_to(:read, request) }
+      it { is_expected.to be_able_to(:destroy, request) }
+      it { is_expected.to be_able_to(:update, state) }
+      it { is_expected.to be_able_to(:submit, state) }
+    end
+
+    context 'reimbursement requests' do
+      let(:request) { create :reimbursement_request, user: delegator_user }
+
+      it { is_expected.to be_able_to(:read, request) }
+      it { is_expected.to be_able_to(:edit, request) }
+      it { is_expected.to be_able_to(:update, request) }
+      it { is_expected.to be_able_to(:destroy, request) }
+      it { is_expected.to be_able_to(:update, state) }
+      it { is_expected.to be_able_to(:submit, state) }
+    end
+  end
+
   describe 'new user' do
     let(:user) { build :user }
 

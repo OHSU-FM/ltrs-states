@@ -1,4 +1,4 @@
-<%= form_for(@user, url: polymorphic_path(@user, anchor: 'delegates'), html: {id: :edit_delegates}) do |f| %>
+<%= form_for @user, url: polymorphic_path(@user, anchor: 'delegates'), html: { id: :edit_delegates } do |f| %>
   <div class="col-xs-12 col-md-6">
 
     <h3>Delegates</h3>
@@ -12,7 +12,7 @@
         </thead>
         <tbody id="ldap_delegates_table">
           <%= f.fields_for :user_delegations do |g| %>
-            <%= render partial: 'users/user_delegation_fields', locals: {f: g} %>
+            <%= render partial: 'users/user_delegation_fields', locals: { f: g } %>
           <% end %>
         </tbody>
       </table><br/>
@@ -40,7 +40,7 @@
       <h4>People who have granted you delegate access</h4>
       <ul>
         <% @user.delegators.each do |u| %>
-          <li><%= u.name || u.email %></li>
+          <li><%= u.full_name || u.email %></li>
         <% end %>
       </ul>
     <% else %>

@@ -18,6 +18,7 @@ RSpec.describe Users::FormsController, type: :controller do
 
   describe 'GET #delegate_forms' do
     login_user
+
     it 'sets the user to @user' do
       user = create :user
       get :delegate_forms, params: { user_id: user.to_param }
@@ -26,7 +27,7 @@ RSpec.describe Users::FormsController, type: :controller do
 
     # TODO should set delegate forms to @approvables
     it 'assigns approvables for a user to @approvables' do
-      pending('implement delegate behavior')
+      fail('implement delegate behavior')
       fail
     end
   end

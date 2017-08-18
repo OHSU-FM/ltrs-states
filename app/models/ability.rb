@@ -51,7 +51,7 @@ class Ability
     end
 
     can :submit, ApprovalState do |as|
-      as.user == user
+      as.user == user || user.delegators.include?(as.user)
     end
 
     can [:review, :accept, :reject], ApprovalState do |as|

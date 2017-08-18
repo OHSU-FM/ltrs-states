@@ -99,6 +99,8 @@ class ApprovalSearch
     return sort_order == "desc" ? r.reverse! : r
   end
 
+  private
+
   def self.array_join(opp, arr1, arr2)
     if opp == 'and'
       return arr1 & arr2

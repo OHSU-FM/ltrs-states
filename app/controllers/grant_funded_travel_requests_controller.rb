@@ -4,6 +4,10 @@ class GrantFundedTravelRequestsController < ApplicationController
   authorize_resource
   skip_authorize_resource only: :update_state
 
+  # def index
+  #   redirect_to user_forms_path current_user
+  # end
+
   # GET /grant_funded_travel_requests/1
   # GET /grant_funded_travel_requests/1.json
   def show

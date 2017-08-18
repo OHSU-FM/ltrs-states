@@ -52,7 +52,6 @@ FactoryGirl.define do
         leave_request.approval_state.send_to_unopened!
         leave_request.approval_state.review!
         leave_request.approval_state.send_to_unopened!
-        leave_request.approval_state.increment_approval_order
       end
     end
 

@@ -119,25 +119,16 @@ class ApprovalState < ApplicationRecord
 
   def verdict
     if unsubmitted? or submitted? or unopened?
-      verdict_for_ua next_user_approver
+      if next_user_approver.notifier?
+        verdict_for_ua current_user_approver
+      else
+        verdict_for_ua next_user_approver
+      end
+    elsif rejected?
+      'Rejected'
     else
       verdict_for_ua current_user_approver
     end
-    # if is_complete?
-    #   return aasm_state.titleize
-    # elsif ready_to_submit?
-    #   return 'Ready to submit'
-    # elsif missing_information?
-    #   return "Waiting on response from #{user.name || user.email} "
-    # elsif unopened?
-    #   return "Waiting on response from #{next_user_approver.approver.full_name}"
-    # elsif in_review?
-    #   return "Waiting on response from #{current_user_approver.approver.full_name}"
-    # elsif next_user_approver.nil?
-    #   return "Error"
-    # else
-    #   return "Waiting on response from #{next_user_approver.approver.full_name}"
-    # end
   end
 
   def process_state
@@ -152,11 +143,19 @@ class ApprovalState < ApplicationRecord
 
   def verdict_for_ua ua
     if approval_order < ua.approval_order
-      return 'Not Started'
+      if approval_order > 0 or !unsubmitted?
+        return "Waiting on response from #{ua.approver.full_name}"
+      else
+        return 'Not Started'
+      end
     elsif approval_order > ua.approval_order
       return 'Accepted'
     elsif approval_order == ua.approval_order
-      return "Waiting on response from #{ua.approver.full_name}"
+      if ua.notifier?
+        return 'Completed'
+      else
+        return "Waiting on response from #{ua.approver.full_name}"
+      end
     end
   end
 end

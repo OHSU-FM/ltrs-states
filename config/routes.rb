@@ -14,7 +14,9 @@ Rails.application.routes.draw do
     resources :approvals, only: [:index], controller: 'users/approvals'
     match 'delegate_forms' => 'users/forms#delegate_forms', via: :get, as: :delegate_forms
   end
-  resources :leave_requests, except: [:index, :edit, :update] do
+
+  get '/leave_requests', to: redirect('/')
+  resources :leave_requests, except: [:edit, :update] do
     member do
       post 'submit' => 'leave_requests#submit'
       post 'review' => 'leave_requests#review'
@@ -24,7 +26,8 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :travel_requests, except: [:index, :edit, :update] do
+  get '/travel_requests', to: redirect('/')
+  resources :travel_requests, except: [:edit, :update] do
     member do
       post 'submit' => 'travel_requests#submit'
       post 'review' => 'travel_requests#review'
@@ -34,7 +37,8 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :grant_funded_travel_requests, except: [:index, :edit, :update] do
+  get '/grant_funded_travel_requests', to: redirect('/')
+  resources :grant_funded_travel_requests, except: [:edit, :update] do
     member do
       post 'submit' => 'grant_funded_travel_requests#submit'
       post 'review' => 'grant_funded_travel_requests#review'
@@ -44,7 +48,8 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :reimbursement_requests, except: :index do
+  get '/reimbursement_requests', to: redirect('/')
+  resources :reimbursement_requests do
     member do
       post 'submit' => 'reimbursement_requests#submit'
       post 'review' => 'reimbursement_requests#review'

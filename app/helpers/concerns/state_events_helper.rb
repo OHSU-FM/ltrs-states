@@ -18,11 +18,10 @@ module Concerns::StateEventsHelper
     # current_user is correct reviewer if record.approval_order == ua.approval_order - 1
     if record.approval_state.approval_order == 0 && record.user.reviewers.first == ua
       true
-    elsif record.approval_state.approval_order == ua.approval_order
+    elsif record.approval_state.approval_order == ua.approval_order - 1
       true
     else
       false
     end
   end
 end
-    # if record.approval_state.approval_order == ua.approval_order - 1

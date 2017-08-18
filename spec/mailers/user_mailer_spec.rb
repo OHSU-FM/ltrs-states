@@ -88,7 +88,7 @@ RSpec.describe UserMailer, type: :mailer do
       end
 
       it 'renders the correct body' do
-        expect(mail.body).to include 'Accepted'
+        expect(mail.body).to include 'Complete'
       end
 
       it "cc's the user's notifier(s)" do
@@ -96,41 +96,45 @@ RSpec.describe UserMailer, type: :mailer do
           expect(mail.cc).to include ua.approver.email
         }
       end
+
+      context 'when request is a GrantFundedTravelRequest' do
+        let(:request) { create :gf_travel_request, :accepted }
+        let(:reimb) { create :reimbursement_request, gf_travel_request: request }
+        let(:mail) { described_class.request_accepted(request.approval_state).deliver_now }
+
+        it 'includes a link to the generated reimbursement request' do
+          # TODO
+        end
+      end
     end
 
     context 'user with two reviewers' do
-      let(:leave_request) { create :leave_request, :in_review, :two_reviewers }
+      let(:leave_request) { create :leave_request, :back_to_unopened, :two_reviewers }
       before(:each) do
-        leave_request.approval_state.send_to_unopened!
-        leave_request.approval_state.increment_approval_order
         leave_request.approval_state.review!
         leave_request.approval_state.accept!
+        @mail = described_class.request_accepted(leave_request.approval_state).deliver_now
       end
 
       it 'renders the subject' do
-        mail = described_class.request_accepted(leave_request.approval_state).deliver_now
-        expect(mail.subject).to eq "Leave request accepted"
+        expect(@mail.subject).to eq "Leave request accepted"
       end
 
       it 'renders the receiver email' do
-        mail = described_class.request_accepted(leave_request.approval_state).deliver_now
-        expect(mail.to).to eq [leave_request.user.email]
+        expect(@mail.to).to eq [leave_request.user.email]
       end
 
       it 'renders the sender email' do
-        mail = described_class.request_accepted(leave_request.approval_state).deliver_now
-        expect(mail.from).to eq ['from@example.com']
+        expect(@mail.from).to eq ['from@example.com']
       end
 
       it 'renders the correct body' do
-        mail = described_class.request_accepted(leave_request.approval_state).deliver_now
-        expect(mail.body).to include 'Accepted'
+        expect(@mail.body).to include 'Complete'
       end
 
       it "cc's the user's notifier(s)" do
-        mail = described_class.request_accepted(leave_request.approval_state).deliver_now
         leave_request.user.notifiers.map{ |ua|
-          expect(mail.cc).to include ua.approver.email
+          expect(@mail.cc).to include ua.approver.email
         }
       end
     end

@@ -63,4 +63,5 @@ RSpec.configure do |config|
   config.extend ControllerMacros, type: :controller
   config.extend ControllerMacros, type: :view
   config.extend ControllerMacros, type: :feature
+  config.extend ControllerMacros, type: :request
 end

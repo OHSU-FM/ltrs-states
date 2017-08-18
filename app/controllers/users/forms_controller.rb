@@ -13,16 +13,16 @@ class Users::FormsController < ApplicationController
   end
 
   def delegate_forms
-    @approvables = nil
+    @approvables = ApprovalSearch.delegator_approvables_for @user
     respond_to do |format|
       format.html { render template: 'users/forms/index'}
-      format.json { render :json => @approvals }
+      format.json { render json: @approvals }
     end
   end
 
   private
 
   def load_user
-    @user = User.find(params[:user_id])
+    @user = User.find params[:user_id]
   end
 end

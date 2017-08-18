@@ -1,14 +1,16 @@
 require 'rails_helper'
 
-RSpec.describe "leave_requests/new", type: :view do
+RSpec.describe 'leave_requests/new', type: :view do
+  login_user
+
   before(:each) do
-    assign(:leave_request, LeaveRequest.new())
+    assign(:leave_request, build(:leave_request))
+    render
   end
 
-  it "renders new leave_request form" do
-    render
-
-    assert_select "form[action=?][method=?]", leave_requests_path, "post" do
-    end
+  it 'renders new leave_request form' do
+    expect(rendered).to have_content 'New'
+    expect(rendered).to have_content 'Leave Request'
+    expect(rendered).to have_selector :link_or_button, 'Save'
   end
 end

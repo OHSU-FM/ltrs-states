@@ -43,4 +43,18 @@ RSpec.describe ApprovalSearch, type: :model do
       expect(ApprovalSearch.by_params(r, {})).to eq [tr]
     end
   end
+
+  describe 'delgator_approvals_for' do
+    let(:u) { create :user_with_delegate }
+    let(:d) { u.delegates.first }
+    let!(:lr) { create :leave_request, :accepted, user: u }
+    let!(:tr) { create :travel_request, :submitted, user: u }
+    let!(:gftr) { create :gf_travel_request, user: u }
+
+    it 'should return a list of approvals for the delegator user' do
+      expect(ApprovalSearch.delgator_approvals_for(d)). to include lr
+      expect(ApprovalSearch.delgator_approvals_for(d)). to include tr
+      expect(ApprovalSearch.delgator_approvals_for(d)). to include gftr
+    end
+  end
 end

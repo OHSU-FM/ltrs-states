@@ -46,7 +46,6 @@ class User < ApplicationRecord
       field :emp_home
       field :email
       field :login
-      field :sn
       field :is_admin
       field :is_ldap
       field :password
@@ -67,7 +66,6 @@ class User < ApplicationRecord
     group 'Notifications Config' do
       active false
       field :reviewers
-      field :others_notified
       field :user_delegations
     end
 
@@ -98,6 +96,7 @@ class User < ApplicationRecord
   def full_name
     "#{ first_name } #{ last_name }"
   end
+  alias :name :full_name
 
   def reviewers
     user_approvers.where(approver_type: 'reviewer')

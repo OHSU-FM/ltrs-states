@@ -2,8 +2,10 @@ require "rails_helper"
 
 RSpec.describe ReimbursementRequestsController, type: :routing do
   describe "routing" do
-    it "doesn't route to #index" do
-      expect(:get => "/reimbursement_requests").not_to route_to("reimbursement_requests#index")
+
+    # actually a redirect though
+    it "routes to #index" do
+      expect(:get => "/reimbursement_requests").to route_to("reimbursement_requests#index")
     end
 
     it "routes to #new" do

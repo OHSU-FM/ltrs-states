@@ -74,7 +74,6 @@ module StateEvents
     respond_to do |format|
       if @approval_state.next_user_approver.reviewer? and @approval_state.may_send_to_unopened?
         if @approval_state.send_to_unopened!
-          @approval_state.increment_approval_order
           UserMailer.request_first_reviewer_accepted(@approval_state).deliver_now
           format.html { redirect_to @approvable,
                         notice: "#{@approvable.model_name.human} was successfully sent to the next approver." }

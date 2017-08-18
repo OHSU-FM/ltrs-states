@@ -321,7 +321,7 @@ RSpec.describe LeaveRequestsController, type: :controller do
   end
 
   describe "POST accept" do
-    fcontext "with in_review request" do
+    context "with in_review request" do
       login_user
       let(:r) { controller.current_user }
       let(:u) { create :user_with_approvers, reviewer_user: r }
@@ -358,6 +358,7 @@ RSpec.describe LeaveRequestsController, type: :controller do
     end
 
     context "with non-in_review request" do
+      login_user
       let(:leave_request) { create :leave_request }
       let(:approval_state) { leave_request.approval_state }
 

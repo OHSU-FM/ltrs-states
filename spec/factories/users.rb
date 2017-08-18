@@ -23,7 +23,16 @@ FactoryGirl.define do
 
     factory :user_with_delegate do
       after(:create) do |user|
-        d = create :user, first_name: 'delegate', email: "delegate4u#{user.id}@example.com"
+        d = create :user_with_approvers, first_name: 'delegate', login: 'delegate', email: "delegate4u#{user.id}@example.com"
+        create :user_delegation, user: user, delegate_user: d
+      end
+    end
+
+    factory :user_with_complete_delegate do
+      with_approvers
+
+      after(:create) do |user|
+        d = create :user_with_approvers, first_name: 'delegate', login: 'delegate', email: "delegate4u#{user.id}@example.com"
         create :user_delegation, user: user, delegate_user: d
       end
     end

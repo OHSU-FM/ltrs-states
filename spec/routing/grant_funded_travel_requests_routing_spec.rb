@@ -3,8 +3,9 @@ require "rails_helper"
 RSpec.describe GrantFundedTravelRequestsController, type: :routing do
   describe "routing" do
 
-    it "doesn't route to #index" do
-      expect(:get => "/grant_funded_travel_requests").not_to route_to("grant_funded_travel_requests#index")
+    # this actually redirects to home
+    it "routes to #index" do
+      expect(:get => "/grant_funded_travel_requests").to route_to("grant_funded_travel_requests#index")
     end
 
     it "routes to #new" do
