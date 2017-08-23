@@ -99,6 +99,10 @@ class ApprovalSearch
     return sort_order == "desc" ? r.reverse! : r
   end
 
+  def self.delegator_approvables_for u
+    approvables_by_id(u.delegators.map(&:id), 'updated_at', 'desc', 'none')
+  end
+
   private
 
   def self.array_join(opp, arr1, arr2)

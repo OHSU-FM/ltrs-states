@@ -25,10 +25,26 @@ RSpec.describe Users::FormsController, type: :controller do
       expect(assigns(:user)).to eq user
     end
 
-    # TODO should set delegate forms to @approvables
-    it 'assigns approvables for a user to @approvables' do
-      fail('implement delegate behavior')
-      fail
+    context 'when user has delegators' do
+      let(:user) { create :complete_user_with_delegate }
+      let(:d) { user.delegates.first }
+      let!(:lr) { create :leave_request, :submitted, user: user }
+      let(:other_lr) { create :leave_request, :submitted }
+
+      it 'assigns approvables for a user to @approvables' do
+        get :delegate_forms, params: { user_id: d.to_param }
+        expect(assigns(:approvables)).to include lr
+        expect(assigns(:approvables)).not_to include other_lr
+      end
+    end
+
+    context 'when user doesnt have delegators' do
+      let(:user) { create :user }
+
+      it 'assigns @approvables to []' do
+        get :delegate_forms, params: { user_id: user.to_param }
+        expect(assigns(:approvables)).to eq []
+      end
     end
   end
 end

@@ -3,6 +3,6 @@ FactoryGirl.define do
     ffid "MyString"
     string "MyString"
     airline "MyString"
-    user nil
+    user
   end
 end

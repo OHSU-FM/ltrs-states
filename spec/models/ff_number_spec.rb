@@ -1,5 +1,15 @@
 require 'rails_helper'
 
 RSpec.describe FfNumber, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  it 'has a factory' do
+    expect(create :ff_number).to be_valid
+  end
+
+  it 'requires an ffid' do
+    expect(build :ff_number, ffid: nil).not_to be_valid
+  end
+
+  it 'requires an airline' do
+    expect(build :ff_number, airline: nil).not_to be_valid
+  end
 end

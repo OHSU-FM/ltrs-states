@@ -6,6 +6,8 @@ FactoryGirl.define do
     first_name 'test'
     last_name 'user'
     email
+    password 'password'
+    is_ldap false
 
     factory :user_with_approvers, traits: [:with_approvers]
 
@@ -28,7 +30,7 @@ FactoryGirl.define do
       end
     end
 
-    factory :user_with_complete_delegate do
+    factory :complete_user_with_delegate do
       with_approvers
 
       after(:create) do |user|

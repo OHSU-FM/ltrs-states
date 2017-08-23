@@ -4,7 +4,7 @@ RSpec.feature "leave_request states", type: :feature do
 
   describe "user pov" do
     before(:each) do
-      @u = create :user_no_ldap, :with_approvers
+      @u = create :user_with_approvers
       visit new_user_session_path
 
       fill_in 'Username', with: @u.login
