@@ -70,8 +70,8 @@ class Ability
       gftr.user.reviewers.map(&:approver).include? user
     end
 
-    can [:review, :accept, :reject], ReimbursementRequest do |gftr|
-      gftr.user.reviewers.map(&:approver).include? user
+    can [:review, :accept, :reject], ReimbursementRequest do |rr|
+      rr.user.reviewers.map(&:approver).include? user
     end
   end
 end

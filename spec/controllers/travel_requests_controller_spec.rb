@@ -6,25 +6,24 @@ RSpec.describe TravelRequestsController, type: :controller do
   end
 
   describe "GET #show" do
+    login_user
+
     context 'as user' do
-      login_user
       let(:user) { controller.current_user }
+      let(:travel_request) { create :travel_request }
 
       it "assigns the requested travel_request as @travel_request" do
-        travel_request = create :travel_request
-        get :show, params: {id: travel_request.to_param}
+        get :show, params: { id: travel_request.to_param }
         expect(assigns(:travel_request)).to eq travel_request
       end
 
       it "assigns the user as @user" do
-        travel_request = create :travel_request
-        get :show, params: {id: travel_request.to_param}
+        get :show, params: { id: travel_request.to_param }
         expect(assigns(:user)).to eq user
       end
     end
 
     context 'as reviewer' do
-      login_user
       let(:r_user) { controller.current_user }
       let(:user) { create :user_with_approvers, reviewer_user: r_user }
       let(:travel_request) { create :travel_request, :unopened, user: user }
@@ -34,7 +33,7 @@ RSpec.describe TravelRequestsController, type: :controller do
         expect(assigns(:user)).to eq r_user
       end
 
-      it "assigns the requested travel_request as @leave_request" do
+      it "assigns the requested travel_request as @travel_request" do
         get :show, params: { id: travel_request.to_param }
         expect(assigns(:travel_request)).to eq travel_request
       end
@@ -44,7 +43,7 @@ RSpec.describe TravelRequestsController, type: :controller do
         expect(assigns(:back_path)).to eq user_approvals_path(r_user)
       end
 
-      it "sends the :review event to the leave_request" do
+      it "sends the :review event to the travel_request" do
         get :show, params: { id: travel_request.to_param }
         expect(travel_request.approval_state).to be_in_review
       end
@@ -153,4 +152,220 @@ RSpec.describe TravelRequestsController, type: :controller do
     end
   end
 
+  describe "POST #submit" do
+    login_user
+
+    context "with unsubmitted request" do
+      let(:travel_request) { create :travel_request }
+
+      it "assigns the travel_request as @approvable" do
+        post :submit, params: { id: travel_request.to_param }
+        expect(assigns[:approvable]).to be_a(TravelRequest)
+        expect(assigns[:approvable]).to eq travel_request
+        expect(assigns[:approvable]).to be_persisted
+      end
+
+      it "assigns the approval_state as @approval_state" do
+        post :submit, params: { id: travel_request.to_param }
+        expect(assigns[:approval_state]).to eq travel_request.approval_state
+        expect(assigns[:approval_state]).to be_persisted
+      end
+
+      it "sends the submit event to the approval_state, followed by the send_to_unopened event" do
+        post :submit, params: { id: travel_request.to_param }
+        expect(assigns[:approval_state].aasm_state).to eq "unopened"
+      end
+
+      it "redirects to the travel_request_path" do
+        post :submit, params: { id: travel_request.to_param }
+        expect(response).to redirect_to travel_request_path(travel_request)
+      end
+
+      it "sends an email" do
+        expect { post :submit, params: { id: travel_request.to_param } }
+          .to change { ActionMailer::Base.deliveries.count }.by(1)
+      end
+    end
+
+    context "with submitted request" do
+      let(:travel_request) { create :travel_request, :submitted }
+      let(:approval_state) { travel_request.approval_state }
+
+      it "redirects to the travel_request" do
+        post :submit, params: { id: travel_request.to_param }
+        expect(response).to redirect_to travel_request_path(travel_request)
+      end
+
+      it "shows an error message" do
+        post :submit, params: { id: travel_request.to_param }
+        expect(flash[:notice]).not_to be_empty
+      end
+
+      it "doesnt send an email" do
+        expect { post :submit, params: { id: travel_request.to_param } }
+          .to change { ActionMailer::Base.deliveries.count }.by(0)
+      end
+    end
+  end
+
+  describe "POST review" do
+    login_reviewer
+    let(:user) { controller.current_user.reviewable_users.last }
+    let(:approval_state) { travel_request.approval_state }
+
+    context "with unopened request" do
+      let(:travel_request) { create :travel_request, :unopened, user: user }
+
+      it "assigns the travel_request as @approvable" do
+        post :review, params: { id: travel_request.to_param }
+        expect(assigns[:approvable]).to be_a(TravelRequest)
+        expect(assigns[:approvable]).to eq travel_request
+        expect(assigns[:approvable]).to be_persisted
+      end
+
+      it "assigns the approval_state as @approval_state" do
+        post :review, params: { id: travel_request.to_param }
+        expect(assigns[:approval_state]).to eq approval_state
+        expect(assigns[:approval_state]).to be_persisted
+      end
+
+      it "sends the review event to the approval_state" do
+        post :review, params: { id: travel_request.to_param }
+        expect(assigns[:approval_state].aasm_state).to eq "in_review"
+      end
+
+      it "redirects to the travel_request_path" do
+        post :review, params: { id: travel_request.to_param }
+        expect(response).to redirect_to travel_request_path(travel_request)
+      end
+    end
+
+    context "with non-unopened request" do
+      let(:travel_request) { create :travel_request, user: user }
+
+      it "redirects to the travel_request" do
+        post :review, params: { id: travel_request.to_param }
+        expect(response).to redirect_to travel_request_path(travel_request)
+      end
+
+      it "shows an error message" do
+        post :review, params: { id: travel_request.to_param }
+        expect(flash[:notice]).to be_present
+      end
+    end
+  end
+
+  describe "POST reject" do
+    login_reviewer
+    let(:user) { controller.current_user.reviewable_users.last }
+    let(:approval_state) { travel_request.approval_state }
+
+    context "with in_review request" do
+      let(:travel_request) { create :travel_request, :in_review, user: user }
+
+      it "assigns the travel_request as @approvable" do
+        post :reject, params: { id: travel_request.to_param }
+        expect(assigns[:approvable]).to be_a(TravelRequest)
+        expect(assigns[:approvable]).to eq travel_request
+        expect(assigns[:approvable]).to be_persisted
+      end
+
+      it "assigns the approval_state as @approval_state" do
+        post :reject, params: { id: travel_request.to_param }
+        expect(assigns[:approval_state]).to eq approval_state
+        expect(assigns[:approval_state]).to be_persisted
+      end
+
+      it "sends the reject event to the approval_state" do
+        post :reject, params: { id: travel_request.to_param }
+        expect(assigns[:approval_state].aasm_state).to eq "rejected"
+      end
+
+      it "redirects to the travel_request_path" do
+        post :reject, params: { id: travel_request.to_param }
+        expect(response).to redirect_to travel_request_path(travel_request)
+      end
+
+      it "sends an email" do
+        expect { post :reject, params: { id: travel_request.to_param } }
+          .to change { ActionMailer::Base.deliveries.count }.by(1)
+      end
+    end
+
+    context "with non-in_review request" do
+      let(:travel_request) { create :travel_request, user: user }
+
+      it "redirects to the travel_request" do
+        post :reject, params: { id: travel_request.to_param }
+        expect(response).to redirect_to travel_request_path(travel_request)
+      end
+
+      it "shows an error message" do
+        post :reject, params: { id: travel_request.to_param }
+        expect(flash[:notice]).not_to be_empty
+      end
+
+      it "doesnt send an email" do
+        expect { post :reject, params: { id: travel_request.to_param } }
+          .to change { ActionMailer::Base.deliveries.count }.by(0)
+      end
+    end
+  end
+
+  describe "POST accept" do
+    login_reviewer
+    let(:user) { controller.current_user.reviewable_users.last }
+    let(:approval_state) { travel_request.approval_state }
+
+    context "with in_review request" do
+      let(:travel_request) { create :travel_request, :in_review, user: user }
+
+      it "assigns the travel_request as @approvable" do
+        post :accept, params: { id: travel_request.to_param }
+        expect(assigns[:approvable]).to be_a(TravelRequest)
+        expect(assigns[:approvable]).to eq travel_request
+        expect(assigns[:approvable]).to be_persisted
+      end
+
+      it "assigns the approval_state as @approval_state" do
+        post :accept, params: { id: travel_request.to_param }
+        expect(assigns[:approval_state]).to eq approval_state
+        expect(assigns[:approval_state]).to be_persisted
+      end
+
+      it "sends the accept event to the approval_state" do
+        post :accept, params: { id: travel_request.to_param }
+        expect(assigns[:approval_state].aasm_state).to eq "accepted"
+      end
+
+      it "redirects to the travel_request_path" do
+        post :accept, params: { id: travel_request.to_param }
+        expect(response).to redirect_to travel_request_path(travel_request)
+      end
+
+      it "sends an email" do
+        expect { post :accept, params: { id: travel_request.to_param } }
+          .to change { ActionMailer::Base.deliveries.count }.by(1)
+      end
+    end
+
+    context "with non-in_review request" do
+      let(:travel_request) { create :travel_request, user: user }
+
+      it "redirects to the travel_request" do
+        post :accept, params: { id: travel_request.to_param }
+        expect(response).to redirect_to travel_request_path(travel_request)
+      end
+
+      it "shows an error message" do
+        post :accept, params: { id: travel_request.to_param }
+        expect(flash[:notice]).not_to be_empty
+      end
+
+      it "doesnt send an email" do
+        expect { post :accept, params: { id: travel_request.to_param } }
+          .to change { ActionMailer::Base.deliveries.count }.by(0)
+      end
+    end
+  end
 end

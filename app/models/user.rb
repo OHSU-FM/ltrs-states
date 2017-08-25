@@ -38,6 +38,8 @@ class User < ApplicationRecord
   has_paper_trail
   acts_as_paranoid
 
+  # don't let rails_admin count against code coverage
+  # :nocov:
   rails_admin do
     group 'User Information' do
       field :full_name
@@ -80,6 +82,7 @@ class User < ApplicationRecord
       scopes [nil, :deleted]
     end
   end
+  # :nocov:
 
   def is_admin?
     is_admin

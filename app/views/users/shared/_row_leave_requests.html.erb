@@ -11,7 +11,6 @@
     <b>Updated at: </b><%= tz_convert(record.approval_state.updated_at, current_user.timezone)  %><br/>
     <b>First Day: </b><%= record.start_date %><br/>
     <b>Last Day: </b><%= record.end_date %><br/>
-    <b>Traveling: </b><%= ((record.need_travel.nil? or record.is_traveling == false) ? 'No':'Yes') %><br />
     <b>Description: </b><%= record.desc %><br/>
     <%= link_to 'View record', record, class: 'modal_show' if show_approver_form %><br/>
   </td>

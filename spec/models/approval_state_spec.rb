@@ -229,15 +229,9 @@ RSpec.describe ApprovalState, type: :model do
         end
       end
 
-      it "value for a given approver is 'Not Started' if approval_order is > \
-        state approval_order" do
+      it "value for a given approver is 'Not Started' if approval_order is > state approval_order" do
         expect(@request.approval_state.process_state.values.last).to eq 'Not Started'
       end
-
-      # it "'s values should be a phrase that compares a user with what action is \
-      #  expected of them for this request" do
-      #   expect(@request.approval_state.process_state.values.first).to eq 'unopened'
-      # end
     end
 
     context 'two reviewers' do

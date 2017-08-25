@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe LeaveRequestsController, type: :controller do
+
   describe "GET #show" do
     context 'as user' do
       login_user
@@ -165,6 +166,7 @@ RSpec.describe LeaveRequestsController, type: :controller do
 
   describe "POST #submit" do
     login_user
+
     context "with unsubmitted request" do
       let(:leave_request) { create :leave_request }
 
@@ -219,10 +221,12 @@ RSpec.describe LeaveRequestsController, type: :controller do
   end
 
   describe "POST review" do
-    login_user
+    login_reviewer
+    let(:user) { controller.current_user.reviewable_users.last }
+    let(:approval_state) { leave_request.approval_state }
+
     context "with unopened request" do
-      let(:leave_request) { create :leave_request, :unopened }
-      let(:approval_state) { leave_request.approval_state }
+      let(:leave_request) { create :leave_request, :unopened, user: user }
 
       it "assigns the leave_request as @approvable" do
         post :review, params: { id: leave_request.to_param }
@@ -249,8 +253,7 @@ RSpec.describe LeaveRequestsController, type: :controller do
     end
 
     context "with non-unopened request" do
-      let(:leave_request) { create :leave_request }
-      let(:approval_state) { leave_request.approval_state }
+      let(:leave_request) { create :leave_request, user: user }
 
       it "redirects to the leave_request" do
         post :review, params: { id: leave_request.to_param }
@@ -265,10 +268,12 @@ RSpec.describe LeaveRequestsController, type: :controller do
   end
 
   describe "POST reject" do
-    login_user
+    login_reviewer
+    let(:user) { controller.current_user.reviewable_users.last }
+    let(:approval_state) { leave_request.approval_state }
+
     context "with in_review request" do
-      let(:leave_request) { create :leave_request, :in_review }
-      let(:approval_state) { leave_request.approval_state }
+      let(:leave_request) { create :leave_request, :in_review, user: user }
 
       it "assigns the leave_request as @approvable" do
         post :reject, params: { id: leave_request.to_param }
@@ -300,8 +305,7 @@ RSpec.describe LeaveRequestsController, type: :controller do
     end
 
     context "with non-in_review request" do
-      let(:leave_request) { create :leave_request }
-      let(:approval_state) { leave_request.approval_state }
+      let(:leave_request) { create :leave_request, user: user }
 
       it "redirects to the leave_request" do
         post :reject, params: { id: leave_request.to_param }
@@ -321,12 +325,12 @@ RSpec.describe LeaveRequestsController, type: :controller do
   end
 
   describe "POST accept" do
+    login_reviewer
+    let(:user) { controller.current_user.reviewable_users.last }
+    let(:approval_state) { leave_request.approval_state }
+
     context "with in_review request" do
-      login_user
-      let(:r) { controller.current_user }
-      let(:u) { create :user_with_approvers, reviewer_user: r }
-      let(:leave_request) { create :leave_request, :in_review, user: u }
-      let(:approval_state) { leave_request.approval_state }
+      let(:leave_request) { create :leave_request, :in_review, user: user }
 
       it "assigns the leave_request as @approvable" do
         post :accept, params: { id: leave_request.to_param }
@@ -358,9 +362,7 @@ RSpec.describe LeaveRequestsController, type: :controller do
     end
 
     context "with non-in_review request" do
-      login_user
-      let(:leave_request) { create :leave_request }
-      let(:approval_state) { leave_request.approval_state }
+      let(:leave_request) { create :leave_request, user: user }
 
       it "redirects to the leave_request" do
         post :accept, params: { id: leave_request.to_param }

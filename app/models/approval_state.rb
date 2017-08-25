@@ -109,10 +109,6 @@ class ApprovalState < ApplicationRecord
     new_record? == false && approvable.new_record? == false && unsubmitted?
   end
 
-  def is_complete?
-    expired? or rejected? or accepted?
-  end
-
   def submitted_or_higher?
     !unsubmitted?
   end

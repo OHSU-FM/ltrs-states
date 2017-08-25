@@ -14,11 +14,10 @@ module ControllerMacros
     logout(warden_scope(resource))
   end
 
-  def login_user u=nil
+  def login_user
     before(:each) do
-      user = u || FactoryGirl.create(:user)
       @request.env["devise.mapping"] = Devise.mappings[:user]
-      sign_in(user)
+      sign_in(FactoryGirl.create(:user))
     end
   end
 
@@ -26,6 +25,21 @@ module ControllerMacros
     before(:each) do
       @request.env["devise.mapping"] = Devise.mappings[:admin]
       sign_in(FactoryGirl.create :admin)
+    end
+  end
+
+  def login_reviewer
+    before(:each) do
+      @request.env["devise.mapping"] = Devise.mappings[:user]
+      sign_in((FactoryGirl.create :user_with_approvers).reviewers.first.approver)
+    end
+  end
+
+  def login_delegate
+    before(:each) do
+      u = create :complete_user_with_delegate
+      @request.env["devise.mapping"] = Devise.mappings[:user]
+      sign_in(u.delegates.first)
     end
   end
 

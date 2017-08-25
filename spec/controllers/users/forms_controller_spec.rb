@@ -2,17 +2,48 @@ require 'rails_helper'
 
 RSpec.describe Users::FormsController, type: :controller do
   describe 'GET #index' do
-    login_user
-    it 'sets the user to @user' do
-      user = create :user
-      get :index, params: { user_id: user.to_param }
-      expect(assigns(:user)).to eq user
+    context 'as normal user' do
+      login_user
+      let(:user) { controller.current_user }
+
+      it 'sets the user to @user' do
+        get :index, params: { user_id: user.to_param }
+        expect(assigns(:user)).to eq user
+      end
+
+      it 'assigns approvables for a user to @approvables' do
+        leave_request = create :leave_request, user: user
+        get :index, params: { user_id: user.to_param }
+        expect(assigns(:approvables)).to include leave_request
+      end
+
+      it 'redirects if user requests index for another user' do
+        other_user = create :user
+        get :index, params: { user_id: other_user.to_param }
+        expect(response).to redirect_to root_path
+      end
     end
 
-    it 'assigns approvables for a user to @approvables' do
-      leave_request = create :leave_request
-      get :index, params: { user_id: leave_request.user.to_param }
-      expect(assigns(:approvables)).to include leave_request
+    context 'as admin' do
+      login_admin
+
+      let(:other_user) { create :user }
+
+      it 'can access index for other users' do
+        get :index, params: { user_id: other_user.to_param }
+        expect(response).to be_success
+      end
+
+      it 'sets the user to @user' do
+        get :index, params: { user_id: other_user.to_param }
+        expect(assigns(:user)).to eq other_user
+      end
+
+      it 'assigns approvables for a user to @approvables' do
+        leave_request = create :leave_request, user: other_user
+        get :index, params: { user_id: other_user.to_param }
+        expect(assigns(:approvables)).to include leave_request
+      end
     end
   end
 

@@ -6,25 +6,24 @@ RSpec.describe ReimbursementRequestsController, type: :controller do
   end
 
   describe "GET #show" do
+    login_user
+
     context 'as user' do
-      login_user
       let(:user) { controller.current_user }
+      let(:reimbursement_request) { create :reimbursement_request}
 
       it "assigns the requested reimbursement_request as @reimbursement_request" do
-        reimbursement_request = create :reimbursement_request
         get :show, params: {id: reimbursement_request.to_param}
         expect(assigns(:reimbursement_request)).to eq reimbursement_request
       end
 
       it "assigns the user as @user" do
-        reimbursement_request = create :reimbursement_request
         get :show, params: {id: reimbursement_request.to_param}
         expect(assigns(:user)).to eq user
       end
     end
 
     context 'as reviewer' do
-      login_user
       let(:r_user) { controller.current_user }
       let(:user) { create :user_with_approvers, reviewer_user: r_user }
       let(:reimbursement_request) { create :reimbursement_request, :unopened, user: user }
@@ -63,8 +62,9 @@ RSpec.describe ReimbursementRequestsController, type: :controller do
   end
 
   describe "POST #create" do
+    login_user
+
     context "with valid params" do
-      login_user
       let(:user) { controller.current_user }
       let(:valid_attributes) { build(:reimbursement_request, user: user).attributes }
 
@@ -87,7 +87,6 @@ RSpec.describe ReimbursementRequestsController, type: :controller do
     end
 
     context 'with valid params and a delegate user' do
-      login_user
       let(:d_user) { controller.current_user }
       let(:user) { create :user }
       let(:delegation) { create :user_delegation, user: user, delegate_user: d_user }
@@ -117,7 +116,6 @@ RSpec.describe ReimbursementRequestsController, type: :controller do
     end
 
     context "with invalid params" do
-      login_user
       let(:invalid_attributes) {
         build(:reimbursement_request).attributes.except("depart_date").merge("depart_date" => nil)
       }
@@ -130,6 +128,42 @@ RSpec.describe ReimbursementRequestsController, type: :controller do
       it "re-renders the 'new' template" do
         post :create, params: { reimbursement_request: invalid_attributes }
         expect(response).to render_template("new")
+      end
+    end
+  end
+
+  describe 'PUT #update' do
+    let(:rr) { create :reimbursement_request, user: user }
+    let(:updated_params) { rr.attributes.update(air_use: true) }
+
+    context 'with logged in user' do
+      login_user
+      let(:user) { controller.current_user }
+
+      it 'updates the request' do
+        patch :update, params: { id: rr.id, reimbursement_request: updated_params }
+        rr.reload
+        expect(rr.air_use).to be_truthy
+      end
+    end
+
+    context 'with logged in delegate' do
+      login_delegate
+      let(:user) { controller.current_user.delegators.first }
+
+      it 'updates the request' do
+        patch :update, params: { id: rr.id, reimbursement_request: updated_params }
+        rr.reload
+        expect(rr.air_use).to be_truthy
+      end
+    end
+
+    context 'without logged in user' do
+      let(:user) { create :user }
+      it 'doesnt update the request' do
+        patch :update, params: { id: rr.id, reimbursement_request: updated_params }
+        rr.reload
+        expect(rr.air_use).to be_falsey
       end
     end
   end
@@ -153,9 +187,11 @@ RSpec.describe ReimbursementRequestsController, type: :controller do
 
   describe "POST accept" do
     login_user
+    let(:user) { create :user_with_approvers, reviewer_user: controller.current_user}
+    let(:approval_state) { reimbursement_request.approval_state }
+
     context "with in_review request" do
-      let(:reimbursement_request) { create :reimbursement_request, :in_review }
-      let(:approval_state) { reimbursement_request.approval_state }
+      let(:reimbursement_request) { create :reimbursement_request, :in_review, user: user }
 
       it "assigns the reimbursement_request as @approvable" do
         post :accept, params: { id: reimbursement_request.to_param }
@@ -187,9 +223,7 @@ RSpec.describe ReimbursementRequestsController, type: :controller do
     end
 
     context "with non-in_review request" do
-      let(:u) { create :user_with_approvers }
-      let(:reimbursement_request) { create :reimbursement_request, user: u }
-      let(:approval_state) { reimbursement_request.approval_state }
+      let(:reimbursement_request) { create :reimbursement_request, user: user }
 
       it "redirects to the reimbursement_request" do
         post :accept, params: { id: reimbursement_request.to_param }

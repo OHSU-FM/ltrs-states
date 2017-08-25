@@ -12,6 +12,7 @@ module StateEvents
   end
 
   def submit
+    authorize! :submit, @approvable
     respond_to do |format|
       if @approval_state.may_submit?
         if @approval_state.submit!
@@ -34,6 +35,7 @@ module StateEvents
   end
 
   def review
+    authorize! :review, @approvable
     respond_to do |format|
       if @approval_state.may_review?
         if @approval_state.review!
@@ -52,6 +54,7 @@ module StateEvents
   end
 
   def reject
+    authorize! :reject, @approvable
     respond_to do |format|
       if @approval_state.may_reject?
         if @approval_state.reject!
@@ -71,6 +74,7 @@ module StateEvents
   end
 
   def accept
+    authorize! :accept, @approvable
     respond_to do |format|
       if @approval_state.next_user_approver.reviewer? and @approval_state.may_send_to_unopened?
         if @approval_state.send_to_unopened!
@@ -106,10 +110,10 @@ module StateEvents
 
   def build_reimbursement_request_for u, tr
     ReimbursementRequest.create!(user: u,
-                                depart_date: tr.depart_date,
-                                return_date: tr.return_date,
-                                form_user: current_user.full_name,
-                                form_email: current_user.email)
+                                 depart_date: tr.depart_date,
+                                 return_date: tr.return_date,
+                                 form_user: current_user.full_name,
+                                 form_email: current_user.email)
   end
 
   def set_approvable_and_state

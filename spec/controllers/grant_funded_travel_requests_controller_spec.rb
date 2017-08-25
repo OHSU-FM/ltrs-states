@@ -6,25 +6,24 @@ RSpec.describe GrantFundedTravelRequestsController, type: :controller do
   end
 
   describe "GET #show" do
+    login_user
+
     context 'as user' do
-      login_user
       let(:user) { controller.current_user }
+      let(:gf_travel_request) { create :gf_travel_request }
 
       it "assigns the requested gf_travel_request as @gf_travel_request" do
-        gf_travel_request = create :gf_travel_request
         get :show, params: {id: gf_travel_request.to_param}
         expect(assigns(:gf_travel_request)).to eq gf_travel_request
       end
 
       it "assigns the user as @user" do
-        gf_travel_request = create :gf_travel_request
         get :show, params: {id: gf_travel_request.to_param}
         expect(assigns(:user)).to eq user
       end
     end
 
     context 'as reviewer' do
-      login_user
       let(:r_user) { controller.current_user }
       let(:user) { create :user_with_approvers, reviewer_user: r_user }
       let(:gf_travel_request) { create :gf_travel_request, :unopened, user: user }
@@ -153,9 +152,11 @@ RSpec.describe GrantFundedTravelRequestsController, type: :controller do
 
   describe "POST accept" do
     login_user
+    let(:user) { create :user_with_approvers, reviewer_user: controller.current_user }
+    let(:approval_state) { gf_travel_request.approval_state }
+
     context "with in_review request" do
-      let(:gf_travel_request) { create :gf_travel_request, :in_review }
-      let(:approval_state) { gf_travel_request.approval_state }
+      let(:gf_travel_request) { create :gf_travel_request, :in_review, user: user }
 
       it "assigns the gf_travel_request as @approvable" do
         post :accept, params: { id: gf_travel_request.to_param }
@@ -194,9 +195,7 @@ RSpec.describe GrantFundedTravelRequestsController, type: :controller do
     end
 
     context "with non-in_review request" do
-      let(:u) { create :user_with_approvers }
-      let(:gf_travel_request) { create :gf_travel_request, user: u }
-      let(:approval_state) { gf_travel_request.approval_state }
+      let(:gf_travel_request) { create :gf_travel_request, user: user }
 
       it "redirects to the gf_travel_request" do
         post :accept, params: { id: gf_travel_request.to_param }

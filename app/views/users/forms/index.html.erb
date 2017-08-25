@@ -3,10 +3,10 @@
 <div>
   <ul class="list-inline">
     <li>
-      <%= active_link_to "My Forms", user_forms_path(current_user.id), :class=>'btn-default btn btn-md'  %>
+      <%= active_link_to "My Forms", user_forms_path(current_user.id), class: 'btn-default btn btn-md' %>
     </li>
     <li>
-      <%= active_link_to 'Delegate Forms', user_delegate_forms_path(current_user.id), class:'btn btn-default btn-md' %>
+      <%= active_link_to 'Delegate Forms', user_delegate_forms_path(current_user.id), class: 'btn btn-default btn-md' %>
     </li>
     <li>
       <div class="dropdown">
@@ -20,7 +20,7 @@
             <%= link_to 'New Staff Leave Request', new_leave_request_path %>
           </li>
           <li>
-            <%= link_to 'New Faculty Leave Request', new_leave_request_path(:extra=>true)%>
+            <%= link_to 'New Faculty Leave Request', new_leave_request_path(extra: true) %>
           </li>
           <li>
             <% if current_user.grant_funded? %>
@@ -29,11 +29,9 @@
               <%= link_to 'New Travel Request', new_travel_request_path %>
             <% end %>
           </li>
-
         </ul>
       </div>
     </li>
-
   </ul>
 </div>
 
@@ -59,8 +57,8 @@
     </thead>
     <tbody>
       <% @approvables.each do |approvable| %>
-        <%= render :partial=>"users/shared/row_#{approvable.class.table_name}",
-          :locals=>{user: @user, record: approvable, show_user_form: true}%>
+        <%= render partial: "users/shared/row_#{approvable.class.table_name}",
+          locals: { user: @user, record: approvable, show_user_form: true } %>
       <% end %>
     </tbody>
   </table>

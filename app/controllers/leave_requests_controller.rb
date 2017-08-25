@@ -2,7 +2,7 @@ class LeaveRequestsController < ApplicationController
   include StateEvents
   before_action :load_resources, only: [:show, :edit, :update, :destroy]
   authorize_resource
-  skip_authorize_resource only: :update_state
+  skip_authorize_resource only: [:update_state, :submit, :review, :reject, :accept]
 
   # GET /leave_requests
   # GET /leave_requests.json
