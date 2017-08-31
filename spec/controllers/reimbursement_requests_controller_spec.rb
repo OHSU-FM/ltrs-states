@@ -134,36 +134,51 @@ RSpec.describe ReimbursementRequestsController, type: :controller do
 
   describe 'PUT #update' do
     let(:rr) { create :reimbursement_request, user: user }
-    let(:updated_params) { rr.attributes.update(air_use: true) }
 
-    context 'with logged in user' do
+    context 'with valid_attributes' do
+      let(:valid_attributes) { rr.attributes.update(air_use: true) }
+
+      context 'with logged in user' do
+        login_user
+        let(:user) { controller.current_user }
+
+        it 'updates the request' do
+          patch :update, params: { id: rr.id, reimbursement_request: valid_attributes }
+          rr.reload
+          expect(rr.air_use).to be_truthy
+        end
+      end
+
+      context 'with logged in delegate' do
+        login_delegate
+        let(:user) { controller.current_user.delegators.first }
+
+        it 'updates the request' do
+          patch :update, params: { id: rr.id, reimbursement_request: valid_attributes }
+          rr.reload
+          expect(rr.air_use).to be_truthy
+        end
+      end
+
+      context 'without logged in user' do
+        let(:user) { create :user }
+        it 'doesnt update the request' do
+          patch :update, params: { id: rr.id, reimbursement_request: valid_attributes }
+          rr.reload
+          expect(rr.air_use).to be_falsey
+        end
+      end
+    end
+
+    context 'with invalid_attributes' do
       login_user
       let(:user) { controller.current_user }
+      let(:invalid_attributes) { rr.attributes.update("return_date" => nil) }
 
-      it 'updates the request' do
-        patch :update, params: { id: rr.id, reimbursement_request: updated_params }
-        rr.reload
-        expect(rr.air_use).to be_truthy
-      end
-    end
-
-    context 'with logged in delegate' do
-      login_delegate
-      let(:user) { controller.current_user.delegators.first }
-
-      it 'updates the request' do
-        patch :update, params: { id: rr.id, reimbursement_request: updated_params }
-        rr.reload
-        expect(rr.air_use).to be_truthy
-      end
-    end
-
-    context 'without logged in user' do
-      let(:user) { create :user }
-      it 'doesnt update the request' do
-        patch :update, params: { id: rr.id, reimbursement_request: updated_params }
-        rr.reload
-        expect(rr.air_use).to be_falsey
+      it 'renders edit' do
+        patch :update, params: { id: rr.id, reimbursement_request: invalid_attributes }
+        expect(response).to render_template(:edit)
+        expect(assigns[:reimbursement_request]).to eq rr
       end
     end
   end

@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe "travel_requests/edit", type: :view do
   before(:each) do
     @user = create :user_with_approvers
-    allow(controller).to receive(:current_user) { @user }
+    controller.stubs(:current_user).returns(@user)
     @travel_request = assign(:travel_request, create(:travel_request, user: @user))
   end
 

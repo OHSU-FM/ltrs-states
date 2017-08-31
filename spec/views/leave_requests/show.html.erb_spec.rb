@@ -4,7 +4,7 @@ RSpec.describe 'leave_requests/show', type: :view do
   context 'with unsubmitted leave_request' do
     before(:each) do
       @user = create :user_with_approvers
-      allow(controller).to receive(:current_user) { @user }
+      controller.stubs(:current_user).returns(@user)
       @leave_request = assign(:leave_request, (create :leave_request, user: @user))
     end
 

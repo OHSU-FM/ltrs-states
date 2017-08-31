@@ -1,6 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe LeaveRequestsController, type: :controller do
+  describe "GET #index" do
+    # there is no leave_requests#index
+  end
 
   describe "GET #show" do
     context 'as user' do
@@ -54,9 +57,24 @@ RSpec.describe LeaveRequestsController, type: :controller do
 
   describe "GET #new" do
     login_user
-    it "assigns a new leave_request as @leave_request" do
-      get :new
-      expect(assigns(:leave_request)).to be_a_new(LeaveRequest)
+
+    context "as user" do
+      it "assigns a new leave_request as @leave_request" do
+        get :new
+        expect(assigns(:leave_request)).to be_a_new(LeaveRequest)
+      end
+
+      it "assigns @back_path as the user's user forms path" do
+        get :new
+        expect(assigns[:back_path]).to eq user_forms_path(controller.current_user)
+      end
+    end
+
+    context "as user with extra (faculty user)" do
+      it "assigns a new leave_request with leave_request_extra as @leave_request" do
+        get :new, params: { extra: true }
+        expect(assigns[:leave_request].has_extra?).to be_truthy
+      end
     end
   end
 
@@ -166,9 +184,10 @@ RSpec.describe LeaveRequestsController, type: :controller do
 
   describe "POST #submit" do
     login_user
+    let(:user) { controller.current_user }
 
     context "with unsubmitted request" do
-      let(:leave_request) { create :leave_request }
+      let(:leave_request) { create :leave_request, user: user }
 
       it "assigns the leave_request as @approvable" do
         post :submit, params: { id: leave_request.to_param }
@@ -199,21 +218,38 @@ RSpec.describe LeaveRequestsController, type: :controller do
       end
     end
 
-    context "with submitted request" do
-      let(:leave_request) { create :leave_request, :submitted }
-      let(:approval_state) { leave_request.approval_state }
+    context "with non-unsubmitted request" do
+      (ApprovalState.aasm.states.map(&:name) - [:unsubmitted]).each do |state|
+        let!(:as) { create :leave_approval_state, aasm_state: state, user: user }
+        let!(:leave_request) { as.approvable }
 
-      it "redirects to the leave_request" do
+        it "redirects to the leave_request" do
+          post :submit, params: { id: leave_request.to_param }
+          expect(response).to redirect_to leave_request_path(leave_request)
+        end
+
+        it "shows an error message" do
+          post :submit, params: { id: leave_request.to_param }
+          expect(flash[:notice]).not_to be_empty
+        end
+
+        it "doesnt send an email" do
+          expect { post :submit, params: { id: leave_request.to_param } }
+            .to change { ActionMailer::Base.deliveries.count }.by(0)
+        end
+      end
+    end
+
+    context 'when submit fails for some reason' do
+      let(:leave_request) { create :leave_request }
+      before(:each) { ApprovalState.any_instance.stubs(:submit!).returns(false) }
+
+      it 'redirects to show' do
         post :submit, params: { id: leave_request.to_param }
         expect(response).to redirect_to leave_request_path(leave_request)
       end
 
-      it "shows an error message" do
-        post :submit, params: { id: leave_request.to_param }
-        expect(flash[:notice]).not_to be_empty
-      end
-
-      it "doesnt send an email" do
+      it "doesn't send an email" do
         expect { post :submit, params: { id: leave_request.to_param } }
           .to change { ActionMailer::Base.deliveries.count }.by(0)
       end
@@ -250,19 +286,36 @@ RSpec.describe LeaveRequestsController, type: :controller do
         post :review, params: { id: leave_request.to_param }
         expect(response).to redirect_to leave_request_path(leave_request)
       end
+
+      context 'that fails to be accepted for some reason' do
+        before(:each) { ApprovalState.any_instance.stubs(:review!).returns(false) }
+
+        it "redirects to the leave_request_path" do
+          post :review, params: { id: leave_request.to_param }
+          expect(response).to redirect_to leave_request_path(leave_request)
+        end
+
+        it "flashes an alert" do
+          post :review, params: { id: leave_request.to_param }
+          expect(flash.alert).not_to be_empty
+        end
+      end
     end
 
     context "with non-unopened request" do
-      let(:leave_request) { create :leave_request, user: user }
+      (ApprovalState.aasm.states.map(&:name) - [:unopened]).each do |state|
+        let!(:as) { create :leave_approval_state, aasm_state: state, user: user }
+        let!(:leave_request) { as.approvable }
 
-      it "redirects to the leave_request" do
-        post :review, params: { id: leave_request.to_param }
-        expect(response).to redirect_to leave_request_path(leave_request)
-      end
+        it "redirects to the leave_request" do
+          post :review, params: { id: leave_request.to_param }
+          expect(response).to redirect_to leave_request_path(leave_request)
+        end
 
-      it "shows an error message" do
-        post :review, params: { id: leave_request.to_param }
-        expect(flash[:notice]).to be_present
+        it "shows an error message" do
+          post :review, params: { id: leave_request.to_param }
+          expect(flash[:notice]).to be_present
+        end
       end
     end
   end
@@ -302,6 +355,20 @@ RSpec.describe LeaveRequestsController, type: :controller do
         expect { post :reject, params: { id: leave_request.to_param } }
           .to change { ActionMailer::Base.deliveries.count }.by(1)
       end
+
+      context 'that fails to be rejected for some reason' do
+        before(:each) { ApprovalState.any_instance.stubs(:reject!).returns(false) }
+
+        it "redirects to the leave_request_path" do
+          post :reject, params: { id: leave_request.to_param }
+          expect(response).to redirect_to leave_request_path(leave_request)
+        end
+
+        it "flashes an alert" do
+          post :reject, params: { id: leave_request.to_param }
+          expect(flash.alert).not_to be_empty
+        end
+      end
     end
 
     context "with non-in_review request" do
@@ -325,11 +392,11 @@ RSpec.describe LeaveRequestsController, type: :controller do
   end
 
   describe "POST accept" do
-    login_reviewer
     let(:user) { controller.current_user.reviewable_users.last }
     let(:approval_state) { leave_request.approval_state }
 
     context "with in_review request" do
+      login_reviewer
       let(:leave_request) { create :leave_request, :in_review, user: user }
 
       it "assigns the leave_request as @approvable" do
@@ -359,9 +426,113 @@ RSpec.describe LeaveRequestsController, type: :controller do
         expect { post :accept, params: { id: leave_request.to_param } }
           .to change { ActionMailer::Base.deliveries.count }.by(1)
       end
+
+      context 'that fails to be accepted for some reason' do
+        it "redirects to the leave_request_path" do
+          post :accept, params: { id: leave_request.to_param }
+          expect(response).to redirect_to leave_request_path(leave_request)
+        end
+
+        it "flashes an alert" do
+          ApprovalState.any_instance.stubs(:accept!).returns(false)
+          post :accept, params: { id: leave_request.to_param }
+          expect(flash.alert).not_to be_empty
+        end
+      end
+    end
+
+    context 'when user has more than one reviewer' do
+      context '(first reviewer)' do
+        login_first_reviewer
+        let!(:leave_request) { create :leave_request, :in_review, user: user }
+
+        it "assigns the leave_request as @approvable" do
+          post :accept, params: { id: leave_request.to_param }
+          expect(assigns[:approvable]).to eq leave_request
+          expect(assigns[:approvable]).to be_persisted
+        end
+
+        it "assigns the approval_state as @approval_state" do
+          post :accept, params: { id: leave_request.to_param }
+          expect(assigns[:approval_state]).to eq approval_state
+          expect(assigns[:approval_state]).to be_persisted
+        end
+
+        it "sends the send_to_unopened event to the approval_state" do
+          post :accept, params: { id: leave_request.to_param }
+          expect(assigns[:approval_state].aasm_state).to eq "unopened"
+        end
+
+        it "redirects to the leave_request_path" do
+          post :accept, params: { id: leave_request.to_param }
+          expect(response).to redirect_to leave_request_path(leave_request)
+        end
+
+        it "sends an email" do
+          expect { post :accept, params: { id: leave_request.to_param } }
+            .to change { ActionMailer::Base.deliveries.count }.by(1)
+        end
+
+        context 'and send_to_unopened fails for some reason' do
+          it 'shows an error message' do
+            ApprovalState.any_instance.stubs(:send_to_unopened!).returns(false)
+            post :accept, params: { id: leave_request.to_param }
+            expect(flash.alert).not_to be_empty
+          end
+        end
+      end
+
+      context '(second reviewer)' do
+        login_second_reviewer
+        let!(:leave_request) { create :leave_request, :back_to_unopened, user: user }
+
+        it "assigns the leave_request as @approvable" do
+          post :accept, params: { id: leave_request.to_param }
+          expect(assigns[:approvable]).to eq leave_request
+          expect(assigns[:approvable]).to be_persisted
+        end
+
+        it "assigns the approval_state as @approval_state" do
+          post :accept, params: { id: leave_request.to_param }
+          expect(assigns[:approval_state]).to eq approval_state
+          expect(assigns[:approval_state]).to be_persisted
+        end
+
+        it "sends the accept event to the approval_state" do
+          post :accept, params: { id: leave_request.to_param }
+          expect(assigns[:approval_state].aasm_state).to eq "accepted"
+        end
+
+        it "redirects to the leave_request_path" do
+          post :accept, params: { id: leave_request.to_param }
+          expect(response).to redirect_to leave_request_path(leave_request)
+        end
+
+        it "sends an email" do
+          expect { post :accept, params: { id: leave_request.to_param } }
+            .to change { ActionMailer::Base.deliveries.count }.by(1)
+        end
+
+        context 'and accept fails for some reason' do
+          before(:each) do
+            ApprovalState.any_instance.stubs(:accept!).returns(false)
+          end
+
+          it 'shows an error message' do
+            post :accept, params: { id: leave_request.to_param }
+            expect(flash.alert).not_to be_empty
+          end
+
+          it 'doesnt send an email' do
+            expect { post :accept, params: { id: leave_request.to_param } }
+              .to change { ActionMailer::Base.deliveries.count }.by(0)
+          end
+        end
+      end
     end
 
     context "with non-in_review request" do
+      login_reviewer
       let(:leave_request) { create :leave_request, user: user }
 
       it "redirects to the leave_request" do

@@ -112,9 +112,11 @@ class GrantFundedTravelRequest < ApplicationRecord
     if car_assistance == true
       if rental_needs_desc.nil? or rental_needs_desc.empty?
         errors.add(:rental_needs_desc, 'Must be answered if traveler is requesting assistance')
-      elsif cell_number.nil? or cell_number.empty?
+      end
+      if cell_number.nil? or cell_number.empty?
         errors.add(:cell_number, 'Must be answered if traveler is requesting assistance')
-      elsif drivers_licence_num.nil? or drivers_licence_num.empty?
+      end
+      if drivers_licence_num.nil? or drivers_licence_num.empty?
         errors.add(:drivers_licence_num, 'Must be answered if traveler is requesting assistance')
       end
     end

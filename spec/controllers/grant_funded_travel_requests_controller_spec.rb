@@ -133,6 +133,32 @@ RSpec.describe GrantFundedTravelRequestsController, type: :controller do
     end
   end
 
+  # TODO gf travel requests need to be editable
+  # describe 'PUT #update' do
+  #   login_user
+  #   let(:gftr) { create :gf_travel_request, user: controller.current_user }
+  #
+  #   context 'with valid params' do
+  #     let(:valid_params) { gftr.attributes.update(air_use: true) }
+  #
+  #     it 'updates the record' do
+  #       patch :update, params: { id: gftr.id, grant_funded_travel_request: valid_params }
+  #       gftr.reload
+  #       expect(gftr.air_use).to be_truthy
+  #     end
+  #   end
+  #
+  #   context 'with invalid params' do
+  #     let(:invalid_params) { gftr.attributes.update(air_use: nil) }
+  #
+  #     it 'redirects to throws an alert and renders edit' do
+  #       patch :update, params: { id: gftr.id, grant_funded_travel_request: invalid_params }
+  #       byebug
+  #       # expect(flash.alert).to include gftr.errors.first
+  #     end
+  #   end
+  # end
+
   describe "DELETE #destroy" do
     login_user
     let(:user) { controller.current_user }

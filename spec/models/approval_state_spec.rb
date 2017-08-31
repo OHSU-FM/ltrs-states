@@ -28,7 +28,7 @@ RSpec.describe ApprovalState, type: :model do
 
     it 'should log the state change after a transition' do
       as = create :leave_approval_state
-      expect(Rails.logger).to receive(:info)
+      Rails.logger.expects(:info)
         .with("changing from unsubmitted to submitted (event: submit)")
       as.submit
     end
@@ -43,13 +43,13 @@ RSpec.describe ApprovalState, type: :model do
     end
 
     it 'verify presence of required approvable attributes' do
-      expect(as.approvable).to receive(:ready_for_submission?)
+      as.approvable.expects(:ready_for_submission?)
       as.submit
     end
 
     it 'should only transition from unsubmitted' do
       (ApprovalState.aasm.states.map(&:name) - [:unsubmitted]).each do |state|
-        expect(Rails.logger).to receive(:error)
+        Rails.logger.expects(:error)
         expect{
           create(:leave_approval_state, aasm_state: state).submit
         }.to raise_error AASM::InvalidTransition
@@ -66,7 +66,7 @@ RSpec.describe ApprovalState, type: :model do
 
     it 'should not transition from in_review to unopened if next_user_approver is notifier' do
       as = create :leave_approval_state, :in_review
-      expect(Rails.logger).to receive(:error)
+      Rails.logger.expects(:error)
       expect{ as.send_to_unopened! }.to raise_error AASM::InvalidTransition
       expect(as).to be_in_review
     end
@@ -79,7 +79,7 @@ RSpec.describe ApprovalState, type: :model do
 
     it 'should only transition from submitted or in_review' do
       (ApprovalState.aasm.states.map(&:name) - [:submitted, :in_review]).each do |state|
-        expect(Rails.logger).to receive(:error)
+        Rails.logger.expects(:error)
         expect{
           create(:leave_approval_state, aasm_state: state).send_to_unopened
         }.to raise_error AASM::InvalidTransition
@@ -97,7 +97,7 @@ RSpec.describe ApprovalState, type: :model do
 
     it 'should only transition from in_review' do
       (ApprovalState.aasm.states.map(&:name) - [:unopened]).each do |state|
-        expect(Rails.logger).to receive(:error)
+        Rails.logger.expects(:error)
         expect{
           create(:leave_approval_state, aasm_state: state).review
         }.to raise_error AASM::InvalidTransition
@@ -117,7 +117,7 @@ RSpec.describe ApprovalState, type: :model do
 
     it 'should only transition from in_review' do
       (ApprovalState.aasm.states.map(&:name) - [:in_review, :unopened]).each do |state|
-        expect(Rails.logger).to receive(:error)
+        Rails.logger.expects(:error)
         expect{
           create(:leave_approval_state, aasm_state: state).reject
         }.to raise_error AASM::InvalidTransition
@@ -155,7 +155,7 @@ RSpec.describe ApprovalState, type: :model do
 
     it 'should only transition from in_review or unopened' do
       (ApprovalState.aasm.states.map(&:name) - [:in_review, :unopened]).each do |state|
-        expect(Rails.logger).to receive(:error)
+        Rails.logger.expects(:error)
         expect{
           create(:leave_approval_state, aasm_state: state).accept
         }.to raise_error AASM::InvalidTransition

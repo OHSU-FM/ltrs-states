@@ -4,13 +4,6 @@ class LeaveRequestsController < ApplicationController
   authorize_resource
   skip_authorize_resource only: [:update_state, :submit, :review, :reject, :accept]
 
-  # GET /leave_requests
-  # GET /leave_requests.json
-  def index
-    @leave_requests = LeaveRequest.paginate(page: @page, per_page: @per_page)
-      .order('created_at DESC')
-  end
-
   # GET /leave_requests/1
   # GET /leave_requests/1.json
   def show
@@ -24,6 +17,7 @@ class LeaveRequestsController < ApplicationController
   def new
     @back_path = user_forms_path(current_user)
     @leave_request = LeaveRequest.new
+
     if params.has_key?(:extra) and params[:extra] == 'true'
       @leave_request.build_leave_request_extra
       @leave_request.has_extra = true

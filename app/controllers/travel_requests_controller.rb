@@ -42,20 +42,6 @@ class TravelRequestsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /travel_requests/1
-  # PATCH/PUT /travel_requests/1.json
-  def update
-    respond_to do |format|
-      if @travel_request.update(travel_request_params)
-        format.html { redirect_to @travel_request, notice: 'Travel request was successfully updated.' }
-        format.json { render :show, status: :ok, location: @travel_request }
-      else
-        format.html { render :edit }
-        format.json { render json: @travel_request.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
   # DELETE /travel_requests/1
   # DELETE /travel_requests/1.json
   def destroy

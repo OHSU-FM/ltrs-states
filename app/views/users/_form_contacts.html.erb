@@ -1,4 +1,4 @@
-<%= form_for(@user, url: polymorphic_path(@user, anchor: 'contacts'), html: {id: :edit_contacts}) do |f| %>
+<%= form_for(@user, url: polymorphic_path(@user, anchor: 'contacts'), html: { id: :edit_contacts }) do |f| %>
   <div class="col-xs-12 col-md-6">
     <div class="ui-widget-content ui-corner-all partial_form">
       <div id="ldap_query" style="padding:1em;">
@@ -16,7 +16,7 @@
           </thead>
           <tbody id="ldap_query_table">
             <%= f.fields_for :user_approvers do |g| %>
-              <%= render :partial=>'users/user_approver_fields', locals: {f: g} %>
+              <%= render partial: 'users/user_approver_fields', locals: { f: g } %>
             <% end %>
         </tbody></table>
         <%= link_to_add_association '+ Add Contact', f, :user_approvers %>

@@ -63,8 +63,8 @@
 </div>
 
 <div class="ui-widget-content ui-corner-all wide partial_form">
-  <h3> Expense <%= if not travel_request.expense_card_use then ': None' end %>  </h3>
-  <table class="table_view" style="<%= if not travel_request.expense_card_use then 'display:none;' end %>">
+  <h3>Expense<%= !travel_request.expense_card_use ? ': None' : '' %></h3>
+  <table class="table_view" style="<%= !travel_request.expense_card_use ? 'display: none;' : '' %>">
     <tbody>
       <tr>
         <td>
@@ -94,8 +94,8 @@
   </table>
 </div>
 <div class="ui-widget-content ui-corner-all wide partial_form">
-  <h3> Airline Reservation<%= if not travel_request.air_use then ': None' end %></h3>
-  <table class="table_view" style="<%= if not travel_request.air_use then 'display:none;' end %>">
+  <h3>Airline Reservation<%= !travel_request.air_use ? ': None' : '' %></h3>
+  <table class="table_view" style="<%= !travel_request.air_use ? 'display: none;' : '' %>">
     <tbody>
       <tr>
         <td>
@@ -149,8 +149,8 @@
   </table>
 </div>
 <div class="ui-widget-content ui-corner-all wide partial_form">
-  <h3>Rental Car<%= if not travel_request.car_rental then ': None' end %></h3>
-  <table class="table_view" style="<%= if not travel_request.car_rental then 'display:none;' end %>">
+  <h3>Rental Car<%= !travel_request.car_rental ? ': None' : '' %></h3>
+  <table class="table_view" style="<%= !travel_request.car_rental ? 'display: none;' : '' %>">
     <tbody>
       <tr>
         <td>
@@ -172,8 +172,8 @@
   </table>
 </div>
 <div class="ui-widget-content ui-corner-all wide partial_form">
-  <h3>Lodging <%= if not travel_request.lodging_use then ': None' end %></h3>
-  <table class="table_view" style="<%= if not travel_request.lodging_use then 'display:none;' end %>" >
+  <h3>Lodging<%= !travel_request.lodging_use ? ': None' : '' %></h3>
+  <table class="table_view" style="<%= !travel_request.lodging_use ? 'display: none;' : '' %>">
     <tbody>
       <tr>
         <td>
@@ -253,12 +253,11 @@
           <%= travel_request.lodging_other_notes %>
         </td>
       </tr>
-
     </tbody>
   </table>
 </div>
 <div class="ui-widget-content ui-corner-all wide partial_form">
-  <h3> Conference Registration<%= if not travel_request.conf_prepayment then ': None' end %> </h3>
+  <h3>Conference Registration<%= !travel_request.conf_prepayment ? ': None' : '' %></h3>
   <% if travel_request.conf_prepayment %>
     <table class="table_view">
       <tbody>
@@ -282,6 +281,5 @@
         </tr>
       </tbody>
     </table>
-    <% end %>
-  </div>
-
+  <% end %>
+</div>

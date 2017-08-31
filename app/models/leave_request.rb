@@ -28,10 +28,6 @@ class LeaveRequest < ApplicationRecord
     ApprovalState.find_by(approvable: self)
   end
 
-  def is_traveling
-    return (not travel_request.nil? or need_travel)
-  end
-
   # Virtual attribute: returns string stating form type
   def form_type
     has_extra ? 'Faculty' : 'Staff'

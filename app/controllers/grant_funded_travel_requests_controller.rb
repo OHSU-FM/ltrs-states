@@ -47,19 +47,20 @@ class GrantFundedTravelRequestsController < ApplicationController
     end
   end
 
+  # TODO these need to be editable
   # PATCH/PUT /grant_funded_travel_requests/1
   # PATCH/PUT /grant_funded_travel_requests/1.json
-  def update
-    respond_to do |format|
-      if @gf_travel_request.update(grant_funded_travel_request_params)
-        format.html { redirect_to @gf_travel_request, notice: 'Grant funded travel request was successfully updated.' }
-        format.json { render :show, status: :ok, location: @gf_travel_request }
-      else
-        format.html { render :edit }
-        format.json { render json: @gf_travel_request.errors, status: :unprocessable_entity }
-      end
-    end
-  end
+  # def update
+  #   respond_to do |format|
+  #     if @gf_travel_request.update(grant_funded_travel_request_params)
+  #       format.html { redirect_to @gf_travel_request, notice: 'Grant funded travel request was successfully updated.' }
+  #       format.json { render :show, status: :ok, location: @gf_travel_request }
+  #     else
+  #       format.html { render :edit }
+  #       format.json { render json: @gf_travel_request.errors, status: :unprocessable_entity }
+  #     end
+  #   end
+  # end
 
   # DELETE /grant_funded_travel_requests/1
   # DELETE /grant_funded_travel_requests/1.json

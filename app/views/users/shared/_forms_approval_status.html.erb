@@ -55,7 +55,7 @@
           <%= record.user.full_name %>
         </td>
         <td>
-          <%= record.approval_state.submitted_or_higher? ? 'Submitted' : '<b style="color:#d9534f;">Unsubmitted</b>'.html_safe %>
+          <%= record.approval_state.submitted_or_higher? ? 'Submitted' : '<b style="color: #d9534f;">Unsubmitted</b>'.html_safe %>
         </td>
       </tr>
       <% record.approval_state.process_state.each do |reviewer, verdict| %>
@@ -64,7 +64,7 @@
             <%= reviewer.full_name %>
           </td>
           <td>
-            <% if reviewer.approval_order == record.approval_state.approval_order && current_user == reviewer.approver %>
+            <% if current_user.is_admin? or (reviewer.approval_order == record.approval_state.approval_order && current_user == reviewer.approver) %>
               <%= render partial: 'users/shared/approvals_reviewer_actions', locals: { approval_state: record.approval_state, user: current_user, record: record } %>
             <% else %>
               <%= verdict %>
