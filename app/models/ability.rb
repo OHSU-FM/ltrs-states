@@ -18,6 +18,8 @@ class Ability
     can :access, :rails_admin
     can :dashboard
     can :manage, :all
+    cannot :update, LeaveRequest
+    cannot :update, TravelRequest
   end
 
   def normal_user_permissions user
