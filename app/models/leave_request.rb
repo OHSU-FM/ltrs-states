@@ -1,14 +1,15 @@
 class LeaveRequest < ApplicationRecord
-  belongs_to :user
+  belongs_to :user, -> { with_deleted }
   has_one :approval_state, as: :approvable, dependent: :destroy
   delegate :current_user_approver, :next_user_approver, to: :approval_state
 
   has_one :leave_request_extra, dependent: :destroy
   accepts_nested_attributes_for :leave_request_extra, allow_destroy: true
+  # accepts_nested_attributes_for :approval_state
 
   # have to do this in an after_create callback so we have an approvable_id
   # to reference
-  after_create :build_approval_state
+  after_create :save_approval_state
 
   has_paper_trail
   acts_as_paranoid
@@ -39,8 +40,8 @@ class LeaveRequest < ApplicationRecord
 
   private
 
-  def build_approval_state
-    ApprovalState.create(user: user, approvable: self)
+  def save_approval_state
+    self.create_approval_state(user: user) if approval_state.nil?
   end
 
   def hours_present

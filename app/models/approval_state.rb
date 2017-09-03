@@ -2,7 +2,7 @@ class ApprovalState < ApplicationRecord
   include AASM
 
   belongs_to :approvable, polymorphic: true
-  belongs_to :user
+  belongs_to :user, -> { with_deleted }
 
   has_paper_trail
 
