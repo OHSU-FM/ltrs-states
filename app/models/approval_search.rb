@@ -18,10 +18,17 @@ class ApprovalSearch
     f_val = parameters[:filter] || 'pending'
     qq = parameters[:q]
     if qq == "" or qq.nil?
-      approvables_by_id(ids, sort_by, sort_order, f_val)
+      aprs = approvables_by_id(ids, sort_by, sort_order, f_val)
     else
-      approvables_by_q(ids, sort_by, sort_order, f_val, qq)
+      aprs = approvables_by_q(ids, sort_by, sort_order, f_val, qq)
     end
+    if f_val == 'pending'
+      aprs = aprs.select{|apr|
+        !(apr.approval_state.unopened? and apr.approval_state.approval_order >= apr.approval_state.user_approver_for(user).approval_order)
+      }
+    end
+
+    return aprs
   end
 
   def self.approvables_by_id ids, sort_by, sort_order, f_val

@@ -1,8 +1,8 @@
 class UserFile < ActiveRecord::Base
   # These user files can belong to travel_requests
   has_many :travel_files
-  has_many :travel_requests, through: :filable
-  has_many :grant_funded_travel_requests, through: :filable
+  has_many :travel_requests, as: :filable
+  has_many :grant_funded_travel_requests, as: :filable
   belongs_to :user
 
   # paperclip file field

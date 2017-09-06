@@ -29,7 +29,7 @@ RSpec.describe ApprovalState, type: :model do
     it 'should log the state change after a transition' do
       as = create :leave_approval_state
       Rails.logger.expects(:info)
-        .with("changing from unsubmitted to submitted (event: submit)")
+        .with("[EVENT] changing from unsubmitted to submitted (event: submit)")
       as.submit
     end
   end

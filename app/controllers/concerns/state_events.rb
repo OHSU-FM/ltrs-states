@@ -20,7 +20,7 @@ module StateEvents
           if @approval_state.may_send_to_unopened? && @approval_state.send_to_unopened!
             format.html { redirect_to @approvable,
                           notice: "#{@approvable.model_name.human} was successfully submitted." }
-            format.json { render :show, status: :ok, location: @approvable }
+            format.json { render json: @approvable, status: :ok, location: @approvable }
           end
         else
           format.html { redirect_to @approvable, alert: "Request was unable to be submitted" }
@@ -39,7 +39,7 @@ module StateEvents
         if @approval_state.review!
           format.html { redirect_to @approvable,
                         notice: "#{@approvable.model_name.human} was successfully reviewed." }
-          format.json { render :show, status: :ok, location: @approvable }
+          format.json { render json: @approvable, status: :ok, location: @approvable }
         else
           format.html { redirect_to @approvable, alert: "Request was unable to be reviewed" }
           format.json { render json: @approvable.errors, status: :unprocessable_entity }
@@ -58,7 +58,7 @@ module StateEvents
           UserMailer.request_rejected(@approval_state).deliver_now
           format.html { redirect_to @approvable,
                         notice: "#{@approvable.model_name.human} was successfully rejected." }
-          format.json { render :show, status: :ok, location: @approvable }
+          format.json { render json: @approvable, status: :ok, location: @approvable }
         else
           format.html { redirect_to @approvable, alert: "Request was unable to be rejected" }
           format.json { render json: @approvable.errors, status: :unprocessable_entity }
@@ -91,7 +91,7 @@ module StateEvents
           UserMailer.request_accepted(@approval_state).deliver_now
           format.html { redirect_to @approvable,
                         notice: "#{@approvable.model_name.human} was successfully accepted." }
-          format.json { render :show, status: :ok, location: @approvable }
+          format.json { render json: @approvable, status: :ok, location: @approvable }
         else
           format.html { redirect_to @approvable, alert: "Request was unable to be accepted" }
           format.json { render json: @approvable.errors, status: :unprocessable_entity }

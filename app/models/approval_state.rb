@@ -78,7 +78,7 @@ class ApprovalState < ApplicationRecord
   end
 
   def log_state_change
-    logger.info("changing from #{aasm.from_state} to #{aasm.to_state} (event: #{aasm.current_event})")
+    logger.info("[EVENT] changing from #{aasm.from_state} to #{aasm.to_state} (event: #{aasm.current_event})")
   end
 
   def previous_user_approver

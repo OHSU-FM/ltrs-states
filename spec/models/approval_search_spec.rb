@@ -44,6 +44,17 @@ RSpec.describe ApprovalSearch, type: :model do
     end
   end
 
+  describe 'approvals for user with multiple reviewers' do
+    let(:u) { create :user_two_reviewers }
+    let(:r) { u.reviewers.first.approver }
+    let!(:lr1) { create :leave_request, :unopened, user: u }
+    let!(:lr) { create :leave_request, :back_to_unopened, user: u }
+
+    it "shouldn't include requests that the reviewer has sent down the chain" do
+      expect(ApprovalSearch.by_params(r)).not_to include lr
+    end
+  end
+
   describe 'delgator_approvals_for' do
     let(:u) { create :complete_user_with_delegate }
     let(:d) { u.delegates.first }

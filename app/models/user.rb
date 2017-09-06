@@ -42,7 +42,8 @@ class User < ApplicationRecord
   # :nocov:
   rails_admin do
     group 'User Information' do
-      field :full_name
+      field :first_name
+      field :last_name
       field :empid
       field :emp_class
       field :emp_home
@@ -67,7 +68,7 @@ class User < ApplicationRecord
 
     group 'Notifications Config' do
       active false
-      field :reviewers
+      field :user_approvers
       field :user_delegations
     end
 

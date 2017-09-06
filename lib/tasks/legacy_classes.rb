@@ -1,3 +1,4 @@
+# :nocov:
 class LegacyUser < ActiveRecord::Base
   establish_connection :legacy
   self.table_name = 'users'
@@ -100,3 +101,4 @@ class LegacyTravelFile < ActiveRecord::Base
   belongs_to :legacy_travel_request, foreign_key: 'travel_request_id'
   belongs_to :legacy_user_file, foreign_key: 'user_file_id'
 end
+# :nocov:
