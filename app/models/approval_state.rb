@@ -122,6 +122,8 @@ class ApprovalState < ApplicationRecord
       end
     elsif rejected?
       'Rejected'
+    elsif accepted?
+      'Complete'
     else
       verdict_for_ua current_user_approver
     end

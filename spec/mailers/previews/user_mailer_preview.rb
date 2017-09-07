@@ -17,13 +17,13 @@ class UserMailerPreview < ActionMailer::Preview
   end
 
   def leave_request
-    state = ApprovalState.where(approvable_type: 'LeaveRequest').where.not(aasm_state: ['in_review', 'unsubmitted', 'unopened']).first
+    state = ApprovalState.where(approvable_type: 'LeaveRequest').where.not(aasm_state: ['in_review', 'unsubmitted', 'unopened', 'expired', 'rejected']).first
     state = FactoryGirl.create(:leave_request, :submitted, user: User.first).approval_state if state.nil?
     UserMailer.send("request_#{state.aasm_state}".to_sym, state)
   end
 
   def travel_request
-    state = ApprovalState.where(approvable_type: 'TravelRequest').where.not(aasm_state: ['in_review', 'unsubmitted', 'unopened']).first
+    state = ApprovalState.where(approvable_type: 'TravelRequest').where.not(aasm_state: ['in_review', 'unsubmitted', 'unopened', 'expired', 'rejected']).first
     state = FactoryGirl.create(:travel_request, :submitted, user: User.first).approval_state if state.nil?
     UserMailer.send("request_#{state.aasm_state}".to_sym, state)
   end

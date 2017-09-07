@@ -6,6 +6,9 @@
   <body>
     <h1><%= @msg %></h1>
     <p>
+      <b>User: </b><%= @approval_state.user.full_name %>
+    </p>
+    <p>
       <b>Status:</b><%= @approval_state.verdict %>
     </p>
     <p>
