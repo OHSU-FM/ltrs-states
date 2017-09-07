@@ -20,6 +20,7 @@ class Ability
     can :manage, :all
     cannot :update, LeaveRequest
     cannot :update, TravelRequest
+    cannot :update, GrantFundedTravelRequest # TODO make these editable
   end
 
   def normal_user_permissions user

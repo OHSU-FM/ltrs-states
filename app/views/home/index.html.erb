@@ -40,7 +40,7 @@
           </li>
           <li>
             <% if current_user.grant_funded? %>
-              <%= link_to "New Travel Request", new_grant_funded_travel_request_path %>
+              <%= link_to "New Grant Funded Travel Request", new_grant_funded_travel_request_path %>
             <% else %>
               <%= link_to 'New Travel Request', new_travel_request_path %>
             <% end %>

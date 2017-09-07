@@ -1,13 +1,15 @@
 <%= form_for(@user, url: polymorphic_path(@user, anchor: 'home'), html: { id: :edit_home }) do |f| %>
   <div class="col-xs-12 col-md-6">
-
     <div class="ui-widget-content ui-corner-all partial_form">
-
       <table class="table">
         <tbody>
           <tr>
             <td><%= f.label :dob, 'Date of Birth' %></td>
             <td><%= f.date_field :dob %></td>
+          </tr>
+          <tr>
+            <td><%= f.label :legal_name, 'Legal Name' %></td>
+            <td><%= f.text_field :legal_name %></td>
           </tr>
           <tr>
             <td><%= f.label :cell_number, 'Cell Phone Number' %></td>
@@ -67,7 +69,6 @@
           </div>
         </div>
       </div>
-
     </div>
 
     <div>
@@ -78,7 +79,7 @@
   <div class="col-xs-12 col-md-6 bs-callout bs-callout-info">
     <h2>About your traveler profile</h2>
     <ul>
-      <li>None of the fields listed here are required</li>
+      <li>The following fields are required for RSS to complete any requests to arrange travel: Date of Birth, Cell Phone Number, First Emergency Contact Name, First Emergency Contact Number. RSS will not provide assistance in travel booking with missing or incomplete information in these fields. The remaining fields are optional, but will help us quickly and smoothly complete your travel arrangements</li>
       <li>Any information that you do provide here will be automatically populated in future leave and travel requests</li>
       <li>With the exception of frequent flier numbers, if you provide any of these pieces of information in the course of filling out a request form, that information will be saved to your traveler profile and available in later requests</li>
     </ul>
