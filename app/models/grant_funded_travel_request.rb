@@ -4,6 +4,7 @@ class GrantFundedTravelRequest < ApplicationRecord
   has_many :travel_files, as: :filable, dependent: :destroy
   has_many :user_files, through: :travel_files, dependent: :destroy
   has_one :approval_state, as: :approvable, dependent: :destroy
+  has_one :reimbursement_request
 
   delegate :current_user_approver, :next_user_approver, to: :approval_state
 
@@ -72,13 +73,13 @@ class GrantFundedTravelRequest < ApplicationRecord
   # validation methods
 
   def conference_url
-    if business_purpose_desc == 'conference' and (business_purpose_url.nil? or business_purpose_url.empty?)
+    if business_purpose_desc == 'conference' and ![true, false].include? business_purpose_url
       errors.add(:business_purpose_url, 'Conference URL must be provided')
     end
   end
 
   def conference_other
-    if business_purpose_desc == 'other' and (business_purpose_other.nil? or business_purpose_other.empty?)
+    if business_purpose_desc == 'other' and ![true, false].include? business_purpose_other
       errors.add(:business_purpose_other, 'Description must be provided')
     end
   end
@@ -91,40 +92,40 @@ class GrantFundedTravelRequest < ApplicationRecord
   end
 
   def expense_card
-    if expense_card_use == true and (expense_card_type.nil? or expense_card_type.empty?)
+    if expense_card_use == true and ![true, false].include? expense_card_type
       errors.add(:expense_card_type, 'Award must be provided')
     end
   end
 
   def air_assistance_if_use
-    if air_use == true and (air_assistance.nil? or air_assistance.empty?)
+    if air_use == true and ![true, false].include? air_assistance
       errors.add(:air_assistance, 'Must be answered if traveler is flying')
     end
   end
 
   def car_assistance_if_rental
-    if car_rental == true and (car_assistance.nil? or car_assistance.empty?)
+    if car_rental == true and ![true, false].include? car_assistance
       errors.add(:car_assistance, 'Must be answered if traveler is renting a car')
     end
   end
 
   def car_details_if_assistance
     if car_assistance == true
-      if rental_needs_desc.nil? or rental_needs_desc.empty?
+      if ![true, false].include? rental_needs_desc
         errors.add(:rental_needs_desc, 'Must be answered if traveler is requesting assistance')
       end
-      if cell_number.nil? or cell_number.empty?
+      if ![true, false].include? cell_number
         errors.add(:cell_number, 'Must be answered if traveler is requesting assistance')
       end
-      if drivers_licence_num.nil? or drivers_licence_num.empty?
+      if ![true, false].include? drivers_licence_num
         errors.add(:drivers_licence_num, 'Must be answered if traveler is requesting assistance')
       end
     end
   end
 
   def registration_assistance_if_reimb
-    if registration_reimb == true and (registration_assistance.nil? or registration_assistance.empty?)
-        errors.add(:registration_assistance, 'Must be answered if traveler must pay for event registration')
+    if registration_reimb == true and ![true, false].include? registration_assistance
+      errors.add(:registration_assistance, 'Must be answered if traveler must pay for event registration')
     end
   end
 end

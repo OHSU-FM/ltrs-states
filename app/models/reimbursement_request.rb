@@ -1,5 +1,7 @@
 class ReimbursementRequest < ApplicationRecord
   belongs_to :user
+  belongs_to :gf_travel_request, class_name: 'GrantFundedTravelRequest',
+    foreign_key: 'grant_funded_travel_request_id'
 
   has_many :travel_files, as: :filable, dependent: :destroy
   has_many :user_files, through: :travel_files, dependent: :destroy

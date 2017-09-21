@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170906200158) do
+ActiveRecord::Schema.define(version: 20170920212957) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -175,7 +175,9 @@ ActiveRecord::Schema.define(version: 20170906200158) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "meal_host_reimb"
+    t.bigint "grant_funded_travel_request_id"
     t.index ["deleted_at"], name: "index_reimbursement_requests_on_deleted_at"
+    t.index ["grant_funded_travel_request_id"], name: "index_reimbursement_requests_on_grant_funded_travel_request_id"
   end
 
   create_table "travel_files", force: :cascade do |t|
@@ -323,6 +325,7 @@ ActiveRecord::Schema.define(version: 20170906200158) do
   end
 
   add_foreign_key "ff_numbers", "users"
+  add_foreign_key "reimbursement_requests", "grant_funded_travel_requests"
   add_foreign_key "travel_files", "travel_requests", column: "filable_id"
   add_foreign_key "travel_files", "user_files"
   add_foreign_key "user_approvers", "users"

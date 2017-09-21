@@ -1,150 +1,255 @@
-<div class="ui-widget-content ui-corner-all wide partial_form">
-  <table class="table_view">
-    <tbody>
-      <tr>
-        <td>
-          Other FMR Attending?
-        </td>
-        <td>
-          <%= grant_funded_travel_request.other_fmr_attending %>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+<div class="container" style="width: inherit;">
+  <div class="row">
+    <div class="col-lg-12">
+      <h4>Traveler Details</h4>
+      <% if grant_funded_travel_request.form_email != grant_funded_travel_request.user.email %>
+        <div class="ui-widget-content ui-corner-all wide partial_form">
+          <p>Request submitted for: <%= grant_funded_travel_request.user.full_name %></p>
+          <br/>
+          <b>Submitted by</b><%= grant_funded_travel_request.form_user %>
+        </div>
+      <% else %>
+        <p>Travel Request for <%= grant_funded_travel_request.user.full_name %></p>
+      <% end %>
+    </div>
+  </div>
 </div>
-<div class="ui-widget-content ui-corner-all wide partial_form">
-  <h3>Travel Dates</h3>
-  <table class="table_view">
-    <tbody>
-      <tr>
-        <td>
-          Departure Date:
-        </td>
-        <td>
-          <%= grant_funded_travel_request.depart_date %>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          Return Date:
-        </td>
-        <td>
-          <%= grant_funded_travel_request.return_date %>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          Travel Destination:
-        </td>
-        <td>
-          <%= grant_funded_travel_request.dest_desc %>
-        </td>
-      </tr>
-      <tr>
-        <td>
+<div class="container" style="width: inherit;">
+  <div class="row">
+    <div class="col-lg-6">
+      <div class="row">
+      </div>
+      <div class="row">
+        <div class="dest_desc">
+          <div class="col-lg-6">
+            Travel Destination:
+            <br />
+            <%= grant_funded_travel_request.dest_desc %>
+          </div>
+          <div class="col-lg-6">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="dates">
+          <div class="col-lg-6">
+            Departure date:
+            <br />
+            <%= grant_funded_travel_request.depart_date %>
+          </div>
+          <div class="col-lg-6">
+            Return date:
+            <br />
+            <%= grant_funded_travel_request.return_date %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="business_purpose">
+        <div class="row">
           Business Purpose:
-        </td>
-        <td>
-          <%= grant_funded_travel_request.business_purpose_desc %>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+          <%= hf_business_purpose_desc_to_human[ grant_funded_travel_request.business_purpose_desc ] %>
+          <br />
+          <% unless [nil, ""].include? grant_funded_travel_request.business_purpose_url %>
+            Conference URL:
+            <br />
+            <%= grant_funded_travel_request.business_purpose_url %>
+          <% end %>
 
-<div class="ui-widget-content ui-corner-all wide partial_form">
-  <h3> Expense <%= if not grant_funded_travel_request.expense_card_use then ': None' end %>  </h3>
-  <table class="table_view" style="<%= if not grant_funded_travel_request.expense_card_use then 'display:none;' end %>">
-    <tbody>
-      <tr>
-        <td>
-          Will travel expenses be charged to an account?
-        </td>
-        <td>
-          <%= hf_boolean_to_words grant_funded_travel_request.expense_card_use %>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          Account to charge:
-        </td>
-        <td>
-          <%= grant_funded_travel_request.expense_card_type %>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-<div class="ui-widget-content ui-corner-all wide partial_form">
-  <h3> Airline Reservation<%= if not grant_funded_travel_request.air_use then ': None' end %></h3>
-  <table class="table_view" style="<%= if not grant_funded_travel_request.air_use then 'display:none;' end %>">
-    <tbody>
-      <tr>
-        <td>
-          Frequent Flyer ID:
-        </td>
-        <td>
-          <%= grant_funded_travel_request.ffid %>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-<div class="ui-widget-content ui-corner-all wide partial_form">
-  <h3>Rental Car<%= if not grant_funded_travel_request.car_rental then ': None' end %></h3>
-  <table class="table_view" style="<%= if not grant_funded_travel_request.car_rental then 'display:none;' end %>">
-    <tbody>
-      <tr>
-        <td>
-          Do you need to rent a car?:
-        </td>
-        <td>
-          <%= grant_funded_travel_request.car_rental %>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-<div class="ui-widget-content ui-corner-all wide partial_form">
-  <h3>Lodging <%= if not grant_funded_travel_request.lodging_reimb then ': None' end %></h3>
-  <table class="table_view" style="<%= if not grant_funded_travel_request.lodging_reimb then 'display:none;' end %>" >
-    <tbody>
-      <tr>
-        <td>
-          Do you need lodging accomodations?
-        </td>
-        <td>
-          <%= grant_funded_travel_request.lodging_reimb %>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-<div class="ui-widget-content ui-corner-all wide partial_form">
-  <h3> Conference Registration<%= if not grant_funded_travel_request.registration_reimb then ': None' end %> </h3>
-  <% if grant_funded_travel_request.registration_reimb %>
-    <table class="table_view">
-      <tbody>
-        <tr>
-          <td>
-            Do you need to prepay for conference registration?
-          </td>
-          <td>
-            <%= hf_boolean_to_words grant_funded_travel_request.registration_reimb %>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            File:
-          </td>
-          <!-- <td> -->
-          <!--   <%# grant_funded_travel_request.user_files.each do |g|  %> -->
-          <!--     <%#= link_to g.uploaded_file_file_name, user_file_url(g, protocol: 'https://', only_path: false) %><br /> -->
-          <!--   <%# end %> -->
-          <!-- </td> -->
-        </tr>
-      </tbody>
-    </table>
-    <% end %>
+          <% unless [nil, ""].include? grant_funded_travel_request.business_purpose_other %>
+            Description:
+            <br />
+            <%= grant_funded_travel_request.business_purpose_other %>
+          <% end %>
+        </div>
+      </div>
+      <div class="expense_card toggle_form">
+        <div class="row">
+          Travel expenses to be charged to an account?
+          <br />
+          <b><%= hf_boolean_to_words grant_funded_travel_request.expense_card_use %></b>
+        </div>
+        <div id="expense_card_type_form" class="stop_flouc">
+          <div class="row">
+            <% if grant_funded_travel_request.expense_card_use %>
+              Account to charge:
+              <br />
+              <%= grant_funded_travel_request.expense_card_type %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
+  <hr />
+
+  <div class="row">
+    <h4>Event & Travel Expenses</h4>
+    <div class="col-lg-6">
+      <div class="row">
+        Will traveler be flying for this event?
+        <br />
+        <b><%= hf_boolean_to_words grant_funded_travel_request.air_use %></b>
+        <% if grant_funded_travel_request.air_use %>
+          <div id="air_use_form" class="stop_flouc">
+            Will traveler be needing assistance in obtaining airline reservations?
+            <br />
+            <b><%= hf_boolean_to_words grant_funded_travel_request.air_assistance %></b>
+          </div>
+          <% if grant_funded_travel_request.air_assistance %>
+            <div id="air_assistance_form" class="stop_flouc">
+              <p>Seat Preference: <%= grant_funded_travel_request.flight_seat_pref %></p>
+              <br />
+              <p>Frequent Flyer ID: <%= grant_funded_travel_request.ffid %></p>
+              <br />
+              <p>TSA Precheck #: <%= grant_funded_travel_request.tsa_pre %></p>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+      <div class="row">
+
+        <div class="toggle_form">
+          Will traveler be renting a car for this event?
+          <br />
+          <b><%= hf_boolean_to_words grant_funded_travel_request.car_rental %></b>
+          <div id="rental_car_form">
+          <% if grant_funded_travel_request.car_rental %>
+            Does traveler need assistance in obtaining rental car reservations?
+            <br />
+            <b><%= hf_boolean_to_words grant_funded_travel_request.car_assistance %></b>
+            <% if grant_funded_travel_request.car_assistance %>
+              <div id="rental_car_assistance_form">
+                Rental needs (e.g. dates, vehicle size, etc.):
+                <br >
+                <%= grant_funded_travel_request.rental_needs_desc %>
+                <br />
+                Cell Phone Number:
+                <br />
+                <%= grant_funded_travel_request.cell_number %>
+                <br />
+                Driver License Number:
+                <%= grant_funded_travel_request.drivers_licence_num %>
+              </div>
+            <% end %>
+          <% end %>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="toggle_form">
+          Will traveler need to pay for event registration?
+          <br />
+          <b><%= hf_boolean_to_words grant_funded_travel_request.registration_reimb %></b>
+          <% if grant_funded_travel_request.registration_reimb %>
+            <div id="registration_form">
+              Does traveler need assistance in paying for registering?
+              <br />
+              <b><%= hf_boolean_to_words grant_funded_travel_request.registration_assistance %></b>
+              <% if grant_funded_travel_request.registration_assistance %>
+                <div id="registration_assistance_form">
+                  URL of registration site
+                  <br />
+                  <%= grant_funded_travel_request.registration_url %>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6">
+      <div class="row">
+        <div class="toggle_form">
+          Will traveler use paid lodging for this event?
+          <br />
+          <b><%= hf_boolean_to_words grant_funded_travel_request.lodging_reimb %></b>
+          <% if grant_funded_travel_request.lodging_reimb %>
+            <div id="lodging_form">
+              Does traveler need assistance in obtaining lodging reservations?
+              <br />
+              <b><%= hf_boolean_to_words grant_funded_travel_request.lodging_assistance %></b>
+              <% if grant_funded_travel_request.lodging_assistance %>
+                <div id="lodging_assistance_form" class="table_form stop_flouc">
+                  URL of desired lodging
+                  <%= grant_funded_travel_request.lodging_url %>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="toggle_form">
+          Will traveler use paid ground transportation for this event?
+          <br />
+          <b><%= hf_boolean_to_words grant_funded_travel_request.ground_transport %></b>
+          <% if grant_funded_travel_request.ground_transport %>
+            <div id="ground_transport_form">
+              Does traveler need assistance in obtaining paid  ground transportation?
+              <br />
+              <b><%= hf_boolean_to_words grant_funded_travel_request.ground_transport_assistance %></b>
+              <% if grant_funded_travel_request.ground_transport_assistance %>
+                <div id="ground_transport_assistance_form">
+                  Describe transportation needs (e.g. shuttle URL, dates, etc):
+                  <br >
+                  <%= grant_funded_travel_request.ground_transport_desc %>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- <div class=""> -->
+  <%# <%= f.label :meal_reimb, 'Meal Reimbursement' %>
+  <!-- <p>If traveler has a Department issued purchasing card, all allowable meal (and other) expenses must be purchased with card. Only select Per Diem if traveler does not have a purchasing card.</p> -->
+  <!-- <br > -->
+  <%# <%= f.radio_button :meal_reimb, true %>
+  <%# <%= f.label :meal_reimb_per_diem, "Per Diem" %>
+  <!-- <br > -->
+  <%# <%= f.radio_button :meal_reimb, false %>
+  <%# <%= f.label :meal_reimb_per_diem, "None" %>
+  <!-- </div> -->
+<!-- <div> -->
+  <!--   <h4>File Attachments</h4> -->
+  <!--   <table> -->
+    <!--     <tbody> -->
+      <!--       <tr> -->
+        <!--         <td colspan=2 style="text&#45;align:initial;"> -->
+          <!--           <div> -->
+            <!--             <%#= f.fields_for :user_files  do |g| %> -->
+              <!--               <%#= render partial: 'user_file_fields', locals: { f: g } %> -->
+              <!--             <%# end %> -->
+              <!--           </div> -->
+            <!--           <div> -->
+              <!--             <%#= link_to_add_association '+ Add File', f, :user_files %> -->
+              <!--           </div> -->
+            <!--         </td> -->
+          <!--       </tr> -->
+        <!--     </tbody> -->
+      <!--   </table> -->
+    <!--   <ul> -->
+      <!--     <li> -->
+        <!--       Please include any files that will assist us in the conference registration process. -->
+        <!--     </li> -->
+      <!--     <li> -->
+        <!--       File size limit is 10MB -->
+        <!--     </li> -->
+      <!--     <li> -->
+        <!--       Accepted File Types: -->
+        <!--       <span title="Adobe Acrobat compatible PDF">pdf</span>, -->
+        <!--       <span title="Supported image types include: png, gif, jpeg">image</span>, -->
+        <!--       <span title="Microsoft Word Documents (doc, docx)">word document</span> -->
+        <!--     </li> -->
+      <!--   </ul> -->
+    <!-- </div> -->
+  <!--  -->

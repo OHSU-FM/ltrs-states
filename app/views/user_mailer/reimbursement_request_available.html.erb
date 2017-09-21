@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+  </head>
+  <body>
+    <h1><%= @msg %></h1>
+    <p>
+      <b>User: </b><%= @approval_state.user.full_name %>
+    </p>
+    <p>
+      The reimbursement request for your recent travel has been created.
+    </p>
+    <p>
+      <%= link_to('You can view it here', reimbursement_request_url(@approval_state.approvable.reimbursement_request.id), protocol: 'https://', only_path: false) %>
+    </p>
+  </body>
+</html>

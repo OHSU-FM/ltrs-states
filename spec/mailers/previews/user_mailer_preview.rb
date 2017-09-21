@@ -39,4 +39,10 @@ class UserMailerPreview < ActionMailer::Preview
     state = FactoryGirl.create(:reimbursement_request, :submitted, user: User.find_by(login: 'grant')).approval_state if state.nil?
     UserMailer.send("request_#{state.aasm_state}".to_sym, state)
   end
+
+  def reimbursement_request_available
+    req = ReimbursementRequest.last
+    req = FactoryGirl.create(:reimbursement_request, user: User.find_by(login: 'grant')) if req.nil?
+    UserMailer.send('reimbursement_request_available', req.gf_travel_request.approval_state)
+  end
 end

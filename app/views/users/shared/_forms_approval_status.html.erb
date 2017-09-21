@@ -65,7 +65,11 @@
           </td>
           <td>
             <% if current_user.is_admin? or (reviewer.approval_order == record.approval_state.approval_order && current_user == reviewer.approver) %>
-              <%= render partial: 'users/shared/approvals_reviewer_actions', locals: { approval_state: record.approval_state, user: current_user, record: record } %>
+              <% if record.approval_state.unopened? %>
+                <%= verdict %>
+              <% else %>
+                <%= render partial: 'users/shared/approvals_reviewer_actions', locals: { approval_state: record.approval_state, user: current_user, record: record } %>
+              <% end %>
             <% else %>
               <%= verdict %>
             <% end %>

@@ -151,6 +151,8 @@ class ApprovalState < ApplicationRecord
     elsif approval_order == ua.approval_order
       if ua.notifier?
         return 'Completed'
+      elsif unopened?
+        return 'Accepted'
       else
         return "Waiting on response from #{ua.approver.full_name}"
       end

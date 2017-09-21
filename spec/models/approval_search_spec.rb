@@ -5,31 +5,40 @@ RSpec.describe ApprovalSearch, type: :model do
     let(:u) { create :user_with_approvers }
     let(:r) { u.reviewers.first.approver }
     let!(:lr) { create :leave_request, :accepted, user: u }
-    let!(:tr) { create :travel_request, :submitted, user: u }
-    let!(:gftr) { create :gf_travel_request, user: u }
+    let!(:tr) { create :travel_request, :unopened, user: u }
+    let!(:gftr) { create :gf_travel_request, :accepted, :with_rr, user: u }
+    let!(:rr) { gftr.reimbursement_request }
 
     it 'should order by created_at DESC by default' do
-      expect(ApprovalSearch.by_params(r, {'filter': 'none'})).to eq [gftr, tr, lr]
+      expect(ApprovalSearch.by_params(r, {'filter': 'none'})).to eq [rr, gftr, tr, lr]
     end
 
     it 'should sort ASC if params[:sort_order] == asc' do
       expect(ApprovalSearch.by_params(r, {'sort_order': 'asc', 'filter': 'none'}))
-        .to eq [lr, tr, gftr]
+        .to eq [lr, tr, gftr, rr]
     end
 
     it 'should order by updated_at if params[:sort_by] == updated_at' do
       # touch lr so that lr.updated_at > tr.updated_at
       lr.update!(desc: "I've been updated!")
       expect(ApprovalSearch.by_params(r, {'sort_by': 'updated_at', 'filter': 'none'}))
-        .to eq [lr, gftr, tr]
+        .to eq [lr, rr, gftr, tr]
     end
 
-    it 'should display return only leave_requests if q == leave' do
+    it 'should return only leave_requests if q == leave' do
       expect(ApprovalSearch.by_params(r, {'q': 'leave', 'filter': 'none'})).to eq [lr]
     end
 
-    it 'should display return travel_requests and grant_funded_travel_requests if q == travel' do
+    it 'should return travel_requests and grant_funded_travel_requests if q == travel' do
       expect(ApprovalSearch.by_params(r, {'q': 'travel', 'filter': 'none'})).to eq [gftr, tr]
+    end
+
+    it 'should return only reimbursement_requests if q == reimbursement' do
+      expect(ApprovalSearch.by_params(r, {'q': 'reimbursement', 'filter': 'none'})).to eq [rr]
+    end
+
+    it 'should return only leave_requests if q == leave' do
+      expect(ApprovalSearch.by_params(r, {'q': 'leave', 'filter': 'none'})).to eq [lr]
     end
 
     it 'should search fields for query terms' do
@@ -46,12 +55,17 @@ RSpec.describe ApprovalSearch, type: :model do
 
   describe 'approvals for user with multiple reviewers' do
     let(:u) { create :user_two_reviewers }
-    let(:r) { u.reviewers.first.approver }
+    let(:r1) { u.reviewers.first.approver }
+    let(:r2) { u.reviewers.last.approver }
     let!(:lr1) { create :leave_request, :unopened, user: u }
     let!(:lr) { create :leave_request, :back_to_unopened, user: u }
 
     it "shouldn't include requests that the reviewer has sent down the chain" do
-      expect(ApprovalSearch.by_params(r)).not_to include lr
+      expect(ApprovalSearch.by_params(r1)).not_to include lr
+    end
+
+    it "shouldn't include requests that prior reviewers haven't reviewed yet" do
+      expect(ApprovalSearch.by_params(r2)).not_to include lr1
     end
   end
 

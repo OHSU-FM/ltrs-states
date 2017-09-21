@@ -1,6 +1,8 @@
 class UserMailer < ApplicationMailer
   add_template_helper(ApplicationHelper)
   add_template_helper(MealReimbursementRequestsHelper)
+  add_template_helper(GrantFundedTravelRequestsHelper)
+  include Rails.application.routes.url_helpers
 
   def request_submitted(approval_state, opts={})
     @approval_state = approval_state
@@ -37,5 +39,12 @@ class UserMailer < ApplicationMailer
       cc: cc_user.email,
       subject: "#{@approval_state.approvable.class.to_s.underscore.humanize} accepted by #{@approval_state.current_user_approver.approver.full_name}",
       template_name: "#{@approval_state.approvable.class.to_s.underscore}_email.html.erb"
+  end
+
+  def reimbursement_request_available(approval_state)
+    @approval_state = approval_state
+    logger.info("[MAIL] sending reimbursement_request_available email to: #{@approval_state.user.email}")
+    mail to: @approval_state.user.email,
+      subject: "Reimbursement request available for #{@approval_state.user.full_name}"
   end
 end

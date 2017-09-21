@@ -66,7 +66,8 @@ RSpec.describe ReimbursementRequestsController, type: :controller do
 
     context "with valid params" do
       let(:user) { controller.current_user }
-      let(:valid_attributes) { build(:reimbursement_request, user: user).attributes }
+      let(:gftr) { create :gf_travel_request, :accepted }
+      let(:valid_attributes) { build(:reimbursement_request, user: user, gf_travel_request: gftr).attributes }
 
       it "creates a new ReimbursementRequest" do
         expect {

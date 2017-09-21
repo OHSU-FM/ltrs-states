@@ -106,6 +106,7 @@ module StateEvents
 
   def build_reimbursement_request_for u, tr
     ReimbursementRequest.create!(user: u,
+                                 gf_travel_request: tr,
                                  depart_date: tr.depart_date,
                                  return_date: tr.return_date,
                                  form_user: current_user.full_name,

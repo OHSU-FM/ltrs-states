@@ -84,6 +84,7 @@ class ReimbursementRequestsController < ApplicationController
         .permit(:form_user, :form_email, :other_fmr_attending, :depart_date,
       :return_date, :air_use, :car_rental, :meal_host, :lodging_reimb,
       :traveler_mileage_reimb, :meal_host_reimb, :user_id,
+      :grant_funded_travel_request_id,
       meal_reimbursement_requests_attributes: [
         :id, :breakfast, :breakfast_desc, :lunch, :lunch_desc, :dinner, :dinner_desc
       ])

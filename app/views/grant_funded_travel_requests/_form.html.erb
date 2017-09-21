@@ -10,6 +10,7 @@
         </div>
         <% else %>
           <p>Submitting Travel Request as: <%= current_user.full_name %></p>
+          <%= f.hidden_field :user_id, value: current_user.id %>
         <% end %>
       <% else %>
         <% if @gf_travel_request.form_email != @gf_travel_request.user.email %>

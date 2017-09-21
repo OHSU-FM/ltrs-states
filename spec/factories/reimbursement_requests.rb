@@ -5,6 +5,7 @@ FactoryGirl.define do
     form_email 'email'
     form_user 'user'
     user
+    gf_travel_request
 
     trait :submitted do
       after :create do |reimbursement_request|

@@ -218,6 +218,12 @@ RSpec.describe GrantFundedTravelRequestsController, type: :controller do
           post :accept, params: { id: gf_travel_request.to_param }
         }.to change(ReimbursementRequest, :count).by(1)
       end
+
+      it "sends an email alerting the user that reimb request is available" do
+        expect {
+          post :accept, params: { id: gf_travel_request.to_param }
+        }.to change{ ActionMailer::Base.deliveries.count }.by(1)
+      end
     end
 
     context "with non-in_review request" do

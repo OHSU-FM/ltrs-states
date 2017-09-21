@@ -36,5 +36,28 @@ FactoryGirl.define do
         gf_travel_request.approval_state.review!
       end
     end
+
+    trait :accepted do
+      association :user, factory: :user_with_approvers
+      after :create do |gftr|
+        gftr.approval_state.submit!
+        gftr.approval_state.send_to_unopened!
+        gftr.approval_state.review!
+        gftr.approval_state.accept!
+      end
+    end
+
+    # requires user association, but many other traits do that already.
+    # so, this probably won't work unless paired with one of those traits.
+    trait :with_rr do
+      after :create do |gftr|
+        ReimbursementRequest.create!(user: gftr.user,
+                                     gf_travel_request: gftr,
+                                     depart_date: gftr.depart_date,
+                                     return_date: gftr.return_date,
+                                     form_user: gftr.form_user,
+                                     form_email: gftr.form_email)
+      end
+    end
   end
 end

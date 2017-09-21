@@ -40,7 +40,7 @@ RSpec.describe User, type: :model do
       let(:u) { create :user_with_approvers }
       let(:reviewer) { u.reviewers.first.approver }
       let!(:lr) { create :leave_request, user: u }
-      let!(:tr) { create :travel_request, :submitted, user: u }
+      let!(:tr) { create :travel_request, :unopened, user: u }
 
       it '#reviewables is a list of reviewable requests' do
         expect(reviewer.reviewables).to eq [tr, lr]

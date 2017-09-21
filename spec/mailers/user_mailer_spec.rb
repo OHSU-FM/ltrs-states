@@ -170,4 +170,27 @@ RSpec.describe UserMailer, type: :mailer do
       expect(mail.cc).to include leave_request.user.reviewers.last.email
     end
   end
+
+  describe 'reimbursement_request_available' do
+    let(:gf_travel_request) { create :gf_travel_request, :accepted, :with_rr }
+    let(:mail) { described_class.reimbursement_request_available(gf_travel_request.approval_state).deliver_now }
+
+    it 'renders the subject' do
+      expect(mail.subject).to eq "Reimbursement request available for #{gf_travel_request.user.full_name}"
+    end
+
+    it 'renders the receiver email' do
+      expect(mail.to).to eq [gf_travel_request.user.email]
+    end
+
+    it 'renders the sender email' do
+      expect(mail.from).to eq ['from@example.com']
+    end
+
+    it 'includes a link to the created ReimbursementRequest' do
+      expect(mail.body).to have_link("You can view it here")
+    end
+
+    # TODO check if anyone else needs to be cc'd?
+  end
 end

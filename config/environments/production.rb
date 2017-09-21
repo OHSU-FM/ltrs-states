@@ -98,4 +98,6 @@ Rails.application.configure do
     :sender_address => %{"Exception Notifier" <noreply@fmresearch.ohsu.edu>},
     :exception_recipients => %w{eichelbw@ohsu.edu}
   }
+
+  config.action_mailer.default_options = { from: 'noreply@fmresearch.ohsu.edu' }
 end
