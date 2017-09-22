@@ -172,25 +172,39 @@ RSpec.describe UserMailer, type: :mailer do
   end
 
   describe 'reimbursement_request_available' do
-    let(:gf_travel_request) { create :gf_travel_request, :accepted, :with_rr }
     let(:mail) { described_class.reimbursement_request_available(gf_travel_request.approval_state).deliver_now }
 
-    it 'renders the subject' do
-      expect(mail.subject).to eq "Reimbursement request available for #{gf_travel_request.user.full_name}"
+    context 'when user has no delegators' do
+      let(:gf_travel_request) { create :gf_travel_request, :accepted, :with_rr }
+
+      it 'renders the subject' do
+        expect(mail.subject).to eq "Reimbursement request available for #{gf_travel_request.user.full_name}"
+      end
+
+      it 'renders the receiver email' do
+        expect(mail.to).to eq [gf_travel_request.user.email]
+      end
+
+      it 'renders the sender email' do
+        expect(mail.from).to eq ['from@example.com']
+      end
+
+      it 'includes a link to the created ReimbursementRequest' do
+        expect(mail.body).to have_link("You can view it here")
+      end
+
+      it "cc's no one if user has no delegators" do
+        expect(mail.cc).to be_nil
+      end
     end
 
-    it 'renders the receiver email' do
-      expect(mail.to).to eq [gf_travel_request.user.email]
-    end
+    context 'when user has delegators' do
+      let(:gf_travel_request) { create :delegated_gftr, :with_rr }
+      let(:delegate) { gf_travel_request.user.delegates.first }
 
-    it 'renders the sender email' do
-      expect(mail.from).to eq ['from@example.com']
+      it "cc's the users delegates" do
+        expect(mail.cc).to include delegate.email
+      end
     end
-
-    it 'includes a link to the created ReimbursementRequest' do
-      expect(mail.body).to have_link("You can view it here")
-    end
-
-    # TODO check if anyone else needs to be cc'd?
   end
 end

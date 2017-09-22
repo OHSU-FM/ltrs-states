@@ -10,9 +10,11 @@ FactoryGirl.define do
     registration_reimb false
     lodging_reimb false
     ground_transport false
-    form_email 'email'
-    form_user 'user'
     user
+
+    after :create do |gftr|
+      gftr.update!(form_user: gftr.user.full_name, form_email: gftr.user.email)
+    end
 
     trait :submitted do
       after :create do |gf_travel_request|
@@ -59,5 +61,16 @@ FactoryGirl.define do
                                      form_email: gftr.form_email)
       end
     end
+
+    trait :delegated do
+      association :user, factory: :user_with_delegate
+
+      after :create do |gftr|
+        d = gftr.user.delegates.first
+        gftr.update!(form_user: d.full_name, form_email: d.email)
+      end
+    end
+
+    factory :delegated_gftr, traits: [:delegated]
   end
 end

@@ -86,7 +86,7 @@ module StateEvents
         if @approval_state.accept!
           if @approvable.is_a? GrantFundedTravelRequest
             build_reimbursement_request_for @approval_state.user, @approvable
-            # TODO send email alerting user that reimb req has been created
+            UserMailer.reimbursement_request_available(@approval_state).deliver_now
           end
           UserMailer.request_accepted(@approval_state).deliver_now
           format.html { redirect_to @approvable,

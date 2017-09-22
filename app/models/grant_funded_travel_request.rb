@@ -9,9 +9,8 @@ class GrantFundedTravelRequest < ApplicationRecord
   delegate :current_user_approver, :next_user_approver, to: :approval_state
 
   validates_associated :approval_state
-  validates :depart_date, :return_date, :form_email, :form_user, :user,
-    :dest_desc, :business_purpose_desc,
-    presence: true
+  validates :depart_date, :return_date, :user, :dest_desc,
+    :business_purpose_desc, presence: true
   validates :expense_card_use, :air_use, :car_rental, :registration_reimb,
     :lodging_reimb, :ground_transport,
     inclusion: { in: [true, false] }
@@ -64,6 +63,10 @@ class GrantFundedTravelRequest < ApplicationRecord
     self.class.name + " " + self.id.to_s
   end
 
+  def delegate_submitted?
+    user.email != form_email
+  end
+
   private
 
   def build_approval_state
@@ -79,7 +82,7 @@ class GrantFundedTravelRequest < ApplicationRecord
   end
 
   def conference_other
-    if business_purpose_desc == 'other' and ![true, false].include? business_purpose_other
+    if business_purpose_desc == 'other' and business_purpose_other.empty?
       errors.add(:business_purpose_other, 'Description must be provided')
     end
   end
@@ -111,13 +114,13 @@ class GrantFundedTravelRequest < ApplicationRecord
 
   def car_details_if_assistance
     if car_assistance == true
-      if ![true, false].include? rental_needs_desc
+      if [nil, ""].include? rental_needs_desc
         errors.add(:rental_needs_desc, 'Must be answered if traveler is requesting assistance')
       end
-      if ![true, false].include? cell_number
-        errors.add(:cell_number, 'Must be answered if traveler is requesting assistance')
+      if [nil, ""].include? cell_number or !is_a_phone_number?(cell_number)
+        errors.add(:cell_number, 'Must be a phone number')
       end
-      if ![true, false].include? drivers_licence_num
+      if [nil, ""].include? drivers_licence_num
         errors.add(:drivers_licence_num, 'Must be answered if traveler is requesting assistance')
       end
     end
@@ -127,5 +130,13 @@ class GrantFundedTravelRequest < ApplicationRecord
     if registration_reimb == true and ![true, false].include? registration_assistance
       errors.add(:registration_assistance, 'Must be answered if traveler must pay for event registration')
     end
+  end
+
+  # returns true if the provided str contains a phone number
+  # https://stackoverflow.com/questions/31031984/checking-whether-a-string-contains-a-phone-number
+  # @param str String
+  # @return Boolean
+  def is_a_phone_number? str
+    !str.gsub(/\s+/, "").scan(/([^A-Z|^"|^\s]{6,})/i).empty?
   end
 end

@@ -17,14 +17,6 @@ RSpec.describe GrantFundedTravelRequest, type: :model do
     expect(build :gf_travel_request, return_date: nil).not_to be_valid
   end
 
-  it 'requires a form_email' do
-    expect(build :gf_travel_request, form_email: nil).not_to be_valid
-  end
-
-  it 'requires a form_user' do
-    expect(build :gf_travel_request, form_user: nil).not_to be_valid
-  end
-
   it 'requires a user' do
     expect(build :gf_travel_request, user: nil).not_to be_valid
   end
@@ -100,6 +92,8 @@ RSpec.describe GrantFundedTravelRequest, type: :model do
   it 'requires rental details if car_assistance is true' do
     expect(build :gf_travel_request, car_assistance: true, cell_number: nil)
       .not_to be_valid
+    expect(build :gf_travel_request, car_assistance: true, cell_number: 'NaN')
+      .not_to be_valid
     expect(build :gf_travel_request, car_assistance: true, drivers_licence_num: nil)
       .not_to be_valid
     expect(build :gf_travel_request, car_assistance: true, rental_needs_desc: nil)
@@ -135,6 +129,16 @@ RSpec.describe GrantFundedTravelRequest, type: :model do
     it '#to_s returns a string representation of the object' do
       gftr = create :gf_travel_request
       expect(gftr.to_s).to eq "GrantFundedTravelRequest #{gftr.id}"
+    end
+
+    it '#delegate_submitted? returns false if from_email == user.email' do
+      gftr = create :gf_travel_request
+      expect(gftr.delegate_submitted?).to be_falsey
+    end
+
+    it '#delegate_submitted? returns true if form_email != user.email' do
+      d_gftr = create :delegated_gftr
+      expect(d_gftr.delegate_submitted?).to be_truthy
     end
   end
 end

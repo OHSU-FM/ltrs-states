@@ -207,11 +207,6 @@ RSpec.describe GrantFundedTravelRequestsController, type: :controller do
         expect(response).to redirect_to grant_funded_travel_request_path(gf_travel_request)
       end
 
-      it "sends an email" do
-        expect { post :accept, params: { id: gf_travel_request.to_param } }
-          .to change { ActionMailer::Base.deliveries.count }.by(1)
-      end
-
       # user has single reviewer, so we can test ReimbursementRequest creation here
       it "creates a new reimbusement request on success" do
         expect {
@@ -219,10 +214,53 @@ RSpec.describe GrantFundedTravelRequestsController, type: :controller do
         }.to change(ReimbursementRequest, :count).by(1)
       end
 
-      it "sends an email alerting the user that reimb request is available" do
+      it "sends two emails (accepted and reimb_req_available)" do
         expect {
           post :accept, params: { id: gf_travel_request.to_param }
-        }.to change{ ActionMailer::Base.deliveries.count }.by(1)
+        }.to change{ ActionMailer::Base.deliveries.count }.by(2)
+      end
+    end
+
+    context "when user has multiple approvers" do
+      login_user
+      let(:approval_state) { gf_travel_request.approval_state }
+
+      context "the first time around" do
+        let(:user) { create :user_two_reviewers, reviewer1: controller.current_user }
+        let(:gf_travel_request) { create :gf_travel_request, :in_review, user: user }
+
+        it "doesn't create a new reimbusement request on success" do
+          expect {
+            post :accept, params: { id: gf_travel_request.to_param }
+          }.to change(ReimbursementRequest, :count).by(0)
+        end
+
+        it "sends one emails (first_reivewer_accepted)" do
+          expect {
+            post :accept, params: { id: gf_travel_request.to_param }
+          }.to change{ ActionMailer::Base.deliveries.count }.by(1)
+        end
+      end
+
+      context "the last time around" do
+        let(:user) { create :user_two_reviewers, reviewer2: controller.current_user }
+        let(:gf_travel_request) { create :gf_travel_request, :in_review, user: user }
+
+        before(:each) do
+          gf_travel_request.approval_state.update!(approval_order: 2)
+        end
+
+        it "creates a new reimbusement request on success" do
+          expect {
+            post :accept, params: { id: gf_travel_request.to_param }
+          }.to change(ReimbursementRequest, :count).by(1)
+        end
+
+        it "sends two emails (accepted and reimb_req_available)" do
+          expect {
+            post :accept, params: { id: gf_travel_request.to_param }
+          }.to change{ ActionMailer::Base.deliveries.count }.by(2)
+        end
       end
     end
 

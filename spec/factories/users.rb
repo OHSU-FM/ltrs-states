@@ -12,10 +12,16 @@ FactoryGirl.define do
     factory :user_with_approvers, traits: [:with_approvers]
 
     factory :user_two_reviewers do
-      after(:create) do |user|
-        reviewer1 = create :user, first_name: 'reviewer1', email: "reviewer14u#{user.id}@example.com"
-        reviewer2 = create :user, first_name: 'reviewer2', email: "reviewer24u#{user.id}@example.com"
-        notifier = create :user, first_name: 'notifier', email: "notifier4u#{user.id}@example.com"
+      transient do
+        reviewer1 nil
+        reviewer2 nil
+        notifier nil
+      end
+
+      after(:create) do |user, evaluator|
+        reviewer1 = evaluator.reviewer1 || create(:user, first_name: 'reviewer1', email: "reviewer14u#{user.id}@example.com")
+        reviewer2 = evaluator.reviewer2 || create(:user, first_name: 'reviewer2', email: "reviewer24u#{user.id}@example.com")
+        notifier = evaluator.notifier || create(:user, first_name: 'notifier', email: "notifier4u#{user.id}@example.com")
         create :user_approver, user: user, approver_id: notifier.id, approver_type: 'notifier', approval_order: 3
         create :user_approver, user: user, approver_id: reviewer1.id, approver_type: 'reviewer', approval_order: 1
         create :user_approver, user: user, approver_id: reviewer2.id, approver_type: 'reviewer', approval_order: 2

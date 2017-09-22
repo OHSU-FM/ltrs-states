@@ -43,8 +43,15 @@ class UserMailer < ApplicationMailer
 
   def reimbursement_request_available(approval_state)
     @approval_state = approval_state
-    logger.info("[MAIL] sending reimbursement_request_available email to: #{@approval_state.user.email}")
-    mail to: @approval_state.user.email,
+    mail_params = {
+      to: @approval_state.user.email,
       subject: "Reimbursement request available for #{@approval_state.user.full_name}"
+    }
+
+    @delegate_email = @approval_state.approvable.form_email if @approval_state.approvable.delegate_submitted?
+    mail_params.merge!({cc: @delegate_email }) unless @delegate_email.nil?
+
+    logger.info("[MAIL] sending reimbursement_request_available email to: #{@approval_state.user.email}")
+    mail mail_params
   end
 end
