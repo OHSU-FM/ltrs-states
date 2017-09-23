@@ -16,17 +16,12 @@ class GrantFundedTravelRequest < ApplicationRecord
     inclusion: { in: [true, false] }
   validate :conference_url, :conference_other, :date_sequence, :expense_card,
     :air_assistance_if_use, :car_assistance_if_rental, :car_details_if_assistance,
-    :registration_assistance_if_reimb
+    :registration_assistance_if_reimb, :registration_url_if_registration_assistance,
+    :lodging_url_if_lodging_assistance
 
-  # require user to give registration_url if they request registration_assistance
-  validates :registration_url, presence: true, if: Proc.new{ |gf|
-    !gf.registration_assistance.nil? and gf.registration_assistance == true }
   # require user to answer lodging_assistance if they will pay for lodging
   validates :lodging_assistance, inclusion: { in: [true, false] },
     if: Proc.new{ |gf| !gf.lodging_reimb.nil? and gf.lodging_reimb == true }
-  # require url of lodging if user requests help booking lodging
-  validates :lodging_url, presence: true, if: Proc.new{ |gf|
-    !gf.lodging_assistance.nil? and gf.lodging_assistance == true }
   # require user to answer ground_transport_assistance if they will pay for ground_transport
   validates :ground_transport_assistance, inclusion: { in: [true, false] },
     if: Proc.new{ |gf| !gf.ground_transport.nil? and gf.ground_transport == true }
@@ -76,8 +71,12 @@ class GrantFundedTravelRequest < ApplicationRecord
   # validation methods
 
   def conference_url
-    if business_purpose_desc == 'conference' and ![true, false].include? business_purpose_url
-      errors.add(:business_purpose_url, 'Conference URL must be provided')
+    if business_purpose_desc == 'conference'
+      if business_purpose_url.nil? or business_purpose_url.empty?
+        errors.add(:business_purpose_url, 'Conference URL must be provided')
+      elsif !uri? business_purpose_url
+        errors.add(:business_purpose_url, "\"#{business_purpose_url}\" doesn't look like a URL")
+      end
     end
   end
 
@@ -132,11 +131,48 @@ class GrantFundedTravelRequest < ApplicationRecord
     end
   end
 
+  # require user to give registration_url if they request registration_assistance
+  def registration_url_if_registration_assistance
+    if registration_assistance == true
+      if registration_url.nil? or registration_url.empty?
+        errors.add(:registration_url, 'Registration URL must be provided')
+      elsif !uri? registration_url
+        errors.add(:registration_url, "\"#{registration_url}\" doesn't look like a URL")
+      end
+    end
+  end
+
+  # require url of lodging if user requests help booking lodging
+  def lodging_url_if_lodging_assistance
+    if lodging_assistance == true
+      if lodging_url.nil? or lodging_url.empty?
+        errors.add(:lodging_url, 'Lodging URL must be provided')
+      elsif !uri? lodging_url
+        errors.add(:lodging_url, "\"#{lodging_url}\" doesn't look like a URL")
+      end
+    end
+  end
+  validates :lodging_url, presence: true, if: Proc.new{ |gf|
+    !gf.lodging_assistance.nil? and gf.lodging_assistance == true }
+
   # returns true if the provided str contains a phone number
   # https://stackoverflow.com/questions/31031984/checking-whether-a-string-contains-a-phone-number
-  # @param str String
+  # @param str String [string to be checked]
   # @return Boolean
   def is_a_phone_number? str
     !str.gsub(/\s+/, "").scan(/([^A-Z|^"|^\s]{6,})/i).empty?
+  end
+
+  # returns true if provided str is a uri
+  # https://stackoverflow.com/questions/5331014/check-if-given-string-is-an-url
+  # @param str String [string to be checked]
+  # @return Boolean
+  def uri? str
+    uri = URI.parse str
+    %w( http https ).include? uri.scheme
+  rescue URI::BadURIError
+    false
+  rescue URI::InvalidURIError
+    false
   end
 end
