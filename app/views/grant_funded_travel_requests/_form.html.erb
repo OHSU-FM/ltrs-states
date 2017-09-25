@@ -79,13 +79,13 @@
           <%= f.label :expense_card_use, 'Will travel expenses be charged to an account?' %>
           <br />
           <%= f.select :expense_card_use,
-            options_for_select([['yes', true], ['no', false]]), { prompt: 'Select' }, data: { target: '#expense_card_type_form' } %>
+            options_for_select([['yes', true], ['no', false]], f.object.expense_card_use), { prompt: 'Select' }, data: { target: '#expense_card_type_form' } %>
         </div>
         <div id="expense_card_type_form" class="stop_flouc">
           <div class="row">
             <%= f.label :expense_card_type, 'Account to charge:' %>
             <br />
-            <%= f.select :expense_card_type, grouped_options_for_select(hf_funding_options), prompt: 'Select' %>
+            <%= f.select :expense_card_type, grouped_options_for_select(hf_funding_options, f.object.expense_card_type), prompt: 'Select' %>
           </div>
         </div>
       </div>
@@ -102,13 +102,13 @@
           <%= f.label :air_use, 'Will traveler be flying for this event?' %>
           <br />
           <%= f.select :air_use,
-            options_for_select([['yes', true], ['no', false]]),
+            options_for_select([['yes', true], ['no', false]], f.object.air_use),
             { prompt: 'Select' }, data: { target: '#air_use_form' } %>
           <div id="air_use_form" class="stop_flouc">
             <%= f.label :air_assistance, 'Would you like assistance obtaining airline reservations?' %>
             <br />
             <%= f.select :air_assistance,
-              options_for_select([['yes', true], ['no', false]]), { prompt: 'Select' }, data: { target: '#air_assistance_form' } %>
+              options_for_select([['yes', true], ['no', false]], f.object.air_assistance), { prompt: 'Select' }, data: { target: '#air_assistance_form' } %>
             <div id="air_assistance_form" class="stop_flouc">
               <%= f.label :flight_seat_pref, 'Seat Preference:' %>
               <%= f.select :flight_seat_pref, [['Aisle', 'aisle'], ['Middle', 'middle'], ['Window', 'window']] %>
@@ -128,12 +128,12 @@
           <%= f.label :car_rental, 'Will traveler be renting a car for this event?' %>
           <br />
           <%= f.select :car_rental,
-            options_for_select([['yes', true], ['no', false]]), { prompt: 'Select' }, data: { target: '#rental_car_form' } %>
+            options_for_select([['yes', true], ['no', false]], f.object.car_rental), { prompt: 'Select' }, data: { target: '#rental_car_form' } %>
           <div id="rental_car_form">
             <%= f.label :car_assistance, 'Does traveler need assistance in obtaining rental car reservations?' %>
             <br />
             <%= f.select :car_assistance,
-              options_for_select([['yes', true], ['no', false]]), { prompt: 'Select' }, data: { target: '#rental_car_assistance_form' } %>
+              options_for_select([['yes', true], ['no', false]], f.object.car_assistance), { prompt: 'Select' }, data: { target: '#rental_car_assistance_form' } %>
             <div id="rental_car_assistance_form">
               <%= f.label :rental_needs_desc, 'Describe rental needs' %>
               (e.g. dates, vehicle size, etc.)
@@ -155,11 +155,11 @@
           <%= f.label :registration_reimb, 'Will traveler need to pay for event registration?' %>
           <br />
           <%= f.select :registration_reimb,
-            options_for_select([['yes', true], ['no', false]]), { prompt: 'Select' }, data: { target: '#registration_form' } %>
+            options_for_select([['yes', true], ['no', false]], f.object.registration_reimb), { prompt: 'Select' }, data: { target: '#registration_form' } %>
           <div id="registration_form">
             <%= f.label :registration_assistance, 'Does traveler need assistance in paying for registering?' %>
             <%= f.select :registration_assistance,
-              options_for_select([['yes', true], ['no', false]]), { prompt: 'Select' }, data: { target: '#registration_assistance_form' } %>
+              options_for_select([['yes', true], ['no', false]], f.object.registration_assistance), { prompt: 'Select' }, data: { target: '#registration_assistance_form' } %>
             <div id="registration_assistance_form">
               <%= f.label :registration_url, 'URL of registration site' %>
               <%= f.text_field :registration_url %>
@@ -175,12 +175,12 @@
           <%= f.label :lodging_reimb, 'Will traveler use paid lodging for this event?' %>
           <br />
           <%= f.select :lodging_reimb,
-            options_for_select([['yes', true], ['no', false]]), { prompt: 'Select' }, data: { target: '#lodging_form' } %>
+            options_for_select([['yes', true], ['no', false]], f.object.lodging_reimb), { prompt: 'Select' }, data: { target: '#lodging_form' } %>
           <div id="lodging_form">
             <%= f.label :lodging_assistance, 'Does traveler need assistance in obtaining lodging reservations?' %>
             <br />
             <%= f.select :lodging_assistance,
-              options_for_select([['yes', true], ['no', false]]), { prompt: 'Select' }, data: { target: '#lodging_assistance_form' } %>
+              options_for_select([['yes', true], ['no', false]], f.object.lodging_assistance), { prompt: 'Select' }, data: { target: '#lodging_assistance_form' } %>
             <div id="lodging_assistance_form" class="table_form stop_flouc">
               <%= f.label :lodging_url, 'URL of desired lodging' %>
               <%= f.text_field :lodging_url %>
@@ -194,11 +194,11 @@
           <%= f.label :ground_transport, 'Will traveler use paid ground transportation for this event?' %>
           <br />
           <%= f.select :ground_transport,
-            options_for_select([['yes', true], ['no', false]]), { prompt: 'Select' }, data: { target: '#ground_transport_form' } %>
+            options_for_select([['yes', true], ['no', false]], f.object.ground_transport), { prompt: 'Select' }, data: { target: '#ground_transport_form' } %>
           <div id="ground_transport_form">
             <%= f.label :ground_transport_assistance, 'Does traveler need assistance in obtaining paid  ground transportation?' %>
             <%= f.select :ground_transport_assistance,
-              options_for_select([['yes', true], ['no', false]]), { prompt: 'Select' }, data: { target: '#ground_transport_assistance_form' } %>
+              options_for_select([['yes', true], ['no', false]], f.object.ground_transport_assistance), { prompt: 'Select' }, data: { target: '#ground_transport_assistance_form' } %>
             <div id="ground_transport_assistance_form">
               <%= f.label :ground_transport_desc, 'Describe transportation needs' %>
               (e.g. shuttle URL, dates, etc)

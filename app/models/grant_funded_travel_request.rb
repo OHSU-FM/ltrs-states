@@ -94,7 +94,7 @@ class GrantFundedTravelRequest < ApplicationRecord
   end
 
   def expense_card
-    if expense_card_use == true and ![true, false].include? expense_card_type
+    if expense_card_use == true and [nil, ""].include? expense_card_type
       errors.add(:expense_card_type, 'Award must be provided')
     end
   end
