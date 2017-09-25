@@ -61,6 +61,14 @@ RSpec.describe GrantFundedTravelRequest, type: :model do
     end
   end
 
+  # doing this bc urls not containing http/https were being rejected
+  it "should accept urls that don't necessarily include a scheme" do
+    ['test.com', 'http://test.com', 'https://test.com', 'www.test.com'].each do |url|
+      expect(build :gf_travel_request, business_purpose_desc: 'conference',
+             business_purpose_url: url).to be_valid
+    end
+  end
+
   it 'requires a business_purpose_other if business_purpose_desc is other' do
     expect(build :gf_travel_request, business_purpose_desc: 'other',
            business_purpose_other: '').not_to be_valid

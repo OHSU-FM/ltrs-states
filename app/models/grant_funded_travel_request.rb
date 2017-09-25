@@ -164,15 +164,10 @@ class GrantFundedTravelRequest < ApplicationRecord
   end
 
   # returns true if provided str is a uri
-  # https://stackoverflow.com/questions/5331014/check-if-given-string-is-an-url
+  # https://stackoverflow.com/questions/17489562/extracting-urls-from-a-string-that-do-not-contain-http
   # @param str String [string to be checked]
   # @return Boolean
   def uri? str
-    uri = URI.parse str
-    %w( http https ).include? uri.scheme
-  rescue URI::BadURIError
-    false
-  rescue URI::InvalidURIError
-    false
+    !/(https?:\/\/)?\w*\.\w+(\.\w+)*(\/\w+)*(\.\w*)?/.match(str).to_s.empty?
   end
 end
