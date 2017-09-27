@@ -99,7 +99,7 @@
 
       <div class="toggle_form">
         <%= f.label :traveler_mileage_reimb, 'Is traveler submitting for mileage reimbursement?' %>
-        <p>Note, you must submit a receipt for this expense to receipts@ohsu.edu</p>
+        <p>Note, you must attach a PDF of a Google Map&trade; indicating all stops on your trip</p>
         <%= f.select :traveler_mileage_reimb, options_for_select([['yes', true], ['no', false]], f.object.traveler_mileage_reimb),
           { prompt: 'Select' }, data: { target: '#lodging_form' }, required: true %>
       </div>

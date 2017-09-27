@@ -5,8 +5,24 @@ RSpec.describe UserApprover, type: :model do
 
   describe 'validations' do
     it 'requires a user' do
-      expect( build(:user_approver, user: nil) ).not_to be_valid
+      expect(build(:user_approver, user: nil)).not_to be_valid
     end
+
+    it 'requires an approver' do
+      expect(build(:user_approver, approver_id: nil)).not_to be_valid
+    end
+
+    it 'requires an approver_type' do
+      expect(build(:user_approver, approver_type: nil)).not_to be_valid
+    end
+
+    it 'requires an approver_order' do
+      expect(build(:user_approver, approval_order: nil)).not_to be_valid
+    end
+
+     it 'requires a sensical approval_order' do
+       expect(build(:user_approver, approval_order: 9001)).not_to be_valid
+     end
   end
 
   describe 'methods' do
@@ -28,6 +44,11 @@ RSpec.describe UserApprover, type: :model do
 
       ua = create :user_approver
       expect(ua.notifier?).to be_falsey
+    end
+
+    it '#name returns the approver full_name' do
+      ua = create :user_approver
+      expect(ua.name).to eq ua.approver.full_name
     end
   end
 end

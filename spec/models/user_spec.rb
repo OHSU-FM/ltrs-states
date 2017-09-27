@@ -14,6 +14,12 @@ RSpec.describe User, type: :model do
     it 'must have a email' do
       expect(build(:user, email: nil)).not_to be_valid
     end
+
+    it 'air_seat_pref should be one of aisle, middle, window' do
+      expect(build :user, air_seat_pref: 'floor').not_to be_valid
+      # but it should still be allowed to be nil
+      expect(build :user, air_seat_pref: nil).to be_valid
+    end
   end
 
   describe 'methods' do

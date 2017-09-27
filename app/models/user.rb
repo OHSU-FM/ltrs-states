@@ -31,6 +31,8 @@ class User < ApplicationRecord
   accepts_nested_attributes_for :ff_numbers, allow_destroy: true
 
   validates_presence_of :login, :first_name, :last_name, :email
+  validates :air_seat_pref, inclusion: { in: ['aisle', 'middle', 'window']},
+    allow_blank: true
 
   devise :database_authenticatable, :ldap_authenticatable, :rememberable,
     :trackable, :timeoutable
@@ -41,44 +43,107 @@ class User < ApplicationRecord
   # don't let rails_admin count against code coverage
   # :nocov:
   rails_admin do
-    group 'User Information' do
-      field :first_name
-      field :last_name
-      field :empid
-      field :emp_class
-      field :emp_home
-      field :email
-      field :login
-      field :is_admin
-      field :is_ldap
-      field :password
-      field :password_confirmation
-      field :timezone
+    edit do
+      group 'User Information' do
+        field :first_name
+        field :last_name
+        field :empid
+        field :emp_class
+        field :emp_home
+        field :email
+        field :login
+        field :is_admin
+        field :is_ldap
+        field :grant_funded
+        field :password do
+          hide
+        end
+        field :password_confirmation do
+          hide
+        end
+        field :timezone
+      end
+
+      group 'Traveler Profile' do
+        active false
+        field :dob
+        field :cell_number
+        field :travel_email
+        field :ecn1 do
+          label 'Emergency Contact Name 1'
+        end
+        field :ecp1 do
+          label 'Emergency Contact Phone 1'
+        end
+        field :ecn2 do
+          label 'Emergency Contact Name 2'
+        end
+        field :ecp2 do
+          label 'Emergency Contact Phone 2'
+        end
+        field :dietary_restrictions
+        field :ada_accom do
+          label 'ADA Accommodations'
+        end
+        field :air_seat_pref, :enum do
+          label 'Air Seat Preference'
+          enum do
+            ['aisle', 'middle', 'window']
+          end
+        end
+        field :hotel_room_pref do
+          label 'Hotel Room Preference'
+        end
+        field :tsa_pre do
+          label 'TSA Precheck #'
+        end
+        field :legal_name
+        field :ff_numbers do
+          label 'Frequent Flier #s'
+        end
+      end
+
+      group 'Notifications Config' do
+        active false
+        field :user_approvers do
+          label 'User Contacts'
+        end
+        field :user_delegations do
+          hide
+        end
+        field :delegates do
+          help 'Users this user has delegated control to'
+        end
+        field :delegators do
+          help 'Users who have delegated control to this user'
+        end
+        field :approval_states do
+          hide
+        end
+      end
+
+      group 'Forms' do
+        active false
+        field :leave_requests
+        field :travel_requests
+        field :gf_travel_requests
+        field :reimbursement_requests
+      end
+
+      group 'Login History' do
+        active false
+        field :sign_in_count
+        field :current_sign_in_at
+        field :last_sign_in_at
+        field :current_sign_in_ip
+        field :last_sign_in_ip
+        field :remember_created_at
+        field :reset_password_sent_at
+      end
+
+      include_all_fields
     end
 
-    group 'Login History' do
-      active false
-      field :sign_in_count
-      field :current_sign_in_at
-      field :last_sign_in_at
-      field :current_sign_in_ip
-      field :last_sign_in_ip
-      field :remember_created_at
-    end
-
-    group 'Notifications Config' do
-      active false
-      field :user_approvers
-      field :user_delegations
-    end
-
-    group 'Forms' do
-      active false
-      field :leave_requests
-      field :travel_requests
-    end
-
-    include_all_fields
     list do
       scopes [nil, :deleted]
     end

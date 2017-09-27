@@ -190,7 +190,7 @@ RSpec.describe UserMailer, type: :mailer do
       end
 
       it 'includes a link to the created ReimbursementRequest' do
-        expect(mail.body).to have_link("You can view it here")
+        expect(mail.body).to have_link('Click here to access the reimbursement request form')
       end
 
       it "cc's no one if user has no delegators" do
