@@ -1,11 +1,21 @@
 .daily_meal_reimb > .row {
   overflow-x: auto;
   white-space: nowrap;
+  padding-left: 15px;
+  padding-bottom: 5px;
 }
 
-.daily_meal_reimb > .row > .col-xs-3 {
+.daily_meal_reimb > .row > .col-lg-2,
+.daily_meal_reimb > .row > .col-xs-12 {
   display: inline-block;
   float: none;
   border: 1px solid black;
   border-radius: 5px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.daily_meal_reimb > .row > .col-lg-2 > .row,
+.daily_meal_reimb > .row > .col-xs-12 > .row {
+  padding-left: 5px;
 }

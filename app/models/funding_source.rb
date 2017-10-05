@@ -4,8 +4,20 @@ class FundingSource < ApplicationRecord
 
   scope :active, -> { where("? BETWEEN start_date AND end_date", Date.today) }
 
+  # :nocov:
+  rails_admin do
+    edit do
+      field :pi do
+        label "PI"
+      end
+
+      include_all_fields
+    end
+  end
+  # :nocov:
+
   def display_name
-    nickname.nil? ? title : "#{title} (#{nickname})"
+    title
   end
 
   private

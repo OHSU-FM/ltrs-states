@@ -97,6 +97,8 @@ class GrantFundedTravelRequestsController < ApplicationController
                :lodging_assistance, :lodging_url, :registration_reimb,
                :registration_assistance, :registration_url, :user_id,
                :flight_seat_pref, :rental_needs_desc, :ground_transport,
-               :ground_transport_assistance, :ground_transport_desc)
+               :ground_transport_assistance, :ground_transport_desc,
+               :additional_info_needed, :additional_info_memo,
+               :additional_docs_needed)
     end
 end

@@ -139,6 +139,13 @@ RSpec.describe GrantFundedTravelRequest, type: :model do
            ground_transport_desc: nil).not_to be_valid
   end
 
+  it 'requires additional_info_memo if additional_info_needed is true' do
+    expect(build :gf_travel_request, additional_info_needed: true,
+           additional_info_memo: nil).not_to be_valid
+    expect(build :gf_travel_request, additional_info_needed: true,
+           additional_info_memo: '').not_to be_valid
+  end
+
   describe 'methods' do
     it '#to_s returns a string representation of the object' do
       gftr = create :gf_travel_request

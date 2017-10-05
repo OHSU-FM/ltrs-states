@@ -5,6 +5,7 @@
   <span class='label label-default'>Edit</span>
   <hr/>
 </h2>
+
 <%= form_for record, html: { multipart: true, class: "#{record.class.name}_form" } do |f| %>
   <div class="ui-widget-content ui-corner-all wide partial_form">
     <%= render partial: "users/shared/forms_edit_actions", locals: { record: record } %>

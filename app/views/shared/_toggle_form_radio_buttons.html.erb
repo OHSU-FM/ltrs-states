@@ -1,0 +1,5 @@
+<%= f.label symbol, 'Yes', value: true, data: { target: target } %>
+<%= f.radio_button symbol, true, data: { target: target }, checked: f.object.send(symbol) %>
+<%= f.label symbol, 'No', value: false %>
+<%= f.radio_button symbol, false, data: { target: target }, checked: f.object.send(symbol) == false %>
+<br />

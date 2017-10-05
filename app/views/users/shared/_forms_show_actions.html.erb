@@ -1,5 +1,12 @@
 <div class='row forms_show_actions'>
-  <div class="col-xs-12">
+  <div class="col-xs-3">
+    <% if current_user == record.user %>
+      <%= link_to 'Back', user_forms_path(current_user), class: 'btn btn-default' %>
+    <% else %>
+      <%= link_to 'Back', user_approvals_path(current_user), class: 'btn btn-default' %>
+    <% end %>
+  </div>
+  <div class="col-xs-9">
     <div class="btn-group pull-right">
       <% if can? :update, record %>
         <%= link_to('Edit', polymorphic_path(record, action: 'edit'), class: 'btn btn-default') %>

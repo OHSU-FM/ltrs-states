@@ -2,3 +2,10 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+.popover {
+  max-width: 100%;
+}
+
+.popover-content table tbody, .popover-content table tbody tr th {
+  text-align: center;
+}

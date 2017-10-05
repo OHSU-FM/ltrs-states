@@ -1,32 +1,26 @@
-<div class="col-xs-3">
-  <div class="">
-    <%= f.label :reimb_date, f.object.reimb_date.strftime("%A %B %d, %Y") %>
+<div class="col-lg-2 col-xs-12">
+  <div class="row">
+    <%= f.label :reimb_date, f.object.reimb_date.strftime("%a %B %d, %Y") %>
   </div>
 
-  <div class="">
+  <div class="row">
     <%= f.label :breakfast %>
     <br />
     <%= f.radio_button :breakfast, true %> Per Diem
     <%= f.radio_button :breakfast, false %> NA
-    <br />
-    <%= f.text_field :breakfast_desc %>
   </div>
 
-  <div class="">
+  <div class="row">
     <%= f.label :lunch %>
     <br />
     <%= f.radio_button :lunch, true %> Per Diem
     <%= f.radio_button :lunch, false %> NA
-    <br />
-    <%= f.text_field :lunch_desc %>
   </div>
 
-  <div class="">
+  <div class="row">
     <%= f.label :dinner %>
     <br />
     <%= f.radio_button :dinner, true %> Per Diem
     <%= f.radio_button :dinner, false %> NA
-    <br />
-    <%= f.text_field :dinner_desc %>
   </div>
 </div>

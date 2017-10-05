@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170920212957) do
+ActiveRecord::Schema.define(version: 20171005235025) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -29,7 +29,6 @@ ActiveRecord::Schema.define(version: 20170920212957) do
 
   create_table "ff_numbers", force: :cascade do |t|
     t.string "ffid"
-    t.string "string"
     t.string "airline"
     t.bigint "user_id"
     t.datetime "created_at", null: false
@@ -40,8 +39,6 @@ ActiveRecord::Schema.define(version: 20170920212957) do
   create_table "funding_sources", force: :cascade do |t|
     t.string "pi"
     t.string "title"
-    t.string "nickname"
-    t.string "award_number"
     t.date "start_date"
     t.date "end_date"
     t.datetime "created_at", null: false
@@ -89,6 +86,9 @@ ActiveRecord::Schema.define(version: 20170920212957) do
     t.text "ground_transport_desc"
     t.string "flight_airline"
     t.string "flight_seat_pref"
+    t.boolean "additional_info_needed"
+    t.text "additional_info_memo"
+    t.boolean "additional_docs_needed"
     t.index ["deleted_at"], name: "index_grant_funded_travel_requests_on_deleted_at"
   end
 
@@ -148,11 +148,8 @@ ActiveRecord::Schema.define(version: 20170920212957) do
   create_table "meal_reimbursement_requests", force: :cascade do |t|
     t.date "reimb_date"
     t.boolean "breakfast"
-    t.text "breakfast_desc"
     t.boolean "lunch"
-    t.text "lunch_desc"
     t.boolean "dinner"
-    t.text "dinner_desc"
     t.bigint "reimbursement_request_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -176,6 +173,10 @@ ActiveRecord::Schema.define(version: 20170920212957) do
     t.datetime "updated_at", null: false
     t.boolean "meal_host_reimb"
     t.bigint "grant_funded_travel_request_id"
+    t.text "meal_na_desc"
+    t.boolean "additional_info_needed"
+    t.text "additional_info_memo"
+    t.boolean "additional_docs_needed"
     t.index ["deleted_at"], name: "index_reimbursement_requests_on_deleted_at"
     t.index ["grant_funded_travel_request_id"], name: "index_reimbursement_requests_on_grant_funded_travel_request_id"
   end
@@ -296,9 +297,8 @@ ActiveRecord::Schema.define(version: 20170920212957) do
     t.boolean "is_ldap", default: true
     t.datetime "deleted_at"
     t.boolean "grant_funded"
-    t.date "dob"
+    t.text "dob"
     t.string "cell_number"
-    t.string "travel_email"
     t.string "ecn1"
     t.string "ecp1"
     t.string "ecn2"

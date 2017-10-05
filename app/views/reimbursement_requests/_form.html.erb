@@ -33,18 +33,9 @@
   <h4>Travel Event Details</h4>
   <div class="row">
     <div class="col-lg-6">
-      <div class="toggle_form">
-        <%= f.label :other_fmr_attending, "Are there other Family Medicine Research staff/faculty attending this event?" %>
-        <%= f.select :other_fmr_attending,
-          options_for_select([['yes', true], ['no', false]], f.object.other_fmr_attending.to_s),
-          { prompt: 'Select' }, data: { target: '#other_fmr_attending_form' }, required: true %>
-        <div id="other_fmr_attending_form" style="background: lavender;">
-          linking stub
-        </div>
-      </div>
       <div class="itinerary_attachment">
         <h5>Itinerary for Travel</h5>
-        <p>Please see Travel and Reimbursement Policy for itinerary requirements</p>
+        <p>Please see Family Medicine Travel Expense Reimbursement Guide for itinerary requirements</p>
         <%= link_to_add_association '+ Add File', f, :user_files %>
       </div>
     </div>
@@ -57,7 +48,7 @@
       </div>
       <div class="itinerary_attachment">
         <h5>Agenda of Event</h5>
-        <p>Please see Travel and Reimbursement Policy for agenda requirements</p>
+        <p>Please see Family Medicine Travel Expense Reimbursement Guide for agenda requirements</p>
         <%= link_to_add_association '+ Add File', f, :user_files %>
       </div>
     </div>
@@ -73,86 +64,151 @@
 
   <h4>Event & Travel Expenses</h4>
   <div class="daily_meal_reimb">
-    <p>For each day of travel, select which meals were a part of the itinerary (e.g. on departure day, departed at 1pm so eligible for lunch and dinner). Then, for each meal, select Per Diem or NA (e.g. NA due to meal provided by host), and provide brief explanation for selection of NA.</p>
+    <p>For each day of travel, select which meals were a part of the itinerary
+      (e.g. on departure day, departed at 1pm so eligible for lunch and dinner).
+      Then, for each meal, select Per Diem or NA (e.g. NA due to meal provided by
+      host), and provide brief explanation for selection of NA.
+      <i class="glyphicon glyphicon-question-sign"
+        style="font-size: 1.4em; cursor: pointer; cursor: hand;" data-html="true"
+        data-toggle="popover" title="Per Diem Timetable"></i></p>
+    <div id="popover-content" style="display: none;">
+      <table border="1" style="width: 100%">
+        <tr>
+          <th rowspan=2>Departure/Arrival Time</th>
+          <th colspan=3>Departure Day*</th>
+          <th colspan=3>Return Day*</th>
+        </tr>
+        <tr>
+          <td><em>Breakfast</em></td>
+          <td><em>Lunch</em></td>
+          <td><em>Dinner</em></td>
+          <td><em>Breakfast</em></td>
+          <td><em>Lunch</em></td>
+          <td><em>Dinner</em></td>
+        </tr>
+        <tr>
+          <td><b>**5:00am - 9:59am<b></td>
+          <td><b>&#10004;<b></td>
+          <td><b>&#10004;<b></td>
+          <td><b>&#10004;<b></td>
+          <td><b>&#10004;<b></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td><b>10:00am - 1:59pm<b></td>
+          <td></td>
+          <td><b>&#10004;<b></td>
+          <td><b>&#10004;<b></td>
+          <td><b>&#10004;<b></td>
+          <td><b>&#10004;<b></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td><b>2:00pm - 8:59pm**<b></td>
+          <td></td>
+          <td></td>
+          <td><b>&#10004;<b></td>
+          <td><b>&#10004;<b></td>
+          <td><b>&#10004;<b></td>
+          <td><b>&#10004;<b></td>
+        </tr>
+      </table>
+      <p>* Departure and Return time and location must be listed on event agenda and/or itinerary. For information regarding itinerary requirements, refer to Appendix D: Documentation Requirements</p>
+      <p>** For departures and arrivals between 9:00pm and 4:59am, there is no per diem without documented reasonable exception</p>
+    </div>
     <div class="row">
       <%= f.fields_for :meal_reimbursement_requests do |mrrf| %>
         <%= render partial: 'meal_reimbursement_requests/form', locals: { f: mrrf } %>
       <% end %>
     </div>
+    <div class="row">
+      <%= f.label :meal_na_desc, 'Please explain any Per Diem NA responses:' %>
+      <br />
+      <%= f.text_area :meal_na_desc, size: '60x40' %>
+    </div>
+    <hr />
   </div>
 
   <div class="row">
     <div class="col-lg-6">
-      <div class="toggle_form">
+      <div>
+        <em style="color: #d9534f;">&#42</em>
         <%= f.label :air_use, 'Is traveler submitting for airline reimbursement?' %>
         <p>Note, you must submit a receipt for this expense to receipts@ohsu.edu</p>
-        <%= f.select :air_use,
-          options_for_select([['yes', true], ['no', false]], f.object.air_use),
-          { prompt: 'Select' }, data: { target: '#air_use_form' }, required: true %>
+        <%= render partial: 'shared/toggle_form_radio_buttons', locals: { f: f, symbol: :air_use, target: nil } %>
       </div>
-      <div class="toggle_form">
+      <div>
+        <em style="color: #d9534f;">&#42</em>
         <%= f.label :lodging_reimb, 'Is traveler submitting for lodging reimbursement?' %>
         <p>Note, you must submit a receipt for this expense to receipts@ohsu.edu</p>
-        <%= f.select :lodging_reimb, options_for_select([['yes', true], ['no', false]], f.object.lodging_reimb),
-          { prompt: 'Select' }, data: { target: '#lodging_form' }, required: true %>
+        <%= render partial: 'shared/toggle_form_radio_buttons', locals: { f: f, symbol: :lodging_reimb, target: nil } %>
       </div>
 
       <div class="toggle_form">
+        <em style="color: #d9534f;">&#42</em>
         <%= f.label :traveler_mileage_reimb, 'Is traveler submitting for mileage reimbursement?' %>
         <p>Note, you must attach a PDF of a Google Map&trade; indicating all stops on your trip</p>
-        <%= f.select :traveler_mileage_reimb, options_for_select([['yes', true], ['no', false]], f.object.traveler_mileage_reimb),
-          { prompt: 'Select' }, data: { target: '#lodging_form' }, required: true %>
+        <%= render partial: 'shared/toggle_form_radio_buttons', locals: { f: f, symbol: :traveler_mileage_reimb, target: "#traveler_mileage_reimb_form" } %>
+        <br />
+        <div id="traveler_mileage_reimb_form">
+          <%= f.fields_for :user_files  do |g| %>
+            <%= render partial: 'user_file_fields', locals: { f: g } %>
+          <% end %>
+          <div>
+            <%= link_to_add_association '+ Add File', f, :user_files %>
+          </div>
+        </div>
       </div>
     </div>
 
     <div class="col-lg-6">
-      <div class="toggle_form">
+      <div>
+        <em style="color: #d9534f;">&#42</em>
         <%= f.label :car_rental, 'Is traveler submitting for rental car reimbursement?' %>
         <p>Note, you must submit a receipt for this expense to receipts@ohsu.edu</p>
-        <%= f.select :car_rental, options_for_select([['yes', true], ['no', false]], f.object.car_rental),
-          { prompt: 'Select' }, data: { target: '#rental_car_form' }, required: true %>
+        <%= render partial: 'shared/toggle_form_radio_buttons', locals: { f: f, symbol: :car_rental, target: nil } %>
       </div>
 
-      <div class="toggle_form">
+      <div>
+        <em style="color: #d9534f;">&#42</em>
         <%= f.label :meal_host_reimb, 'Is traveler submitting for meal hosting reimbursement?' %>
         <p>Note, you must submit a receipt for this expense to receipts@ohsu.edu</p>
-        <%= f.select :meal_host_reimb, options_for_select([['yes', true], ['no', false]], f.object.meal_host_reimb),
-          { prompt: 'Select' }, data: { target: '#rental_car_form' }, required: true %>
+        <%= render partial: 'shared/toggle_form_radio_buttons', locals: { f: f, symbol: :meal_host_reimb, target: nil } %>
       </div>
     </div>
   </div>
-</div>
 
-  <!--   <h4>File Attachments</h4> -->
-  <!--   <table> -->
-    <!--     <tbody> -->
-      <!--       <tr> -->
-        <!--         <td colspan=2 style="text&#45;align:initial;"> -->
-          <!--           <div> -->
-            <!--             <%#= f.fields_for :user_files  do |g| %> -->
-              <!--               <%#= render partial: 'user_file_fields', locals: { f: g } %> -->
-              <!--             <%# end %> -->
-              <!--           </div> -->
-            <!--           <div> -->
-              <!--             <%#= link_to_add_association '+ Add File', f, :user_files %> -->
-              <!--           </div> -->
-            <!--         </td> -->
-          <!--       </tr> -->
-        <!--     </tbody> -->
-      <!--   </table> -->
-    <!--   <ul> -->
-      <!--     <li> -->
-        <!--       Please include any files that will assist us in the conference registration process. -->
-        <!--     </li> -->
-      <!--     <li> -->
-        <!--       File size limit is 10MB -->
-        <!--     </li> -->
-      <!--     <li> -->
-        <!--       Accepted File Types: -->
-        <!--       <span title="Adobe Acrobat compatible PDF">pdf</span>, -->
-        <!--       <span title="Supported image types include: png, gif, jpeg">image</span>, -->
-        <!--       <span title="Microsoft Word Documents (doc, docx)">word document</span> -->
-        <!--     </li> -->
-      <!--   </ul> -->
-    <!-- </div> -->
-  <!--  -->
+  <hr />
+
+  <div class="row">
+    <div class="col-lg-6">
+      <div class="toggle_form">
+        <%= f.label :additional_info_needed, 'Are there additional details you would like to provide?' %>
+        <br />
+        <%= render partial: 'shared/toggle_form_radio_buttons', locals: { f: f, symbol: :additional_info_needed, target: '#additional_info_needed_form' } %>
+        <div id="additional_info_needed_form">
+          <em style="color: #d9534f;">&#42</em>
+          <%= f.label :additional_info_memo, 'Additional details:' %>
+          <br />
+          <%= f.text_area :additional_info_memo, size: '60x40' %>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="toggle_form">
+        <%= f.label :additional_docs_needed, 'Are there preapproved documents relevant to this request that you would like to attach?' %>
+        <br />
+        <%= render partial: 'shared/toggle_form_radio_buttons', locals: { f: f, symbol: :additional_docs_needed, target: '#additional_docs_needed_form' } %>
+        <br />
+        <div id="additional_docs_needed_form">
+          <%= f.fields_for :user_files  do |g| %>
+            <%= render partial: 'user_file_fields', locals: { f: g } %>
+          <% end %>
+          <div>
+            <%= link_to_add_association '+ Add File', f, :user_files %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

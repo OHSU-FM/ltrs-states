@@ -57,7 +57,7 @@ RSpec.describe Ability, type: :model do
         it { is_expected.to be_able_to(:read, request) }
         it { is_expected.to be_able_to(:edit, request) }
         it { is_expected.to be_able_to(:update, request) }
-        it { is_expected.to be_able_to(:destroy, request) }
+        it { is_expected.not_to be_able_to(:destroy, request) }
       end
     end
 
@@ -128,7 +128,7 @@ RSpec.describe Ability, type: :model do
       it { is_expected.to be_able_to(:read, request) }
       it { is_expected.to be_able_to(:edit, request) }
       it { is_expected.to be_able_to(:update, request) }
-      it { is_expected.to be_able_to(:destroy, request) }
+      it { is_expected.not_to be_able_to(:destroy, request) }
       it { is_expected.to be_able_to(:update, state) }
       it { is_expected.to be_able_to(:submit, state) }
     end

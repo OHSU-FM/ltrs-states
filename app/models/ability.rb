@@ -45,7 +45,7 @@ class Ability
       gftr.user == user || user.reviewable_users.include?(gftr.user)
     end
 
-    can [:read, :edit, :update, :destroy], ReimbursementRequest do |gftr|
+    can [:read, :edit, :update], ReimbursementRequest do |gftr|
       gftr.user == user || user.reviewable_users.include?(gftr.user)
     end
 

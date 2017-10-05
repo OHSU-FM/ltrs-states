@@ -1,90 +1,90 @@
 
 .ellipsis{
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    -o-text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
 }
 
 
 textarea{
-max-width:100%;height:80px;max-height:80px;
+  max-width:100%;height:80px;max-height:80px;
 }
 .icon-asterisk:before{
-    content:'*';
-    color:red;
-    margin-left:-12px;
+  content:'*';
+  color:red;
+  margin-left:-12px;
 }
 
 .pagination{
-    a, span, em{
-        line-height: 2.2em;
-        margin: 5px;
-        padding: 5px 10px;
-        border: 1px solid #ddd;
-        border-radius: 24px;
-        &:hover{
-            background-color: #ddd;
-        }
+  a, span, em{
+    line-height: 2.2em;
+    margin: 5px;
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+    border-radius: 24px;
+    &:hover{
+      background-color: #ddd;
     }
-    em{
-        background-color: #d5d5d5;
-    }
+  }
+  em{
+    background-color: #d5d5d5;
+  }
 
 
 }
 
 .label-badge{
-    border-radius: 1em;
+  border-radius: 1em;
 }
 
 td.ellipsis{
-    max-width: 300px;
+  max-width: 300px;
 }
 
 form select{
-    max-width: 100px;
+  max-width: 100px;
 }
 
 .spinner-image{
-    background-image: image-url('spinner.gif');
-    background-repeat:no-repeat;
-    background-position: center center;
-    background-attachment: fixed;
+  background-image: image-url('spinner.gif');
+  background-repeat:no-repeat;
+  background-position: center center;
+  background-attachment: fixed;
 }
 .centered-spinner-image{
-    @extend .spinner-image;
-    margin-left: auto;
-    margin-right: auto;
-    height: 200px;
+  @extend .spinner-image;
+  margin-left: auto;
+  margin-right: auto;
+  height: 200px;
 }
 
 #title{
-    color: #222;
-    font-size: 22px;
+  color: #222;
+  font-size: 22px;
 }
 
 #sidebar-wrapper > ul > li > a{
-    position: relative;
+  position: relative;
 }
 #sidebar-wrapper > ul > li > a > i{
-    position: absolute;
-    top: 13px;
-    right: 25px;
+  position: absolute;
+  top: 13px;
+  right: 25px;
 }
 
 table > tbody > tr > td:first-child > label{
-    text-align: top;
+  text-align: top;
 }
 
 @media print{
-    .hidden-print{display:none;}
+  .hidden-print{display:none;}
 }
 
 .field_with_errors {
   padding: 2px;
   background-color: rgb(217, 83, 79);
-  display: table;
+  display: inline;
 }
 
 #error_explanation {

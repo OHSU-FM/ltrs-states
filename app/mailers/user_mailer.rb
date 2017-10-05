@@ -49,7 +49,7 @@ class UserMailer < ApplicationMailer
     }
 
     @delegate_email = @approval_state.approvable.form_email if @approval_state.approvable.delegate_submitted?
-    mail_params.merge!({cc: @delegate_email }) unless @delegate_email.nil?
+    mail_params.merge!({ cc: @delegate_email }) unless @delegate_email.nil?
 
     logger.info("[MAIL] sending reimbursement_request_available email to: #{@approval_state.user.email}")
     mail mail_params

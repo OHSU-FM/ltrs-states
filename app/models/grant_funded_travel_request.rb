@@ -13,7 +13,7 @@ class GrantFundedTravelRequest < ApplicationRecord
     :business_purpose_desc, presence: true
   validates :expense_card_use, :air_use, :car_rental, :registration_reimb,
     :lodging_reimb, :ground_transport,
-    inclusion: { in: [true, false] }
+    inclusion: { in: [true, false], message: "%{attribute} must be provided" }
   validate :conference_url, :conference_other, :date_sequence, :expense_card,
     :air_assistance_if_use, :car_assistance_if_rental, :car_details_if_assistance,
     :registration_assistance_if_reimb, :registration_url_if_registration_assistance,
@@ -28,6 +28,8 @@ class GrantFundedTravelRequest < ApplicationRecord
   # require description of trasport need if user requests help w ground transit
   validates :ground_transport_desc, presence: true, if: Proc.new{ |gf|
     !gf.ground_transport_assistance.nil? and gf.ground_transport_assistance == true }
+  validates :additional_info_memo, presence: true, if: Proc.new{ |gf|
+    gf.additional_info_needed == true }
 
   accepts_nested_attributes_for :approval_state, allow_destroy: true
   accepts_nested_attributes_for :travel_files, allow_destroy: true
@@ -117,7 +119,7 @@ class GrantFundedTravelRequest < ApplicationRecord
         errors.add(:rental_needs_desc, 'Must be answered if traveler is requesting assistance')
       end
       if [nil, ""].include? cell_number or !is_a_phone_number?(cell_number)
-        errors.add(:cell_number, 'Must be a phone number')
+        errors.add(:cell_number, "\"#{cell_number}\" doesn't look like a phone number")
       end
       if [nil, ""].include? drivers_licence_num
         errors.add(:drivers_licence_num, 'Must be answered if traveler is requesting assistance')
@@ -152,8 +154,6 @@ class GrantFundedTravelRequest < ApplicationRecord
       end
     end
   end
-  validates :lodging_url, presence: true, if: Proc.new{ |gf|
-    !gf.lodging_assistance.nil? and gf.lodging_assistance == true }
 
   # returns true if the provided str contains a phone number
   # https://stackoverflow.com/questions/31031984/checking-whether-a-string-contains-a-phone-number

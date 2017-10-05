@@ -11,6 +11,7 @@
 // GO AFTER THE REQUIRES BELOW.
 //
 //= require jquery
+//= require jquery-ui
 //= require jquery_ujs
 //= require bootstrap-sprockets
 //= require bootstrap
@@ -24,4 +25,5 @@
 //= require approvals
 //= require survey
 //= require grant_funded_travel_requests
+//= require reimbursement_requests
 //= require rails.validations
