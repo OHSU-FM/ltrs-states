@@ -40,13 +40,8 @@ RSpec.describe FundingSource, type: :model do
     end
   end
 
-  it '#display_name concats title and nickname' do
-    fs = create :funding_source, title: 'title', nickname: 'nickname'
-    expect(fs.display_name).to eq 'title (nickname)'
-  end
-
-  it '#display_name doesnt show nickname or parens if nickname.nil?' do
-    fs = create :funding_source, title: 'title', nickname: nil
+  it '#display_name returns title' do
+    fs = create :funding_source, title: 'title'
     expect(fs.display_name).to eq 'title'
   end
 end
