@@ -4,27 +4,23 @@
       <table class="table">
         <tbody>
           <tr>
-            <td><%= f.label :dob, 'Date of Birth' %></td>
-            <td><%= f.date_field :dob %></td>
+            <td><em style="color: #d9534f;">&#42</em> <%= f.label :dob, 'Date of Birth' %></td>
+            <td><%= f.text_field :dob, value: f.object.dob, placeholder: 'mm-dd-yyyy' %></td>
           </tr>
           <tr>
-            <td><%= f.label :legal_name, 'Legal Name' %></td>
+            <td><em style="color: #d9534f;">&#42</em> <%= f.label :legal_name, 'Legal Name' %></td>
             <td><%= f.text_field :legal_name %></td>
           </tr>
           <tr>
-            <td><%= f.label :cell_number, 'Cell Phone Number' %></td>
+            <td><em style="color: #d9534f;">&#42</em> <%= f.label :cell_number, 'Cell Phone Number' %></td>
             <td><%= f.text_field :cell_number %></td>
           </tr>
           <tr>
-            <td><%= f.label :travel_email, 'Preferred Email' %><br />(if different from primary email)</td>
-            <td><%= f.text_field :travel_email %></td>
-          </tr>
-          <tr>
-            <td><%= f.label :ecn1, 'First Emergency Contact Name' %></td>
+            <td><em style="color: #d9534f;">&#42</em> <%= f.label :ecn1, 'First Emergency Contact Name' %></td>
             <td><%= f.text_field :ecn1 %></td>
           </tr>
           <tr>
-            <td><%= f.label :ecp1, 'First Emergency Contact Phone' %></td>
+            <td><em style="color: #d9534f;">&#42</em> <%= f.label :ecp1, 'First Emergency Contact Phone Number' %></td>
             <td><%= f.text_field :ecp1 %></td>
           </tr>
           <tr>
@@ -32,7 +28,7 @@
             <td><%= f.text_field :ecn2 %></td>
           </tr>
           <tr>
-            <td><%= f.label :ecp2, 'Second Emergency Contact Phone' %></td>
+            <td><%= f.label :ecp2, 'Second Emergency Contact Phone Number' %></td>
             <td><%= f.text_field :ecp2 %></td>
           </tr>
           <tr>
@@ -79,7 +75,7 @@
   <div class="col-xs-12 col-md-6 bs-callout bs-callout-info">
     <h2>About your traveler profile</h2>
     <ul>
-      <li>The following fields are required for RSS to complete any requests to arrange travel: Date of Birth, Cell Phone Number, First Emergency Contact Name, First Emergency Contact Number. RSS will not provide assistance in travel booking with missing or incomplete information in these fields. The remaining fields are optional, but will help us quickly and smoothly complete your travel arrangements</li>
+      <li>The following fields are required ( <em style="color: #d9534f;">&#42</em> ) for RSS to complete any requests to arrange travel: Date of Birth, Legal Name, Cell Phone Number, First Emergency Contact Name, First Emergency Contact Phone Number. RSS will not provide assistance in travel booking with missing or incomplete information in these fields. The remaining fields are optional, but will help us quickly and smoothly complete your travel arrangements</li>
       <li>Any information that you do provide here will be automatically populated in future leave and travel requests</li>
       <li>With the exception of frequent flier numbers, if you provide any of these pieces of information in the course of filling out a request form, that information will be saved to your traveler profile and available in later requests</li>
       <li>In order to have multiple frequent flier numbers stored in the system, they must be added within your traveler profile (and not just provided in your travel request)</li>
