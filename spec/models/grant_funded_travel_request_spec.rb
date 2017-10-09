@@ -79,6 +79,16 @@ RSpec.describe GrantFundedTravelRequest, type: :model do
            return_date: 1.day.from_now).not_to be_valid
   end
 
+ it "doesn't like dates too far in the past" do
+    bad_start = Date.new(2009)
+    expect(build :gf_travel_request, depart_date: bad_start).not_to be_valid
+  end
+
+ it "doesn't like dates too far in the future" do
+    bad_end = Date.new(2100)
+    expect(build :gf_travel_request, return_date: bad_end).not_to be_valid
+  end
+
   it 'requires that an award is selected if expense_card_use is true' do
     expect(build :gf_travel_request, expense_card_use: true,
            expense_card_type: nil).not_to be_valid

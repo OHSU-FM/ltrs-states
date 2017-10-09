@@ -62,5 +62,17 @@ class LeaveRequest < ApplicationRecord
       errors.add(:end_date, '')
       errors.add(:start_date, 'Beginning of leave cannot be later than end date')
     end
+
+    unless start_date.nil? or end_date.nil? # nils caught by another validator
+      # complain about old dates
+      if start_date < Date.new(2010)
+        errors.add(:start_date, "That's too far in the past")
+      end
+
+      # complain about dates far in the future
+      if end_date > Date.new(2050)
+        errors.add(:end_date, "That's too far in the future")
+      end
+    end
   end
 end

@@ -49,13 +49,13 @@
           <div class="col-lg-6">
             <em style="color: #d9534f;">&#42</em> <%= f.label :depart_date, 'Departure date:' %>
             <br />
-            <%= f.date_field :depart_date,
+            <%= f.date_field :depart_date, placeholder: 'yyyy-mm-dd',
               min: '2000-01-01', max: '2100-01-1' %>
           </div>
           <div class="col-lg-6">
             <em style="color: #d9534f;">&#42</em> <%= f.label :return_date, 'Return date:' %>
             <br />
-            <%= f.date_field :return_date,
+            <%= f.date_field :return_date, placeholder: 'yyyy-mm-dd',
               min: '2000-01-01', max: '2100-01-1' %>
           </div>
         </div>

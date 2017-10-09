@@ -33,11 +33,21 @@ RSpec.describe LeaveRequest, type: :model do
       expect(build :leave_request, end_date: nil).not_to be_valid
     end
 
-    it 'must have dates that make sense' do
+   it 'must have dates that make sense' do
       bad_start = DateTime.now.tomorrow.to_date
       bad_end = DateTime.now
       expect(build :leave_request, start_date: bad_start, end_date: bad_end)
         .not_to be_valid
+    end
+
+   it "doesn't like dates too far in the past" do
+      bad_start = Date.new(2009)
+      expect(build :leave_request, start_date: bad_start).not_to be_valid
+    end
+
+   it "doesn't like dates too far in the future" do
+      bad_end = Date.new(2100)
+      expect(build :leave_request, end_date: bad_end).not_to be_valid
     end
   end
 

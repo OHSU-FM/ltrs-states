@@ -90,8 +90,20 @@ class GrantFundedTravelRequest < ApplicationRecord
 
   def date_sequence
     if depart_date && return_date && depart_date > return_date
-      errors.add(:end_date, '')
+      errors.add(:return_date, '')
       errors.add(:depart_date, 'Beginning of travel cannot be later than end date')
+    end
+
+    unless depart_date.nil? or return_date.nil? # nils caught by another validator
+      # complain about old dates
+      if depart_date < Date.new(2010)
+        errors.add(:depart_date, "That's too far in the past")
+      end
+
+      # complain about dates far in the future
+      if return_date > Date.new(2050)
+        errors.add(:return_date, "That's too far in the future")
+      end
     end
   end
 
