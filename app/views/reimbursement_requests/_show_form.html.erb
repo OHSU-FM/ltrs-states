@@ -51,6 +51,17 @@
         <%= render partial: 'meal_reimbursement_requests/show_form', locals: { mrr: mrr } %>
       <% end %>
     </div>
+
+    <div class="row">
+      <% if reimbursement_request.has_na_meal_reimb? or !reimbursement_request.meal_na_desc.nil? %>
+        <div class="col-lg-12">
+          <div class="row">
+            <p>Per Diem NA explanations:</p>
+            <p><%= reimbursement_request.meal_na_desc %></p>
+          </div>
+        </div>
+      <% end %>
+    </div>
   </div>
 
   <div class="row">
@@ -78,38 +89,34 @@
       <b><%= hf_reimb_tf_to_words reimbursement_request.meal_host_reimb %></b>
     </div>
   </div>
-</div>
 
-<!--   <h4>File Attachments</h4> -->
-<!--   <table> -->
-  <!--     <tbody> -->
-    <!--       <tr> -->
-      <!--         <td colspan=2 style="text&#45;align:initial;"> -->
-        <!--           <div> -->
-          <!--             <%#= f.fields_for :user_files  do |g| %> -->
-            <!--               <%#= render partial: 'user_file_fields', locals: { f: g } %> -->
-            <!--             <%# end %> -->
-            <!--           </div> -->
-          <!--           <div> -->
-            <!--             <%#= link_to_add_association '+ Add File', f, :user_files %> -->
-            <!--           </div> -->
-          <!--         </td> -->
-        <!--       </tr> -->
-      <!--     </tbody> -->
-    <!--   </table> -->
-  <!--   <ul> -->
-    <!--     <li> -->
-      <!--       Please include any files that will assist us in the conference registration process. -->
-      <!--     </li> -->
-    <!--     <li> -->
-      <!--       File size limit is 10MB -->
-      <!--     </li> -->
-    <!--     <li> -->
-      <!--       Accepted File Types: -->
-      <!--       <span title="Adobe Acrobat compatible PDF">pdf</span>, -->
-      <!--       <span title="Supported image types include: png, gif, jpeg">image</span>, -->
-      <!--       <span title="Microsoft Word Documents (doc, docx)">word document</span> -->
-      <!--     </li> -->
-    <!--   </ul> -->
-  <!-- </div> -->
-<!--  -->
+  <hr />
+
+  <div class="row">
+    <div class="col-lg-6">
+      Are there additional details you would like to provide?
+      <br />
+      <b><%= hf_boolean_to_words reimbursement_request.additional_info_needed %></b>
+      <% if reimbursement_request.additional_info_needed %>
+        <div id="ground_transport_form">
+          Additional details:
+          <br />
+          <%= reimbursement_request.additional_info_memo %>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="col-lg-6">
+      Are there preapproved documents relevant to this request that you would like to attach?
+      <br />
+      <b><%= hf_boolean_to_words reimbursement_request.additional_docs_needed %></b>
+      <% if reimbursement_request.additional_docs_needed %>
+        <div id="ground_transport_form">
+          Documents:
+          <br />
+          <%# <%= grant_funded_travel_request.additional_info_memo %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

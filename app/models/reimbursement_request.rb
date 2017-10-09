@@ -49,6 +49,10 @@ class ReimbursementRequest < ApplicationRecord
     self.class.name + " " + self.id.to_s
   end
 
+  def has_na_meal_reimb?
+    meal_reimbursement_requests.any?{|mrr| mrr.has_na? }
+  end
+
   private
 
   def build_approval_state
