@@ -6,7 +6,7 @@ class Users::FormsController < ApplicationController
 
     approvables = @user.approvables
     @approvables = WillPaginate::Collection.create(@page, @per_page, approvables.length) do |pager|
-      pager.replace approvables
+      pager.replace approvables[pager.offset, pager.per_page].to_a
     end
 
     respond_to do |format|
@@ -18,7 +18,7 @@ class Users::FormsController < ApplicationController
   def delegate_forms
     approvables = ApprovalSearch.delegator_approvables_for @user
     @approvables = WillPaginate::Collection.create(@page, @per_page, approvables.length) do |pager|
-      pager.replace approvables
+      pager.replace approvables[pager.offset, pager.per_page].to_a
     end
 
     respond_to do |format|

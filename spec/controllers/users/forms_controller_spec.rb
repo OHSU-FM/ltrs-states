@@ -17,6 +17,12 @@ RSpec.describe Users::FormsController, type: :controller do
         expect(assigns(:approvables)).to include leave_request
       end
 
+      it 'paginates approvables' do
+        leave_requests = create_list(:leave_request, 11, user: user)
+        get :index, params: { user_id: user.to_param }
+        expect(assigns(:approvables).count).to eq 10
+      end
+
       it 'redirects if user requests index for another user' do
         other_user = create :user
         get :index, params: { user_id: other_user.to_param }

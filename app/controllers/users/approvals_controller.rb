@@ -5,7 +5,7 @@ class Users::ApprovalsController < ApplicationController
     redirect_to root_path unless (current_user.is_admin? || current_user == @user)
     reviewable = ApprovalSearch.by_params(@user, params)
     @approvals = WillPaginate::Collection.create(@page, @per_page, reviewable.length) do |pager|
-      pager.replace reviewable
+      pager.replace reviewable[pager.offset, pager.per_page].to_a
     end
   end
 

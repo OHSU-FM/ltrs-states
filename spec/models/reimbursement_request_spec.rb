@@ -43,7 +43,7 @@ RSpec.describe ReimbursementRequest, type: :model do
 
     it '#has_na_meal_reimb? returns true if any meal reimbursement_request is na' do
       rr = create :reimbursement_request
-      rr.meal_reimbursement_requests.first.update!(lunch: "NA")
+      rr.meal_reimbursement_requests.first.update!(lunch: false)
       expect(rr.has_na_meal_reimb?).to be_truthy
     end
   end

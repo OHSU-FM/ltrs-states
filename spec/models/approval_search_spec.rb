@@ -58,14 +58,30 @@ RSpec.describe ApprovalSearch, type: :model do
     let(:r1) { u.reviewers.first.approver }
     let(:r2) { u.reviewers.last.approver }
     let!(:lr1) { create :leave_request, :unopened, user: u }
-    let!(:lr) { create :leave_request, :back_to_unopened, user: u }
+    let!(:lr2) { create :leave_request, :back_to_unopened, user: u }
 
-    it "shouldn't include requests that the reviewer has sent down the chain" do
-      expect(ApprovalSearch.by_params(r1)).not_to include lr
+    context 'first reviewer' do
+      it "shouldn't include requests that the reviewer has sent down the chain" do
+        expect(ApprovalSearch.by_params(r1)).not_to include lr2
+      end
+
+      it "should include requests that the reviewer has yet to review" do
+        expect(ApprovalSearch.by_params(r1)).to include lr1
+      end
     end
 
-    it "shouldn't include requests that prior reviewers haven't reviewed yet" do
-      expect(ApprovalSearch.by_params(r2)).not_to include lr1
+    context 'second reviewer' do
+      it "shouldn't include requests that prior reviewers haven't reviewed yet" do
+        expect(ApprovalSearch.by_params(r2)).not_to include lr1
+      end
+
+      it "should include requests that prior reviewers haven't reviewed yet if filter: 'upcoming'" do
+        expect(ApprovalSearch.by_params(r2, { filter: 'upcoming' })).to include lr1
+      end
+
+      it "should include requests that prior reviewers have accepted" do
+        expect(ApprovalSearch.by_params(r2)).to include lr2
+      end
     end
   end
 
