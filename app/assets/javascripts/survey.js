@@ -96,6 +96,16 @@ $().ready( function(){
 
   });
 
+  // check hide or show when dd is changed
+  $('.toggle_form select').change(function(){
+    toggle_form_dd(this);
+  });
+
+  // Default: Hide followup questions until we select 'yes' in dd
+  $('.toggle_form select').each(function(){
+    toggle_form_dd(this);
+  });
+
   // first: hide forms unless associated true radio button is checked
   $('.toggle_form input[type="radio"][value="true"]').each(function() {
     if (!$(this).is('checked')) {
@@ -188,6 +198,27 @@ function modal_post(form){
     }
   });
 
+}
+
+// Deal with drowdown hide/show
+function toggle_form_dd(obj){
+  var $obj = $(obj);
+  var match_against = ($obj.data().invert == true) ? 'false' : 'true'
+  if($obj.val() == match_against){
+    $($obj.data().target).css('opacity', 0)
+    .slideDown('slow')
+    .animate(
+      { opacity: 1 },
+      { queue: false, duration: 'slow' }
+    );
+  }else{
+    $($obj.data().target).css('opacity', 1)
+    .slideUp('slow')
+    .animate(
+      { opacity: 0 },
+      { queue: false, duration: 'slow' }
+    );
+  }
 }
 
 // Toggle visibility of questions - FadeIn and FadeOut
