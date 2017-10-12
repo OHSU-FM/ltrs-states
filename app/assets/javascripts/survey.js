@@ -108,8 +108,10 @@ $().ready( function(){
 
   // first: hide forms unless associated true radio button is checked
   $('.toggle_form input[type="radio"][value="true"]').each(function() {
-    if (!$(this).is('checked')) {
+    if (!$(this).is(':checked')) {
       hide_form($(this).data().target);
+    } else {
+      show_form($(this).data().target);
     }
   });
 
