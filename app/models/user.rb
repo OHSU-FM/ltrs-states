@@ -68,7 +68,6 @@ class User < ApplicationRecord
         active false
         field :dob
         field :cell_number
-        field :travel_email
         field :ecn1 do
           label 'Emergency Contact Name 1'
         end
