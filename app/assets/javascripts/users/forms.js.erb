@@ -1,0 +1,34 @@
+// Place all the behaviors and hooks related to the matching controller here.
+// All this logic will automatically be available in application.js.
+// You can use CoffeeScript in this file: http://coffeescript.org/
+
+$(".js_ajax_destroy").parents('form')
+  // Fade/hide row in table on destroy
+    .on('ajax:success', function(evt, data, status, xhr){
+      $(evt.target).parents('.record_row').fadeOut();
+      $(evt.target).find('.img_status').fadeOut();
+      $(evt.target).find('select option:not(:selected)').prop('disabled', false);
+      var new_val = $(evt.target).find('#approval_state_aasm_state').attr('value');
+      // Set new val so we know when to show a submit button
+      $(evt.target).find('#status_was').attr('value', new_val);
+    })
+  // Show loader
+    .on('ajax:error', function(evt, xhr, data){
+      console.log('There was an error')
+      $(evt.target).children('.img_status').hide();
+      $target = $(evt.target).find('input[type="submit"]')
+      $target.attr('disabled','disabled');
+      $target.val(xhr.responseJSON.message);
+    })
+  // Show loader
+    .on('ajax:before', function(evt, data, status, xhr){
+      // Create icon
+      if ($(evt.target).children('.img_status').length == 0 ){
+        $(evt.target).append('<img class="img_status" src="<%= asset_path 'ajax-loader.gif' %>" alt="Wait" />');
+      }
+      // Hide button
+      $(evt.target).children('.js_ajax_destroy').hide();
+      // Show icon
+      $(evt.target).children('.img_status').show();
+      $(evt.target).find('select option:not(:selected)').prop('disabled', true);
+    });

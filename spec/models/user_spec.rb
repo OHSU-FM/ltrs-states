@@ -15,6 +15,11 @@ RSpec.describe User, type: :model do
       expect(build(:user, email: nil)).not_to be_valid
     end
 
+    it 'empid must be an integer' do
+      expect(build(:user, empid: 1.1)).not_to be_valid
+      expect(build(:user, empid: 'lol')).not_to be_valid
+    end
+
     it 'air_seat_pref should be one of aisle, middle, window' do
       expect(build :user, air_seat_pref: 'floor').not_to be_valid
       # but it should still be allowed to be nil

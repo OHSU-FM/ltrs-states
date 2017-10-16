@@ -49,4 +49,8 @@ module ApplicationHelper
   def hf_boolean_to_words value
     value.present? ? "Yes" : "No"
   end
+
+  def bootstrap_class_for key
+    { success: "alert-success", error: "alert-danger", alert: "alert-warning", notice: "alert-info" }[key.to_sym] || key
+  end
 end

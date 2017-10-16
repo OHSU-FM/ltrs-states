@@ -33,6 +33,7 @@ class User < ApplicationRecord
   validates_presence_of :login, :first_name, :last_name, :email
   validates :air_seat_pref, inclusion: { in: ['aisle', 'middle', 'window']},
     allow_blank: true
+  validates :empid, numericality: { only_integer: true }, allow_blank: true
 
   devise :database_authenticatable, :ldap_authenticatable, :rememberable,
     :trackable, :timeoutable

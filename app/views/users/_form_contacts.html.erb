@@ -1,4 +1,4 @@
-<%= form_for(@user, url: polymorphic_path(@user, anchor: 'contacts'), html: { id: :edit_contacts }) do |f| %>
+<%= form_for(@user, url: polymorphic_path(@user, anchor: 'contacts'), remote: true, html: { id: :edit_contacts }) do |f| %>
   <div class="col-xs-12 col-md-6">
     <div class="ui-widget-content ui-corner-all partial_form">
       <div id="ldap_query" style="padding:1em;">

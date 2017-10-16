@@ -8,6 +8,6 @@ $(document).ready(function(){
 		$(this).parents('tr').addClass('spinner-image').
 			css("background-color","#FFCCCC").
 			find('input, button').each(function(){this.disabled = true});
-	});	
+	});
 
 });

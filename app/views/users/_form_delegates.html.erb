@@ -1,4 +1,4 @@
-<%= form_for @user, url: polymorphic_path(@user, anchor: 'delegates'), html: { id: :edit_delegates } do |f| %>
+<%= form_for @user, url: polymorphic_path(@user, anchor: 'delegates'), remote: true, html: { id: :edit_delegates } do |f| %>
   <div class="col-xs-12 col-md-6">
 
     <h3>Delegates</h3>

@@ -1,4 +1,4 @@
-<%= form_for(@user, url: polymorphic_path(@user, anchor: 'home'), html: { id: :edit_home }) do |f| %>
+<%= form_for(@user, url: polymorphic_path(@user, anchor: 'home'), remote: true, html: { id: :edit_home }) do |f| %>
   <div class="col-xs-12 col-md-6">
     <div class="ui-widget-content ui-corner-all partial_form">
       <table class="table">
