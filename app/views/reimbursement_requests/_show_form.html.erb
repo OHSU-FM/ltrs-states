@@ -22,7 +22,6 @@
   <h4>Travel Event Details</h4>
   <div class="row">
     <div class="col-lg-6">
-      <p>Are there other Family Medicine Research staff/faculty attending this event? <%= reimbursement_request.other_fmr_attending %></p>
       <div class="itinerary_attachment">
         <h5>Itinerary for Travel</h5>
         <p>Please see Travel and Reimbursement Policy for itinerary requirements</p>
@@ -94,7 +93,7 @@
 
   <div class="row">
     <div class="col-lg-6">
-      Are there additional details you would like to provide?
+      Are there additional details provided?
       <br />
       <b><%= hf_boolean_to_words reimbursement_request.additional_info_needed %></b>
       <% if reimbursement_request.additional_info_needed %>
@@ -107,7 +106,7 @@
     </div>
 
     <div class="col-lg-6">
-      Are there preapproved documents relevant to this request that you would like to attach?
+      Is there <i>Special Circumstance: Unexpected <br>Change to Travel Plans</i> documentation provided?
       <br />
       <b><%= hf_boolean_to_words reimbursement_request.additional_docs_needed %></b>
       <% if reimbursement_request.additional_docs_needed %>

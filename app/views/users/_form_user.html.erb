@@ -14,21 +14,21 @@
             <td><%= @user.email %></td>
           </tr>
           <tr>
-            <td><%= f.label :empid %></td>
+            <td><%= f.label :empid, 'Employee ID:' %></td>
             <td><%= f.text_field :empid %></td>
           </tr>
           <tr>
-            <td><%= f.label :emp_class %></td>
+            <td><%= f.label :emp_class, 'Employee Class:' %></td>
             <td><%= f.text_field :emp_class %></td>
           </tr>
           <tr>
-            <td><%= f.label :emp_home %></td>
+            <td><%= f.label :emp_home, 'Employee Home:' %></td>
             <td><%= f.text_field :emp_home %></td>
           </tr>
           <% unless @user.is_ldap %>
             <tr>
               <td>
-                <%= f.label :password %>
+                <%= f.label :password, 'Password:' %>
               </td>
               <td>
                 <%= f.password_field :password %>
@@ -36,7 +36,7 @@
             </tr>
             <tr>
               <td>
-                <%= f.label :password_confirmation %>
+                <%= f.label :password_confirmation, 'Password Confirmation:' %>
               </td>
               <td>
                 <%= f.password_field :password_confirmation %>

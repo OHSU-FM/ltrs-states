@@ -41,19 +41,19 @@ RSpec.describe GrantFundedTravelRequestsController, type: :routing do
     end
 
     it "doesn't route to #send_to_unopened via POST" do
-      expect(:post=> "/grant_funded_travel_requests/1/send_to_unopened").not_to route_to("grant_funded_travel_requests#send_to_unopened", :id => "1")
+      expect(:post => "/grant_funded_travel_requests/1/send_to_unopened").not_to route_to("grant_funded_travel_requests#send_to_unopened", :id => "1")
     end
 
     it "routes to #review via POST" do
-      expect(:post=> "/grant_funded_travel_requests/1/review").to route_to("grant_funded_travel_requests#review", :id => "1")
+      expect(:post => "/grant_funded_travel_requests/1/review").to route_to("grant_funded_travel_requests#review", :id => "1")
     end
 
     it "routes to #reject via POST" do
-      expect(:post=> "/grant_funded_travel_requests/1/reject").to route_to("grant_funded_travel_requests#reject", :id => "1")
+      expect(:post => "/grant_funded_travel_requests/1/reject").to route_to("grant_funded_travel_requests#reject", :id => "1")
     end
 
     it "routes to #accept via POST" do
-      expect(:post=> "/grant_funded_travel_requests/1/accept").to route_to("grant_funded_travel_requests#accept", :id => "1")
+      expect(:post => "/grant_funded_travel_requests/1/accept").to route_to("grant_funded_travel_requests#accept", :id => "1")
     end
   end
 end

@@ -66,7 +66,7 @@
       </div>
       <div class="expense_card toggle_form">
         <div class="row">
-          Travel expenses to be charged to an account?
+          Travel expenses to be charged to an account managed by the Department of Family Medicine?
           <br />
           <b><%= hf_boolean_to_words grant_funded_travel_request.expense_card_use %></b>
         </div>
@@ -187,7 +187,7 @@
 
       <div class="row">
         <div class="toggle_form">
-          Will traveler use paid ground transportation for this event?
+          Will traveler use ground transportation (e.g. taxi, shuttle) for this event other than rental or personal vehicle?
           <br />
           <b><%= hf_boolean_to_words grant_funded_travel_request.ground_transport %></b>
           <% if grant_funded_travel_request.ground_transport %>
@@ -217,7 +217,7 @@
       <h4>Additional Details</h4>
       <div class="col-lg-6">
         <div class="row">
-          Are there additional details you would like to provide?
+          Are there additional details provided?
           <br />
           <b><%= hf_boolean_to_words grant_funded_travel_request.additional_info_needed %></b>
           <% if grant_funded_travel_request.additional_info_needed %>
@@ -231,7 +231,7 @@
       </div>
       <div class="col-lg-6">
         <div class="row">
-          Are there preapproved documents relevant to this request that you would like to attach?
+          Are there <i>Special Circumstance: Pre-Approval</i> documents relevant to this request provided?
           <br />
           <b><%= hf_boolean_to_words grant_funded_travel_request.additional_docs_needed %></b>
           <% if grant_funded_travel_request.additional_docs_needed %>
