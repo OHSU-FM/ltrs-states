@@ -7,4 +7,9 @@ module GrantFundedTravelRequestsHelper
      'other' => 'Other'
     }
   end
+
+  def hf_ff_number_enum ffns
+    return [] if ffns.nil?
+    ffns.map {|ffn| [ffn.airline, ffn.ffid] }
+  end
 end

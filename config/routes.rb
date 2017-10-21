@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   resources :home, only: :index
   root to: 'home#index'
   resources :users, only: [:show, :edit, :update] do
+    get 'travel_profile'
     resources :forms, controller: 'users/forms', only: :index do
       member do
         put  'submit'

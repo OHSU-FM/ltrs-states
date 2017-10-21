@@ -41,6 +41,31 @@ class User < ApplicationRecord
   has_paper_trail
   acts_as_paranoid
 
+  TRAVEL_PROFILE_ATTRS = [
+    :dob,
+    :cell_number,
+    :ecn1,
+    :ecp1,
+    :ecn2,
+    :ecp2,
+    :dietary_restrictions,
+    :ada_accom,
+    :air_seat_pref,
+    :hotel_room_pref,
+    :tsa_pre,
+    :legal_name,
+    :ff_numbers
+  ]
+
+  FORM_TRAVEL_PROFILE_ATTRS = [
+    :air_seat_pref,
+    :tsa_pre,
+    :cell_number,
+    :drivers_licence_num,
+    :ff_numbers
+  ]
+
+
   # don't let rails_admin count against code coverage
   # :nocov:
   rails_admin do
@@ -228,5 +253,21 @@ class User < ApplicationRecord
        AND user_approvers.approver_type LIKE 'notifier'", id]
     ).references(:user_approvers)
     @notifiable_users ||= (controllable_users + nu).flatten.uniq
+  end
+
+  def travel_profile
+    h = {}
+    TRAVEL_PROFILE_ATTRS.each do |attr|
+      h[attr.to_s] = send(attr)
+    end
+    return h
+  end
+
+  def form_travel_profile
+    h = {}
+    FORM_TRAVEL_PROFILE_ATTRS.each do |attr|
+      h[attr.to_s] = send(attr)
+    end
+    return h
   end
 end

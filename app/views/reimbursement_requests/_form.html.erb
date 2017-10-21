@@ -133,21 +133,18 @@
   <div class="row">
     <div class="col-lg-6">
       <div>
-        <em style="color: #d9534f;">&#42</em>
-        <%= f.label :air_use, 'Is traveler submitting for airline reimbursement?' %>
+        <%= f.label :air_use, 'Is traveler submitting for airline reimbursement?', class: 'required' %>
         <p>Note, you must submit a receipt for this expense to receipts@ohsu.edu</p>
         <%= render partial: 'shared/toggle_form_radio_buttons', locals: { f: f, symbol: :air_use, target: nil } %>
       </div>
       <div>
-        <em style="color: #d9534f;">&#42</em>
-        <%= f.label :lodging_reimb, 'Is traveler submitting for lodging reimbursement?' %>
+        <%= f.label :lodging_reimb, 'Is traveler submitting for lodging reimbursement?', class: 'required' %>
         <p>Note, you must submit a receipt for this expense to receipts@ohsu.edu</p>
         <%= render partial: 'shared/toggle_form_radio_buttons', locals: { f: f, symbol: :lodging_reimb, target: nil } %>
       </div>
 
       <div class="toggle_form">
-        <em style="color: #d9534f;">&#42</em>
-        <%= f.label :traveler_mileage_reimb, 'Is traveler submitting for mileage reimbursement?' %>
+        <%= f.label :traveler_mileage_reimb, 'Is traveler submitting for mileage reimbursement?', class: 'required' %>
         <p>Note, you must attach a PDF of a Google Map&trade; indicating all stops on your trip</p>
         <%= render partial: 'shared/toggle_form_radio_buttons', locals: { f: f, symbol: :traveler_mileage_reimb, target: "#traveler_mileage_reimb_form" } %>
         <br />
@@ -164,15 +161,13 @@
 
     <div class="col-lg-6">
       <div>
-        <em style="color: #d9534f;">&#42</em>
-        <%= f.label :car_rental, 'Is traveler submitting for rental car reimbursement?' %>
+        <%= f.label :car_rental, 'Is traveler submitting for rental car reimbursement?', class: 'required' %>
         <p>Note, you must submit a receipt for this expense to receipts@ohsu.edu</p>
         <%= render partial: 'shared/toggle_form_radio_buttons', locals: { f: f, symbol: :car_rental, target: nil } %>
       </div>
 
       <div>
-        <em style="color: #d9534f;">&#42</em>
-        <%= f.label :meal_host_reimb, 'Is traveler submitting for meal hosting reimbursement?' %>
+        <%= f.label :meal_host_reimb, 'Is traveler submitting for meal hosting reimbursement?', class: 'required' %>
         <p>Note, you must submit a receipt for this expense to receipts@ohsu.edu</p>
         <%= render partial: 'shared/toggle_form_radio_buttons', locals: { f: f, symbol: :meal_host_reimb, target: nil } %>
       </div>
@@ -188,8 +183,7 @@
         <br />
         <%= render partial: 'shared/toggle_form_radio_buttons', locals: { f: f, symbol: :additional_info_needed, target: '#additional_info_needed_form' } %>
         <div id="additional_info_needed_form">
-          <em style="color: #d9534f;">&#42</em>
-          <%= f.label :additional_info_memo, 'Additional details:' %>
+          <%= f.label :additional_info_memo, 'Additional details:', class: 'required' %>
           <br />
           <%= f.text_area :additional_info_memo, size: '60x40' %>
         </div>

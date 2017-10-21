@@ -5,6 +5,7 @@ RSpec.describe "grant_funded_travel_requests/edit", type: :view do
     @user = create :user_with_approvers
     controller.stubs(:current_user).returns(@user)
     @gf_travel_request = assign(:gf_travel_request, create(:gf_travel_request, user: @user))
+    assign(:travel_profile, {})
   end
 
   it "renders the edit grant_funded_travel_request form" do

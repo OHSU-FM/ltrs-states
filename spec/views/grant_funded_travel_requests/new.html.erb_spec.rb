@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe 'grant_funded_travel_requests/new', type: :view do
   before(:each) do
     assign(:gf_travel_request, build(:gf_travel_request))
+    assign(:travel_profile, {})
   end
 
   context 'as user' do

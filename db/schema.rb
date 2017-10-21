@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171017180117) do
+ActiveRecord::Schema.define(version: 20171020194655) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -67,7 +67,6 @@ ActiveRecord::Schema.define(version: 20171017180117) do
     t.boolean "car_rental"
     t.boolean "car_assistance"
     t.string "cell_number", limit: 255
-    t.string "drivers_licence_num", limit: 255
     t.boolean "lodging_reimb"
     t.boolean "lodging_assistance"
     t.string "lodging_url", limit: 255
@@ -85,10 +84,11 @@ ActiveRecord::Schema.define(version: 20171017180117) do
     t.boolean "ground_transport_assistance"
     t.text "ground_transport_desc"
     t.string "flight_airline"
-    t.string "flight_seat_pref"
+    t.string "air_seat_pref"
     t.boolean "additional_info_needed"
     t.text "additional_info_memo"
     t.boolean "additional_docs_needed"
+    t.string "drivers_licence_num", limit: 255
     t.index ["deleted_at"], name: "index_grant_funded_travel_requests_on_deleted_at"
   end
 
@@ -308,6 +308,7 @@ ActiveRecord::Schema.define(version: 20171017180117) do
     t.text "hotel_room_pref"
     t.string "tsa_pre"
     t.string "legal_name"
+    t.string "drivers_licence_num", limit: 255
     t.index ["deleted_at"], name: "index_users_on_deleted_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true

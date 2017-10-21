@@ -29,21 +29,16 @@ FactoryGirl.define do
       end
     end
 
-    factory :user_with_delegate do
+    trait :with_delegate do
       after(:create) do |user|
-        d = create :user_with_approvers, first_name: 'delegate', login: 'delegate', email: "delegate4u#{user.id}@example.com"
+        d = create :user_with_approvers, first_name: 'delegate',
+          login: 'delegate', email: "delegate4u#{user.id}@example.com"
         create :user_delegation, user: user, delegate_user: d
       end
     end
 
-    factory :complete_user_with_delegate do
-      with_approvers
-
-      after(:create) do |user|
-        d = create :user_with_approvers, first_name: 'delegate', login: 'delegate', email: "delegate4u#{user.id}@example.com"
-        create :user_delegation, user: user, delegate_user: d
-      end
-    end
+    factory :user_with_delegate, traits: [:with_delegate]
+    factory :complete_user_with_delegate, traits: [:with_approvers, :with_delegate]
 
     factory :admin do
       is_admin true
@@ -58,6 +53,7 @@ FactoryGirl.define do
       transient do
         reviewer_user nil
       end
+      password 'password'
 
       after(:create) do |user, evaluator|
         reviewer = evaluator.reviewer_user || create(:user, first_name: 'reviewer', email: "reviewer4u#{user.id}@example.com", is_ldap: false, password: 'password')
@@ -67,5 +63,26 @@ FactoryGirl.define do
         user.reload
       end
     end
+
+    trait :with_profile do
+      dob '11-22-1990'
+      cell_number '111-222-3333'
+      ecn1 'ecn1'
+      ecp1 '444-555-6666'
+      ecn2 'ecn2'
+      ecp2 '777-888-9999'
+      dietary_restrictions 'restr'
+      ada_accom 'accom'
+      air_seat_pref 'aisle'
+      hotel_room_pref 'pref'
+      tsa_pre 'number'
+      legal_name 'george'
+
+      after :create do |u|
+        u.ff_numbers = create_list(:ff_number, 1)
+      end
+    end
+
+    factory :user_with_profile, traits: [:with_profile]
   end
 end

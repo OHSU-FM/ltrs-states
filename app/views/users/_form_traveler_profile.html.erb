@@ -4,23 +4,23 @@
       <table class="table">
         <tbody>
           <tr>
-            <td><em style="color: #d9534f;">&#42</em> <%= f.label :dob, 'Date of Birth' %></td>
+            <td><%= f.label :dob, 'Date of Birth', class: 'required' %></td>
             <td><%= f.text_field :dob, value: f.object.dob, placeholder: 'mm-dd-yyyy' %></td>
           </tr>
           <tr>
-            <td><em style="color: #d9534f;">&#42</em> <%= f.label :legal_name, 'Legal Name' %></td>
+            <td><%= f.label :legal_name, 'Legal Name', class: 'required' %></td>
             <td><%= f.text_field :legal_name %></td>
           </tr>
           <tr>
-            <td><em style="color: #d9534f;">&#42</em> <%= f.label :cell_number, 'Cell Phone Number' %></td>
+            <td><%= f.label :cell_number, 'Cell Phone Number', class: 'required' %></td>
             <td><%= f.text_field :cell_number %></td>
           </tr>
           <tr>
-            <td><em style="color: #d9534f;">&#42</em> <%= f.label :ecn1, 'First Emergency Contact Name' %></td>
+            <td><%= f.label :ecn1, 'First Emergency Contact Name', class: 'required' %></td>
             <td><%= f.text_field :ecn1 %></td>
           </tr>
           <tr>
-            <td><em style="color: #d9534f;">&#42</em> <%= f.label :ecp1, 'First Emergency Contact Phone Number' %></td>
+            <td><%= f.label :ecp1, 'First Emergency Contact Phone Number', class: 'required' %></td>
             <td><%= f.text_field :ecp1 %></td>
           </tr>
           <tr>
@@ -46,6 +46,10 @@
           <tr>
             <td><%= f.label :hotel_room_pref, 'Hotel Room Preference' %></td>
             <td><%= f.text_field :hotel_room_pref %></td>
+          </tr>
+          <tr>
+            <td><%= f.label :drivers_licence_num, "Driver's Licence Number" %></td>
+            <td><%= f.text_field :drivers_licence_num %></td>
           </tr>
           <tr>
             <td><%= f.label :tsa_pre, 'TSA Precheck Number' %></td>

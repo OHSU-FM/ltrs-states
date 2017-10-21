@@ -47,6 +47,24 @@ RSpec.describe User, type: :model do
       expect(u.has_delegators?).to be_truthy
     end
 
+    it '#travel_profile' do
+      u = create :user_with_profile, ecn1: 'Shia Lebouf'
+      expect(u.travel_profile).to be_a Hash
+      User::TRAVEL_PROFILE_ATTRS.each do |attr|
+        expect(u.travel_profile.keys).to include attr.to_s
+      end
+      expect(u.travel_profile['ecn1']).to eq 'Shia Lebouf'
+    end
+
+    it '#form_travel_profile' do
+      u = create :user_with_profile, tsa_pre: '42069'
+      expect(u.form_travel_profile).to be_a Hash
+      User::FORM_TRAVEL_PROFILE_ATTRS.each do |attr|
+        expect(u.form_travel_profile.keys).to include attr.to_s
+      end
+      expect(u.form_travel_profile['tsa_pre']).to eq '42069'
+    end
+
     describe 'reviewer approvables' do
       let(:u) { create :user_with_approvers }
       let(:reviewer) { u.reviewers.first.approver }

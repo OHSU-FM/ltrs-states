@@ -52,4 +52,18 @@ RSpec.describe UsersController, type: :controller do
       end
     end
   end
+
+  describe 'GET #travel_profile' do
+    context 'with logged_in delegate' do
+      login_delegate
+      let(:user) { controller.current_user.delegators.first }
+
+      it 'returns a hash of the delegators travel profile as json' do
+        h = { 'tsa_pre': '42069' }
+        user.update!(h)
+        get :travel_profile, params: { user_id: user.to_param }, format: :json
+        expect(JSON.parse(response.body)["travel_profile"]["tsa_pre"]).to eq '42069'
+      end
+    end
+  end
 end

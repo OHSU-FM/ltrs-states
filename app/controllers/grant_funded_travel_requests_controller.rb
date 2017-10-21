@@ -23,6 +23,7 @@ class GrantFundedTravelRequestsController < ApplicationController
     @gf_travel_request.form_user = current_user.full_name
     @gf_travel_request.form_email = current_user.email
     @gf_travel_request.user = current_user unless current_user.has_delegators?
+    @travel_profile = current_user.has_delegators? ? {} : current_user.form_travel_profile
   end
 
   # GET /grant_funded_travel_requests/1/edit
