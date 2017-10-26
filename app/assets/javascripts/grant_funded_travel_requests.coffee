@@ -58,4 +58,9 @@ $(document).on 'ready page:load', ->
       method: "GET"
     }).success (data) ->
       $(this).fillTravelProfile data
+
+  # cocoon config
+  $('#add-assoc-spec-circ')
+    .data('association-insertion-method', 'append')
+    .data('association-insertion-node', '#spec-circ-attachment')
   return

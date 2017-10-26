@@ -68,15 +68,18 @@ class TravelRequestsController < ApplicationController
     def travel_request_params
       params.require(:travel_request)
         .permit(:form_user, :form_email, :dest_desc, :air_use, :air_desc, :ffid,
-      :dest_depart_date, :dest_depart_hour, :dest_depart_min, :dest_arrive_hour,
+      :depart_date, :dest_depart_hour, :dest_depart_min, :dest_arrive_hour,
       :dest_arrive_min, :preferred_airline, :menu_notes, :additional_travelers,
-      :ret_depart_date, :ret_depart_hour, :ret_depart_min, :ret_arrive_hour,
+      :return_date, :ret_depart_hour, :ret_depart_min, :ret_arrive_hour,
       :ret_arrive_min, :other_notes, :car_rental, :car_arrive, :car_arrive_hour,
       :car_arrive_min, :car_depart, :car_depart_hour, :car_depart_min,
       :car_rental_co, :lodging_use, :lodging_card_type, :lodging_card_desc,
       :lodging_name, :lodging_phone, :lodging_arrive_date, :lodging_depart_date,
       :lodging_additional_people, :lodging_other_notes, :conf_prepayment,
       :conf_desc, :expense_card_use, :expense_card_type, :expense_card_desc,
-      :status, :user_id, :leave_request_id, :mail_sent, :mail_final_sent)
+      :status, :user_id, :leave_request_id, :mail_sent, :mail_final_sent,
+      user_files_attributes: [
+        :user_file, :uploaded_file, :_destroy
+      ])
     end
 end

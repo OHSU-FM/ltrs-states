@@ -33,9 +33,9 @@
     <tbody>
       <tr>
         <td>
-          <%= f.label :dest_depart_date, 'Departure date:' %>
+          <%= f.label :depart_date, 'Departure date:' %>
           <br />
-          <%= f.date_field :dest_depart_date, required: :required,
+          <%= f.date_field :depart_date, required: :required,
             min: '2000-01-01', max: '2100-01-1' %>
         </td>
         <td>
@@ -53,9 +53,9 @@
       </tr>
       <tr>
         <td>
-          <%= f.label :ret_depart_date, 'Return date:' %>
+          <%= f.label :return_date, 'Return date:' %>
           <br />
-          <%= f.date_field :ret_depart_date, required: :required,
+          <%= f.date_field :return_date, required: :required,
             min: '2000-01-01', max: '2100-01-1' %>
         </td>
         <td>

@@ -270,4 +270,8 @@ class User < ApplicationRecord
     end
     return h
   end
+
+  def lnfi
+    "#{last_name.gsub(/\s+/, "")}#{first_name[0]}"
+  end
 end

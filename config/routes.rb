@@ -60,5 +60,6 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :user_files
   match :ldap_search, to: 'users#ldap_search', via: :get, as: :ldap_search
 end

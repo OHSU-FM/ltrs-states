@@ -101,7 +101,7 @@
           </div>
           <% if grant_funded_travel_request.air_assistance %>
             <div id="air_assistance_form" class="stop_flouc">
-              <p>Seat Preference: <%= grant_funded_travel_request.flight_seat_pref %></p>
+              <p>Seat Preference: <%= grant_funded_travel_request.air_seat_pref %></p>
               <br />
               <p>Frequent Flyer ID: <%= grant_funded_travel_request.ffid %></p>
               <br />
@@ -235,10 +235,12 @@
           <br />
           <b><%= hf_boolean_to_words grant_funded_travel_request.additional_docs_needed %></b>
           <% if grant_funded_travel_request.additional_docs_needed %>
-            <div id="ground_transport_form">
+            <div id="additional-docs">
               Documents:
               <br />
-              <%# <%= grant_funded_travel_request.additional_info_memo %>
+              <% grant_funded_travel_request.user_files.each do |uf| %>
+                <%= link_to "Download #{uf.uploaded_file_file_name}", user_file_url(uf, protocol: 'https://', only_path: false) %>
+              <% end %>
             </div>
           <% end %>
         </div>

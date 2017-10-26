@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171020194655) do
+ActiveRecord::Schema.define(version: 20171026202832) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -180,14 +180,6 @@ ActiveRecord::Schema.define(version: 20171020194655) do
     t.index ["grant_funded_travel_request_id"], name: "index_reimbursement_requests_on_grant_funded_travel_request_id"
   end
 
-  create_table "travel_files", force: :cascade do |t|
-    t.bigint "filable_id"
-    t.bigint "user_file_id"
-    t.string "filable_type"
-    t.index ["filable_id"], name: "index_travel_files_on_filable_id"
-    t.index ["user_file_id"], name: "index_travel_files_on_user_file_id"
-  end
-
   create_table "travel_requests", force: :cascade do |t|
     t.string "form_user", limit: 255
     t.string "form_email", limit: 255
@@ -195,7 +187,7 @@ ActiveRecord::Schema.define(version: 20171020194655) do
     t.boolean "air_use", default: false
     t.string "air_desc", limit: 255
     t.text "ffid"
-    t.date "dest_depart_date"
+    t.date "depart_date"
     t.string "dest_depart_hour", limit: 255
     t.string "dest_depart_min", limit: 255
     t.string "dest_arrive_hour", limit: 255
@@ -203,7 +195,7 @@ ActiveRecord::Schema.define(version: 20171020194655) do
     t.text "preferred_airline"
     t.text "menu_notes"
     t.integer "additional_travelers"
-    t.date "ret_depart_date"
+    t.date "return_date"
     t.string "ret_depart_hour", limit: 255
     t.string "ret_depart_min", limit: 255
     t.string "ret_arrive_hour", limit: 255
@@ -262,14 +254,13 @@ ActiveRecord::Schema.define(version: 20171020194655) do
   end
 
   create_table "user_files", force: :cascade do |t|
-    t.string "uploaded_file_name", limit: 255
-    t.string "uploaded_file_content_type", limit: 255
+    t.string "uploaded_file_file_name"
+    t.string "uploaded_file_content_type"
     t.integer "uploaded_file_file_size"
-    t.datetime "uploaded_file_uploaded_at"
-    t.bigint "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_user_files_on_user_id"
+    t.datetime "uploaded_file_updated_at"
+    t.string "fileable_type"
+    t.bigint "fileable_id"
+    t.string "document_type"
   end
 
   create_table "users", force: :cascade do |t|
@@ -326,7 +317,5 @@ ActiveRecord::Schema.define(version: 20171020194655) do
 
   add_foreign_key "ff_numbers", "users"
   add_foreign_key "reimbursement_requests", "grant_funded_travel_requests"
-  add_foreign_key "travel_files", "travel_requests", column: "filable_id"
-  add_foreign_key "travel_files", "user_files"
   add_foreign_key "user_approvers", "users"
 end

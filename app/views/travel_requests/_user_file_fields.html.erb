@@ -1,12 +1,10 @@
 <div class="nested-fields">
-    <ul class="list-inline">
-        <li><%= link_to_remove_association :remove, f %></li>
+  <ul class="list-inline">
+    <li><%= link_to_remove_association :remove, f %></li>
     <% if f.object.new_record? %>
-        <li><%= f.file_field :uploaded_file %></li>
+      <li><%= f.file_field :uploaded_file %></li>
     <% else %>
-        <li><%= link_to "Download #{f.object.uploaded_file_file_name}", user_file_url(f.object, :protocol=> 'https://', :only_path=> false) %></li>
+      <li><%= link_to "Download #{f.object.uploaded_file_file_name}", user_file_url(f.object, protocol: 'https://', only_path: false) %></li>
     <% end %>
-    </ul>
+  </ul>
 </div>
-
-

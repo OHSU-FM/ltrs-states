@@ -9,8 +9,8 @@
     <b>By: </b><%= record.user.nil? ? 'Unknown' : record.user.full_name %><br/>
     <b>Created at: </b><%= tz_convert( record.created_at, current_user.timezone)  %><br/>
     <b>Updated at: </b><%= tz_convert( record.approval_state.updated_at, current_user.timezone)  %><br/>
-    <b>Departing: </b><%= record.dest_depart_date %><br/>
-    <b>Returning: </b><%= record.ret_depart_date %><br/>
+    <b>Departing: </b><%= record.depart_date %><br/>
+    <b>Returning: </b><%= record.return_date %><br/>
     <b>Description: </b><%= record.dest_desc %><br/>
     <%= link_to 'View record', record, class: 'modal_show' if show_approver_form %><br/>
   </td>

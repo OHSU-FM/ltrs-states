@@ -65,6 +65,11 @@ RSpec.describe User, type: :model do
       expect(u.form_travel_profile['tsa_pre']).to eq '42069'
     end
 
+    it '#lnfi returns last_name plus first initial' do
+      u = create :user, last_name: 'Orwell', first_name: 'George'
+      expect(u.lnfi).to eq 'OrwellG'
+    end
+
     describe 'reviewer approvables' do
       let(:u) { create :user_with_approvers }
       let(:reviewer) { u.reviewers.first.approver }

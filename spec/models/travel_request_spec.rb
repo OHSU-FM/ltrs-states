@@ -9,12 +9,12 @@ RSpec.describe TravelRequest, type: :model do
     expect((create :travel_request).approval_state).to be_an ApprovalState
   end
 
-  it 'requires a dest_depart_date' do
-    expect(build :travel_request, dest_depart_date: nil).not_to be_valid
+  it 'requires a depart_date' do
+    expect(build :travel_request, depart_date: nil).not_to be_valid
   end
 
-  it 'requires a ret_depart_date' do
-    expect(build :travel_request, ret_depart_date: nil).not_to be_valid
+  it 'requires a return_date' do
+    expect(build :travel_request, return_date: nil).not_to be_valid
   end
 
   it 'requires a form_email' do

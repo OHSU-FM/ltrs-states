@@ -1,5 +1,6 @@
 class GrantFundedTravelRequestsController < ApplicationController
   before_action :load_resources, only: [:show, :edit, :update, :destroy]
+  before_action :load_travel_profile, only: [:new, :edit, :create]
   include StateEvents
   authorize_resource
   skip_authorize_resource only: :update_state
@@ -23,7 +24,6 @@ class GrantFundedTravelRequestsController < ApplicationController
     @gf_travel_request.form_user = current_user.full_name
     @gf_travel_request.form_email = current_user.email
     @gf_travel_request.user = current_user unless current_user.has_delegators?
-    @travel_profile = current_user.has_delegators? ? {} : current_user.form_travel_profile
   end
 
   # GET /grant_funded_travel_requests/1/edit
@@ -33,7 +33,7 @@ class GrantFundedTravelRequestsController < ApplicationController
   # POST /grant_funded_travel_requests
   # POST /grant_funded_travel_requests.json
   def create
-    @gf_travel_request = GrantFundedTravelRequest.new(grant_funded_travel_request_params)
+    @gf_travel_request = GrantFundedTravelRequest.create(grant_funded_travel_request_params)
     @gf_travel_request.form_user = current_user.full_name
     @gf_travel_request.form_email = current_user.email
 
@@ -86,6 +86,10 @@ class GrantFundedTravelRequestsController < ApplicationController
       end
     end
 
+    def load_travel_profile
+      @travel_profile = current_user.has_delegators? ? {} : current_user.form_travel_profile
+    end
+
     # Never trust parameters from the scary internet, only allow the white list through.
     def grant_funded_travel_request_params
       params.require(:grant_funded_travel_request)
@@ -97,9 +101,11 @@ class GrantFundedTravelRequestsController < ApplicationController
                :cell_number, :drivers_licence_num, :lodging_reimb,
                :lodging_assistance, :lodging_url, :registration_reimb,
                :registration_assistance, :registration_url, :user_id,
-               :flight_seat_pref, :rental_needs_desc, :ground_transport,
+               :air_seat_pref, :rental_needs_desc, :ground_transport,
                :ground_transport_assistance, :ground_transport_desc,
                :additional_info_needed, :additional_info_memo,
-               :additional_docs_needed)
+               :additional_docs_needed, user_files_attributes: [
+                 :user_file, :uploaded_file, :document_type, :_destroy
+               ])
     end
 end

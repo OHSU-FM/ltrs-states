@@ -86,41 +86,10 @@ RSpec.describe TravelRequestsController, type: :controller do
       end
     end
 
-  # TODO these dont apply as long as delegation isnt working for travel requests
-    # context 'with valid params and a delegate user' do
-    #   login_user
-    #   let(:d_user) { controller.current_user }
-    #   let(:user) { create :user }
-    #   let(:delegation) { create :user_delegation, user: user, delegate_user: d_user }
-    #   let(:valid_attributes) { build(:travel_request, user: user).attributes }
-    #
-    #   it "creates a new TravelRequest" do
-    #     expect {
-    #       post :create, params: { travel_request: valid_attributes }
-    #     }.to change(TravelRequest, :count).by(1)
-    #   end
-    #
-    #   it "form_user should be delegate user's full_name" do
-    #     post :create, params: { travel_request: valid_attributes }
-    #     expect(TravelRequest.last.form_user).to eq controller.current_user.full_name
-    #   end
-    #
-    #   it "form_email should be delegate user's email" do
-    #     post :create, params: { travel_request: valid_attributes }
-    #     expect(TravelRequest.last.form_email).to eq controller.current_user.email
-    #   end
-    #
-    #   it "#user should not be current_user" do
-    #     post :create, params: { travel_request: valid_attributes }
-    #     expect(TravelRequest.last.user).not_to eq controller.current_user
-    #     expect(TravelRequest.last.user).to eq user
-    #   end
-    # end
-
     context "with invalid params" do
       login_user
       let(:invalid_attributes) {
-        build(:travel_request).attributes.except("dest_depart_date").merge("dest_depart_date" => nil)
+        build(:travel_request).attributes.except("depart_date").merge("depart_date" => nil)
       }
 
       it "assigns a newly created but unsaved travel_request as @travel_request" do

@@ -1,8 +1,7 @@
 class GrantFundedTravelRequest < ApplicationRecord
   belongs_to :user
 
-  has_many :travel_files, as: :filable, dependent: :destroy
-  has_many :user_files, through: :travel_files, dependent: :destroy
+  has_many :user_files, as: :fileable, dependent: :destroy
   has_one :approval_state, as: :approvable, dependent: :destroy
   has_one :reimbursement_request
 
@@ -32,7 +31,6 @@ class GrantFundedTravelRequest < ApplicationRecord
     gf.additional_info_needed == true }
 
   accepts_nested_attributes_for :approval_state, allow_destroy: true
-  accepts_nested_attributes_for :travel_files, allow_destroy: true
   accepts_nested_attributes_for :user_files, allow_destroy: true
 
   after_create :build_approval_state

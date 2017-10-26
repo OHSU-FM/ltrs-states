@@ -20,3 +20,5 @@
 spec/examples.txt
 
 coverage
+# ignore paperclip uploaded files
+public/system

@@ -3,8 +3,7 @@ class ReimbursementRequest < ApplicationRecord
   belongs_to :gf_travel_request, class_name: 'GrantFundedTravelRequest',
     foreign_key: 'grant_funded_travel_request_id'
 
-  has_many :travel_files, as: :filable, dependent: :destroy
-  has_many :user_files, through: :travel_files, dependent: :destroy
+  has_many :user_files, as: :fileable, dependent: :destroy
   has_many :meal_reimbursement_requests, dependent: :destroy
   has_one :approval_state, as: :approvable, dependent: :destroy
 
@@ -18,7 +17,6 @@ class ReimbursementRequest < ApplicationRecord
     :user
 
   accepts_nested_attributes_for :approval_state, allow_destroy: true
-  accepts_nested_attributes_for :travel_files, allow_destroy: true
   accepts_nested_attributes_for :user_files, allow_destroy: true
   accepts_nested_attributes_for :meal_reimbursement_requests,
     allow_destroy: true
