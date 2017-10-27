@@ -239,7 +239,7 @@
               Documents:
               <br />
               <% grant_funded_travel_request.user_files.each do |uf| %>
-                <%= link_to "Download #{uf.uploaded_file_file_name}", user_file_url(uf, protocol: 'https://', only_path: false) %>
+                <%= link_to "Download #{uf.uploaded_file_file_name}", uf.uploaded_file.url %>
               <% end %>
             </div>
           <% end %>

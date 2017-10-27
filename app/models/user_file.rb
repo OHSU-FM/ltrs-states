@@ -28,7 +28,8 @@ class UserFile < ActiveRecord::Base
   end
 
   def normalize_filename
-    "#{user.lnfi}_#{fileable.return_date.strftime('%Y%m%d')}_#{fileable.id}_#{document_type}"
+    "#{user.lnfi}_#{fileable.return_date.strftime('%Y%m%d')}_" +
+      "#{fileable.id}_#{document_type}#{File.extname(uploaded_file_file_name)}"
   end
 
   def uploaded_file_path
