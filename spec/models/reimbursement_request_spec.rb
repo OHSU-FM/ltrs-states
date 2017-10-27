@@ -35,6 +35,40 @@ RSpec.describe ReimbursementRequest, type: :model do
     expect(rr.meal_reimbursement_requests.count).to eq 3
   end
 
+  describe 'user_files' do
+    it '#itinerary_ufs returns user_files of document_type Itinerary' do
+      rr = create :reimbursement_request
+      uf = create :full_user_file, fileable: rr, document_type: 'Itinerary'
+      uf2 = create :full_user_file, fileable: rr, document_type: 'SomethingElse'
+      expect(rr.itinerary_ufs).to include uf
+      expect(rr.itinerary_ufs).not_to include uf2
+    end
+
+    it '#agenda_ufs returns user_files of document_type Agenda' do
+      rr = create :reimbursement_request
+      uf = create :full_user_file, fileable: rr, document_type: 'Agenda'
+      uf2 = create :full_user_file, fileable: rr, document_type: 'SomethingElse'
+      expect(rr.agenda_ufs).to include uf
+      expect(rr.agenda_ufs).not_to include uf2
+    end
+
+    it '#miles_map_ufs returns user_files of document_type MilesMap' do
+      rr = create :reimbursement_request
+      uf = create :full_user_file, fileable: rr, document_type: 'MilesMap'
+      uf2 = create :full_user_file, fileable: rr, document_type: 'SomethingElse'
+      expect(rr.miles_map_ufs).to include uf
+      expect(rr.miles_map_ufs).not_to include uf2
+    end
+
+    it '#exception_apps returns user_files of document_type ExceptionApp' do
+      rr = create :reimbursement_request
+      uf = create :full_user_file, fileable: rr, document_type: 'ExceptionApp'
+      uf2 = create :full_user_file, fileable: rr, document_type: 'SomethingElse'
+      expect(rr.exception_apps).to include uf
+      expect(rr.exception_apps).not_to include uf2
+    end
+  end
+
   describe 'methods' do
     it '#to_s returns a string representation of the object' do
       rr = create :reimbursement_request

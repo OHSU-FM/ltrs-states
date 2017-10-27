@@ -275,7 +275,7 @@
           </td>
           <td>
             <% travel_request.user_files.each do |g|  %>
-              <%= link_to g.uploaded_file_file_name, user_file_url(g, protocol: 'https://', only_path: false) %><br />
+              <%= link_to "Download #{g.uploaded_file_file_name}", g.uploaded_file.url %>
             <% end %>
           </td>
         </tr>

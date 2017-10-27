@@ -51,6 +51,22 @@ class ReimbursementRequest < ApplicationRecord
     meal_reimbursement_requests.any?{|mrr| mrr.has_na? }
   end
 
+  def itinerary_ufs
+    user_files.where(document_type: 'Itinerary')
+  end
+
+  def agenda_ufs
+    user_files.where(document_type: 'Agenda')
+  end
+
+  def miles_map_ufs
+    user_files.where(document_type: 'MilesMap')
+  end
+
+  def exception_apps
+    user_files.where(document_type: 'ExceptionApp')
+  end
+
   private
 
   def build_approval_state

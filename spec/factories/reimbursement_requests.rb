@@ -29,5 +29,15 @@ FactoryGirl.define do
         reimbursement_request.approval_state.review!
       end
     end
+
+    trait :with_uf do
+      transient do
+        document_type "Itinerary"
+      end
+
+      after(:create) do |rr, evaluator|
+        create_list(:full_user_file, 1, fileable: rr, document_type: evaluator.document_type)
+      end
+    end
   end
 end

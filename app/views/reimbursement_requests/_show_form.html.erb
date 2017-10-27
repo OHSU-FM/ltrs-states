@@ -25,15 +25,21 @@
       <div class="itinerary_attachment">
         <h5>Itinerary for Travel</h5>
         <p>Please see Travel and Reimbursement Policy for itinerary requirements</p>
+        <% reimbursement_request.itinerary_ufs.each do |i| %>
+          <%= link_to "Download #{i.uploaded_file_file_name}", i.uploaded_file.url %>
+        <% end %>
       </div>
     </div>
     <div class="col-lg-3">
       <div class="depart_date">
         Departure date: <%= reimbursement_request.depart_date %>
       </div>
-      <div class="itinerary_attachment">
+      <div class="agenda_attachment">
         <h5>Agenda of Event</h5>
         <p>Please see Travel and Reimbursement Policy for agenda requirements</p>
+        <% reimbursement_request.agenda_ufs.each do |a| %>
+          <%= link_to "Download #{a.uploaded_file_file_name}", a.uploaded_file.url %>
+        <% end %>
       </div>
     </div>
     <div class="col-lg-3">
@@ -76,6 +82,11 @@
       Is traveler submitting for mileage reimbursement?
       <br />
       <b><%= hf_reimb_tf_to_words reimbursement_request.traveler_mileage_reimb %></b>
+      <% if reimbursement_request.traveler_mileage_reimb %>
+        <% reimbursement_request.milage_map_ufs.each do |mm| %>
+          <%= link_to "Download #{mm.uploaded_file_file_name}", mm.uploaded_file.url %>
+        <% end %>
+      <% end %>
     </div>
 
     <div class="col-lg-6">
@@ -97,7 +108,7 @@
       <br />
       <b><%= hf_boolean_to_words reimbursement_request.additional_info_needed %></b>
       <% if reimbursement_request.additional_info_needed %>
-        <div id="ground_transport_form">
+        <div id="additional-info">
           Additional details:
           <br />
           <%= reimbursement_request.additional_info_memo %>
@@ -110,10 +121,12 @@
       <br />
       <b><%= hf_boolean_to_words reimbursement_request.additional_docs_needed %></b>
       <% if reimbursement_request.additional_docs_needed %>
-        <div id="ground_transport_form">
+        <div id="additional-docs-attachment">
           Documents:
           <br />
-          <%# <%= grant_funded_travel_request.additional_info_memo %>
+          <% reimbursement_request.exception_apps.each do |ea| %>
+            <%= link_to "Download #{ea.uploaded_file_file_name}", ea.uploaded_file.url %>
+          <% end %>
         </div>
       <% end %>
     </div>
