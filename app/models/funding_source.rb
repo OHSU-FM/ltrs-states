@@ -10,6 +10,12 @@ class FundingSource < ApplicationRecord
       field :pi do
         label "PI"
       end
+      field :start_date do
+        help "Required."
+      end
+      field :end_date do
+        help "Required."
+      end
 
       include_all_fields
     end

@@ -30,21 +30,30 @@
         <% end %>
       </div>
     </div>
-    <div class="col-lg-3">
-      <div class="depart_date">
-        Departure date: <%= reimbursement_request.depart_date %>
+    <div class="col-lg-6">
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="depart_date">
+            Departure date: <%= reimbursement_request.depart_date %>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="return_date">
+            Return date: <%= reimbursement_request.return_date %>
+          </div>
+        </div>
       </div>
-      <div class="agenda_attachment">
-        <h5>Agenda of Event</h5>
-        <p>Please see Travel and Reimbursement Policy for agenda requirements</p>
-        <% reimbursement_request.agenda_ufs.each do |a| %>
-          <%= link_to "Download #{a.uploaded_file_file_name}", a.uploaded_file.url %>
-        <% end %>
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="agenda_attachment">
+            <h5>Agenda of Event</h5>
+            <p>Please see Travel and Reimbursement Policy for agenda requirements</p>
+            <% reimbursement_request.agenda_ufs.each do |a| %>
+              <%= link_to "Download #{a.uploaded_file_file_name}", a.uploaded_file.url %>
+            <% end %>
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="col-lg-3">
-      <div class="return_date">
-        Return date: <%= reimbursement_request.return_date %>
     </div>
   </div>
 </div>
@@ -83,9 +92,13 @@
       <br />
       <b><%= hf_reimb_tf_to_words reimbursement_request.traveler_mileage_reimb %></b>
       <% if reimbursement_request.traveler_mileage_reimb %>
-        <% reimbursement_request.milage_map_ufs.each do |mm| %>
-          <%= link_to "Download #{mm.uploaded_file_file_name}", mm.uploaded_file.url %>
-        <% end %>
+        <div id="miles-map-attachment">
+          Documents:
+          <br />
+          <% reimbursement_request.miles_map_ufs.each do |mm| %>
+            <%= link_to "Download #{mm.uploaded_file_file_name}", mm.uploaded_file.url %>
+          <% end %>
+        </div>
       <% end %>
     </div>
 

@@ -49,6 +49,13 @@ FactoryGirl.define do
       end
     end
 
+    trait :error do
+      association :user, factory: :user_with_approvers
+      after(:create) do |gftr|
+        gftr.approval_state.update(aasm_state: 'error')
+      end
+    end
+
     # requires user association, but many other traits do that already.
     # so, this probably won't work unless paired with one of those traits.
     trait :with_rr do

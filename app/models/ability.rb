@@ -1,7 +1,7 @@
 class Ability
   include CanCan::Ability
 
-  def initialize(user)
+  def initialize user
     user ||= User.new                   # guest user (not logged in)
 
     alias_action :create, :read, :update, to: :modify
@@ -20,7 +20,6 @@ class Ability
     can :manage, :all
     cannot :update, LeaveRequest
     cannot :update, TravelRequest
-    cannot :update, GrantFundedTravelRequest # TODO make these editable
   end
 
   def normal_user_permissions user
@@ -43,6 +42,10 @@ class Ability
 
     can [:read, :destroy], GrantFundedTravelRequest do |gftr|
       gftr.user == user || user.reviewable_users.include?(gftr.user)
+    end
+
+    can :update, GrantFundedTravelRequest do |gftr|
+      can?(:destroy, gftr) and gftr.approval_state.unsubmitted?
     end
 
     can [:read, :edit, :update], ReimbursementRequest do |gftr|

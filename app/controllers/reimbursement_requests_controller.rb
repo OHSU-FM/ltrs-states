@@ -87,7 +87,7 @@ class ReimbursementRequestsController < ApplicationController
       :grant_funded_travel_request_id, :meal_na_desc, :additional_info_needed,
       :additional_info_memo, :additional_docs_needed,
       user_files_attributes: [
-        :user_file, :uploaded_file, :_destroy
+        :id, :user_file, :uploaded_file, :document_type, :_destroy
       ],
       meal_reimbursement_requests_attributes: [
         :id, :breakfast, :breakfast_desc, :lunch,

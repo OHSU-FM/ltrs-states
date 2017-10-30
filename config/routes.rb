@@ -39,7 +39,7 @@ Rails.application.routes.draw do
   end
 
   get '/grant_funded_travel_requests', to: redirect('/')
-  resources :grant_funded_travel_requests, except: [:edit, :update] do
+  resources :grant_funded_travel_requests do
     member do
       post 'submit' => 'grant_funded_travel_requests#submit'
       post 'review' => 'grant_funded_travel_requests#review'

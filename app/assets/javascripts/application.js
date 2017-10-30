@@ -17,7 +17,6 @@
 //= require bootstrap
 //= require bootstrap-datepicker
 //= require cocoon
-//= require calendar
 //= require utils
 //= require users
 //= require users_ldap_search

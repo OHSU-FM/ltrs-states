@@ -47,7 +47,14 @@ RSpec.describe Ability, type: :model do
 
         it { is_expected.to be_able_to(:submit, request.approval_state) }
         it { is_expected.to be_able_to(:read, request) }
+        it { is_expected.to be_able_to(:update, request) }
         it { is_expected.to be_able_to(:destroy, request) }
+
+        (ApprovalState.aasm.states.map(&:name) - [:unsubmitted]).each do |state|
+          let(:u_request) { create :gf_travel_request, state, user: user }
+
+          it { is_expected.not_to be_able_to(:update, u_request) }
+        end
       end
 
       context "ReimbursementRequest" do
@@ -55,7 +62,6 @@ RSpec.describe Ability, type: :model do
 
         it { is_expected.to be_able_to(:submit, request.approval_state) }
         it { is_expected.to be_able_to(:read, request) }
-        it { is_expected.to be_able_to(:edit, request) }
         it { is_expected.to be_able_to(:update, request) }
         it { is_expected.not_to be_able_to(:destroy, request) }
       end
@@ -67,10 +73,12 @@ RSpec.describe Ability, type: :model do
       let(:gftr) { create :gf_travel_request }
       let(:rr) { create :reimbursement_request }
 
-      it { is_expected.not_to be_able_to(:read, lr) }
-      it { is_expected.not_to be_able_to(:read, tr) }
-      it { is_expected.not_to be_able_to(:read, gftr) }
-      it { is_expected.not_to be_able_to(:read, rr) }
+      [:read, :update, :destroy].each do |action|
+        it { is_expected.not_to be_able_to(action, lr) }
+        it { is_expected.not_to be_able_to(action, tr) }
+        it { is_expected.not_to be_able_to(action, gftr) }
+        it { is_expected.not_to be_able_to(action, rr) }
+      end
     end
   end
 

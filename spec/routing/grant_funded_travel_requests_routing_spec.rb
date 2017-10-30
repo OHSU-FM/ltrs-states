@@ -16,20 +16,20 @@ RSpec.describe GrantFundedTravelRequestsController, type: :routing do
       expect(:get => "/grant_funded_travel_requests/1").to route_to("grant_funded_travel_requests#show", :id => "1")
     end
 
-    it "doesn't route to #edit" do
-      expect(:get => "/grant_funded_travel_requests/1/edit").not_to route_to("grant_funded_travel_requests#edit", :id => "1")
+    it "routes to #edit" do
+      expect(:get => "/grant_funded_travel_requests/1/edit").to route_to("grant_funded_travel_requests#edit", :id => "1")
     end
 
     it "routes to #create" do
       expect(:post => "/grant_funded_travel_requests").to route_to("grant_funded_travel_requests#create")
     end
 
-    it "doesn't route to #update via PUT" do
-      expect(:put => "/grant_funded_travel_requests/1").not_to route_to("grant_funded_travel_requests#update", :id => "1")
+    it "routes to #update via PUT" do
+      expect(:put => "/grant_funded_travel_requests/1").to route_to("grant_funded_travel_requests#update", :id => "1")
     end
 
-    it "doesn't route to #update via PATCH" do
-      expect(:patch => "/grant_funded_travel_requests/1").not_to route_to("grant_funded_travel_requests#update", :id => "1")
+    it "routes to #update via PATCH" do
+      expect(:patch => "/grant_funded_travel_requests/1").to route_to("grant_funded_travel_requests#update", :id => "1")
     end
 
     it "routes to #destroy" do
