@@ -5,7 +5,7 @@ class UserFile < ActiveRecord::Base
   # paperclip file field
   has_attached_file :uploaded_file,
     path:  ":rails_root/public/system/:attachment/:id/:style/:normalize_filename",
-    url:  "/system/:attachment/:id/:style/:normalize_filename"
+    url:  ":rails_relative_url_root/system/:attachment/:id/:style/:normalize_filename"
 
   CONTENT_TYPES = [
     "text/csv",
@@ -25,6 +25,10 @@ class UserFile < ActiveRecord::Base
 
   Paperclip.interpolates :normalize_filename do |attachment, style|
     attachment.instance.normalize_filename
+  end
+
+  Paperclip.interpolates :rails_relative_url_root do |attachment, style|
+    Rails.configuration.relative_url_root.to_s
   end
 
   def normalize_filename
