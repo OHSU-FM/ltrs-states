@@ -109,8 +109,8 @@ module StateEvents
                                  gf_travel_request: tr,
                                  depart_date: tr.depart_date,
                                  return_date: tr.return_date,
-                                 form_user: current_user.full_name,
-                                 form_email: current_user.email)
+                                 form_user: tr.form_user,
+                                 form_email: tr.form_email)
   end
 
   def set_approvable_and_state
