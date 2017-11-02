@@ -29,6 +29,9 @@ class GrantFundedTravelRequest < ApplicationRecord
     !gf.ground_transport_assistance.nil? and gf.ground_transport_assistance == true }
   validates :additional_info_memo, presence: true, if: Proc.new{ |gf|
     gf.additional_info_needed == true }
+  validates :user_files, presence: { message: 'Attachment required' }, if: Proc.new{ |gf|
+    gf.additional_docs_needed == true
+  }
 
   accepts_nested_attributes_for :approval_state, allow_destroy: true
   accepts_nested_attributes_for :user_files, allow_destroy: true

@@ -15,6 +15,8 @@ class ReimbursementRequest < ApplicationRecord
     :form_email,
     :form_user,
     :user
+  validate :miles_map_attachment_if_travel_mildage_reimb,
+    :exception_app_attachment_if_additional_docs_needed
 
   accepts_nested_attributes_for :approval_state, allow_destroy: true
   accepts_nested_attributes_for :user_files, allow_destroy: true
@@ -68,6 +70,22 @@ class ReimbursementRequest < ApplicationRecord
   end
 
   private
+
+  def miles_map_attachment_if_travel_mildage_reimb
+    if traveler_mileage_reimb == true
+      if miles_map_ufs.empty?
+        errors.add(:traveler_mileage_reimb, 'Attachment required')
+      end
+    end
+  end
+
+  def exception_app_attachment_if_additional_docs_needed
+    if additional_docs_needed == true
+      if exception_apps.empty?
+        errors.add(:additional_docs_needed, 'Attachment required')
+      end
+    end
+  end
 
   def build_approval_state
     ApprovalState.create(user: user, approvable: self)

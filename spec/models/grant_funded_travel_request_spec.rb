@@ -156,6 +156,15 @@ RSpec.describe GrantFundedTravelRequest, type: :model do
            additional_info_memo: '').not_to be_valid
   end
 
+  it 'requires an attached user_file if additional_docs_needed' do
+    expect(build :gf_travel_request, additional_docs_needed: true)
+      .not_to be_valid
+
+    valid = create :gf_travel_request
+    uf = create :full_user_file, fileable: valid
+    expect(valid.update(additional_docs_needed: true)).to be_truthy
+  end
+
   describe 'methods' do
     it '#to_s returns a string representation of the object' do
       gftr = create :gf_travel_request

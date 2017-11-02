@@ -29,6 +29,14 @@ RSpec.describe ReimbursementRequest, type: :model do
     expect(build :reimbursement_request, return_date: nil).not_to be_valid
   end
 
+  it 'requires a MilesMap attachment if traveler_mileage_reimb is true' do
+    expect(build :reimbursement_request, traveler_mileage_reimb: true).not_to be_valid
+  end
+
+  it 'requires an ExceptionApp attachment if additional_docs_needed is true' do
+    expect(build :reimbursement_request, additional_docs_needed: true).not_to be_valid
+  end
+
   it 'generates a MealReimbursementRequest for each day of travel' do
     rr = create :reimbursement_request, depart_date: 1.day.ago, return_date: 1.day.from_now
     expect(rr.meal_reimbursement_requests.first).to be_a MealReimbursementRequest
