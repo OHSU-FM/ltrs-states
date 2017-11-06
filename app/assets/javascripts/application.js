@@ -23,6 +23,8 @@
 //= require user_forms
 //= require approvals
 //= require survey
+//= require leave_requests
+//= require travel_requests
 //= require grant_funded_travel_requests
 //= require reimbursement_requests
 //= require rails.validations

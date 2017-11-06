@@ -56,16 +56,14 @@
           <div class="depart_date">
             <%= f.label :depart_date, 'Departure date:' %>
             <br />
-            <%= f.date_field :depart_date, required: :required,
-              min: '2000-01-01', max: '2100-01-1' %>
+            <%= f.date_field :depart_date, required: :required, id: 'start-datepicker' %>
           </div>
         </div>
         <div class="col-lg-6">
           <div class="return_date">
             <%= f.label :return_date, 'Return date:' %>
             <br />
-            <%= f.date_field :return_date, required: :required,
-              min: '2000-01-01', max: '2100-01-1' %>
+            <%= f.date_field :return_date, required: :required, id: 'end-datepicker' %>
           </div>
         </div>
       </div>

@@ -54,14 +54,12 @@
           <div class="col-lg-6">
             <%= f.label :depart_date, 'Departure date:', class: 'required' %>
             <br />
-            <%= f.date_field :depart_date, placeholder: 'yyyy-mm-dd',
-              min: '2000-01-01', max: '2100-01-1' %>
+            <%= f.text_field :depart_date, placeholder: 'mm/dd/yyyy', id: 'start-datepicker' %>
           </div>
           <div class="col-lg-6">
             <%= f.label :return_date, 'Return date:', class: 'required' %>
             <br />
-            <%= f.date_field :return_date, placeholder: 'yyyy-mm-dd',
-              min: '2000-01-01', max: '2100-01-1' %>
+            <%= f.text_field :return_date, placeholder: 'mm/dd/yyyy', id: 'end-datepicker' %>
           </div>
         </div>
       </div>
