@@ -15,8 +15,8 @@ RSpec.feature "leave_request states", type: :feature do
     scenario "user creates a new leave_request" do
       visit new_leave_request_path
 
-      fill_in 'First day of leave', with: 1.day.from_now
-      fill_in 'Last day of leave', with: 2.day.from_now
+      fill_in 'leave_request[start_date]', with: 1.day.from_now
+      fill_in 'leave_request[end_date]', with: 2.day.from_now
       fill_in 'Vacation Hours', with: 1.0
       first(:button, "Save & Review").click
 
