@@ -39,7 +39,7 @@
   <div class="row">
     <div class="col-lg-6">
       <div id="itinerary-attachment">
-        <h5>Itinerary for Travel</h5>
+        <label>Itinerary for Travel</label>
         <p>Please see Family Medicine Travel Expense Reimbursement Guide for itinerary requirements</p>
         <%= f.fields_for :user_files, f.object.itinerary_ufs do |g| %>
           <%= render partial: 'user_file_fields', locals: { f: g, document_type: 'Itinerary' } %>
@@ -48,6 +48,17 @@
           partial: 'user_file_fields',
           id: 'add-assoc-itinerary',
           render_options: { locals: { document_type: 'Itinerary' } } %>
+      </div>
+      <div id="agenda-attachment">
+        <label>Agenda of Event</label>
+        <p>Please see Family Medicine Travel Expense Reimbursement Guide for agenda requirements</p>
+        <%= f.fields_for :user_files, f.object.agenda_ufs do |g| %>
+          <%= render partial: 'user_file_fields', locals: { f: g, document_type: 'Agenda' } %>
+        <% end %>
+        <%= link_to_add_association '+ Add File', f, :user_files,
+          partial: 'user_file_fields',
+          id: 'add-assoc-agenda',
+          render_options: { locals: { document_type: 'Agenda' } } %>
       </div>
     </div>
     <div class="col-lg-6">
@@ -67,30 +78,14 @@
           </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col-lg-12">
-          <div id="agenda-attachment">
-            <h5>Agenda of Event</h5>
-            <p>Please see Family Medicine Travel Expense Reimbursement Guide for agenda requirements</p>
-            <%= f.fields_for :user_files, f.object.agenda_ufs do |g| %>
-              <%= render partial: 'user_file_fields', locals: { f: g, document_type: 'Agenda' } %>
-            <% end %>
-            <%= link_to_add_association '+ Add File', f, :user_files,
-              partial: 'user_file_fields',
-              id: 'add-assoc-agenda',
-              render_options: { locals: { document_type: 'Agenda' } } %>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 
+  <hr />
+
   <h4>Event & Travel Expenses</h4>
   <div class="daily_meal_reimb">
-    <p>For each day select the meal(s) for which Per Diem is requested. Then,
-      below, please explain instances where Per Diem was not requested (e.g.
-      left after 2pm, only require dinner on first day; lunch provided at
-      conference; etc.)
+    <p>For each day select the meal(s) for which Per Diem is requested.
       <i class="glyphicon glyphicon-question-sign"
         style="font-size: 1.4em; cursor: pointer; cursor: hand;" data-html="true"
         data-toggle="popover" title="Per Diem Timetable"></i></p>
@@ -145,11 +140,6 @@
         <%= render partial: 'meal_reimbursement_requests/form', locals: { f: mrrf } %>
       <% end %>
     </div>
-    <div class="row">
-      <%= f.label :meal_na_desc, 'Use this field to provide information for the instances where Per Diem was not requested:', class: 'required' %>
-      <br />
-      <%= f.text_area :meal_na_desc, size: '60x40' %>
-    </div>
     <hr />
   </div>
 
@@ -157,18 +147,18 @@
     <div class="col-lg-6">
       <div>
         <%= f.label :air_use, 'Is traveler submitting for airline reimbursement?', class: 'required' %>
-        <p>Note, you must submit a receipt for this expense to receipts@ohsu.edu</p>
+        <p class="space-left">Note, you must submit a receipt for this expense to receipts@ohsu.edu</p>
         <%= render partial: 'shared/toggle_form_radio_buttons', locals: { f: f, symbol: :air_use, target: nil } %>
       </div>
       <div>
         <%= f.label :lodging_reimb, 'Is traveler submitting for lodging reimbursement?', class: 'required' %>
-        <p>Note, you must submit a receipt for this expense to receipts@ohsu.edu</p>
+        <p class="space-left">Note, you must submit a receipt for this expense to receipts@ohsu.edu</p>
         <%= render partial: 'shared/toggle_form_radio_buttons', locals: { f: f, symbol: :lodging_reimb, target: nil } %>
       </div>
 
       <div class="toggle_form" id="miles-map-attachment">
         <%= f.label :traveler_mileage_reimb, 'Is traveler submitting for mileage reimbursement?', class: 'required' %>
-        <p>Note, you must attach a PDF of a Google Map&trade; indicating all stops on your trip</p>
+        <p class="space-left">Note, you must attach a PDF of a Google Map&trade; indicating all stops on your trip</p>
         <%= render partial: 'shared/toggle_form_radio_buttons', locals: { f: f, symbol: :traveler_mileage_reimb, target: "#traveler_mileage_reimb_form" } %>
         <br />
         <div id="traveler_mileage_reimb_form">
@@ -188,13 +178,13 @@
     <div class="col-lg-6">
       <div>
         <%= f.label :car_rental, 'Is traveler submitting for rental car reimbursement?', class: 'required' %>
-        <p>Note, you must submit a receipt for this expense to receipts@ohsu.edu</p>
+        <p class="space-left">Note, you must submit a receipt for this expense to receipts@ohsu.edu</p>
         <%= render partial: 'shared/toggle_form_radio_buttons', locals: { f: f, symbol: :car_rental, target: nil } %>
       </div>
 
       <div>
         <%= f.label :meal_host_reimb, 'Is traveler submitting for meal hosting reimbursement?', class: 'required' %>
-        <p>Note, you must submit a receipt for this expense to receipts@ohsu.edu</p>
+        <p class="space-left">Note, you must submit a receipt for this expense to receipts@ohsu.edu</p>
         <%= render partial: 'shared/toggle_form_radio_buttons', locals: { f: f, symbol: :meal_host_reimb, target: nil } %>
       </div>
     </div>
@@ -204,7 +194,7 @@
 
   <div class="row">
     <div class="col-lg-6">
-      <div class="toggle_form">
+      <div class="toggle_form space-left">
         <%= f.label :additional_info_needed, 'Are there additional details you would like to provide?' %>
         <br />
         <%= render partial: 'shared/toggle_form_radio_buttons', locals: { f: f, symbol: :additional_info_needed, target: '#additional_info_needed_form' } %>
@@ -216,10 +206,10 @@
       </div>
     </div>
     <div class="col-lg-6">
-      <div class="toggle_form" id="add-docs-attachment">
+      <div class="toggle_form space-left" id="add-docs-attachment">
         <%= f.label :additional_docs_needed, 'Does traveler have <i>Special Circumstance: Unexpected <br>Change to Travel Plans</i> documentation to provide?'.html_safe %> <br />
-        Please see Family Medicine Travel Expense Reimbursement Guide <br />for documentation examples & requirements
-        <br />
+        <p class="space-left">Please see Family Medicine Travel Expense Reimbursement Guide</p>
+        <p class="space-left">for documentation examples & requirements</p>
         <%= render partial: 'shared/toggle_form_radio_buttons', locals: { f: f, symbol: :additional_docs_needed, target: '#additional_docs_needed_form' } %>
         <br />
         <div id="additional_docs_needed_form">

@@ -6,11 +6,11 @@
       <table class="table">
         <tbody>
           <tr>
-            <td><b>Name:</b></td>
+            <td><%= f.label :full_name, 'Name:' %></td>
             <td><%= @user.full_name%></td>
           </tr>
           <tr>
-            <td><b>Email:</b></td>
+            <td><%= f.label :email, 'Email:' %></td>
             <td><%= @user.email %></td>
           </tr>
           <tr>
@@ -27,35 +27,25 @@
           </tr>
           <% unless @user.is_ldap %>
             <tr>
-              <td>
-                <%= f.label :password, 'Password:' %>
-              </td>
-              <td>
-                <%= f.password_field :password %>
-              </td>
+              <td><%= f.label :password, 'Password:' %></td>
+              <td><%= f.password_field :password %></td>
             </tr>
             <tr>
-              <td>
-                <%= f.label :password_confirmation, 'Password Confirmation:' %>
-              </td>
-              <td>
-                <%= f.password_field :password_confirmation %>
-              </td>
+              <td><%= f.label :password_confirmation, 'Password Confirmation:' %></td>
+              <td><%= f.password_field :password_confirmation %></td>
             </tr>
           <% end %>
           <tr>
-            <td><b>Current Login:</b></td>
-            <td><%=  @user.current_sign_in_at ? tz_convert(@user.current_sign_in_at, current_user.timezone) : 'N/A' %></td>
+            <td><%= f.label :current_sign_in, 'Current Login:' %></td>
+            <td><%= @user.current_sign_in_at ? tz_convert(@user.current_sign_in_at, current_user.timezone) : 'N/A' %></td>
           </tr>
           <tr>
-            <td><b>Last Login:</b></td>
-            <td><%=  @user.last_sign_in_at ? tz_convert(@user.last_sign_in_at, current_user.timezone) : 'N/A' %></td>
+            <td><%= f.label :last_sign_in, 'Last Login:' %></td>
+            <td><%= @user.last_sign_in_at ? tz_convert(@user.last_sign_in_at, current_user.timezone) : 'N/A' %></td>
           </tr>
           <tr>
-            <td><b>Time zone:</b></td>
-            <td>
-              <%= f.select :timezone, TZInfo::Country.get('US').zone_identifiers %>
-            </td>
+            <td><%= f.label :timezone, 'Timezone: ' %></td>
+            <td><%= f.select :timezone, TZInfo::Country.get('US').zone_identifiers %></td>
           </tr>
         </tbody>
       </table>

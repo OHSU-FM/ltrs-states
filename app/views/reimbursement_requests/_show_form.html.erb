@@ -65,17 +65,6 @@
         <%= render partial: 'meal_reimbursement_requests/show_form', locals: { mrr: mrr } %>
       <% end %>
     </div>
-
-    <div class="row">
-      <% if reimbursement_request.has_na_meal_reimb? or !reimbursement_request.meal_na_desc.nil? %>
-        <div class="col-lg-12">
-          <div class="row">
-            <p>Per Diem NA explanations:</p>
-            <p><%= reimbursement_request.meal_na_desc %></p>
-          </div>
-        </div>
-      <% end %>
-    </div>
   </div>
 
   <div class="row">

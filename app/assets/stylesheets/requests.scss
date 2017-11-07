@@ -1,0 +1,17 @@
+.popover {
+  max-width: 100%;
+}
+
+.popover-content table tbody, .popover-content table tbody tr th {
+  text-align: center;
+}
+
+label.required:before {
+  content: "* ";
+  color: #d9534f;
+}
+
+.space-left:before {
+  content: "* ";
+  opacity: 0;
+}

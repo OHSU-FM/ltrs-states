@@ -211,7 +211,7 @@
   <div class="row">
     <div class="col-lg-6">
       <div class="row">
-        <div class="toggle_form">
+        <div class="toggle_form space-left">
           <%= f.label :additional_info_needed, 'Does traveler have additional details to provide?' %>
           <br />
           <%= render partial: 'shared/toggle_form_radio_buttons', locals: { f: f, symbol: :additional_info_needed, target: '#additional_info_needed_form' } %>
@@ -225,10 +225,10 @@
     </div>
     <div class="col-lg-6">
       <div class="row">
-        <div class="toggle_form" id="spec-circ-attachment">
+        <div class="toggle_form space-left" id="spec-circ-attachment">
           <%= f.label :additional_docs_needed, 'Does Traveler have <i>Special Circumstance: Pre-Approval</i> documentation to provide?'.html_safe %> <br />
-          Please see Family Medicine Travel Expense Reimbursement Guide <br />for documentation examples & requirements
-          <br />
+          <p class="space-left">Please see Family Medicine Travel Expense Reimbursement Guide</p>
+          <p class="space-left">for documentation examples & requirements</p>
           <%= render partial: 'shared/toggle_form_radio_buttons', locals: { f: f, symbol: :additional_docs_needed, target: '#additional_docs_needed_form' } %>
           <br />
           <div id="additional_docs_needed_form">

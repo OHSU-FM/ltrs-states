@@ -24,35 +24,35 @@
             <td><%= f.text_field :ecp1 %></td>
           </tr>
           <tr>
-            <td><%= f.label :ecn2, 'Second Emergency Contact Name' %></td>
+            <td><%= f.label :ecn2, 'Second Emergency Contact Name', class: 'space-left' %></td>
             <td><%= f.text_field :ecn2 %></td>
           </tr>
           <tr>
-            <td><%= f.label :ecp2, 'Second Emergency Contact Phone Number' %></td>
+            <td><%= f.label :ecp2, 'Second Emergency Contact Phone Number', class: 'space-left' %></td>
             <td><%= f.text_field :ecp2 %></td>
           </tr>
           <tr>
-            <td><%= f.label :dietary_restrictions, 'Dietary Restrictions' %></td>
+            <td><%= f.label :dietary_restrictions, 'Dietary Restrictions', class: 'space-left' %></td>
             <td><%= f.text_field :dietary_restrictions %></td>
           </tr>
           <tr>
-            <td><%= f.label :ada_accom, 'ADA Accomodations' %></td>
+            <td><%= f.label :ada_accom, 'ADA Accomodations', class: 'space-left' %></td>
             <td><%= f.text_field :ada_accom %></td>
           </tr>
           <tr>
-            <td><%= f.label :air_seat_pref, 'Airplane Seat Preference' %></td>
+            <td><%= f.label :air_seat_pref, 'Airplane Seat Preference', class: 'space-left' %></td>
             <td><%= f.select :air_seat_pref, [['Aisle', 'aisle'], ['Middle', 'middle'], ['Window', 'window']], { prompt: 'Select' } %></td>
           </tr>
           <tr>
-            <td><%= f.label :hotel_room_pref, 'Hotel Room Preference' %></td>
+            <td><%= f.label :hotel_room_pref, 'Hotel Room Preference', class: 'space-left' %></td>
             <td><%= f.text_field :hotel_room_pref %></td>
           </tr>
           <tr>
-            <td><%= f.label :drivers_licence_num, "Driver's Licence Number" %></td>
+            <td><%= f.label :drivers_licence_num, "Driver's Licence Number", class: 'space-left' %></td>
             <td><%= f.text_field :drivers_licence_num %></td>
           </tr>
           <tr>
-            <td><%= f.label :tsa_pre, 'TSA Precheck Number' %></td>
+            <td><%= f.label :tsa_pre, 'TSA Precheck Number', class: 'space-left' %></td>
             <td><%= f.text_field :tsa_pre %></td>
           </tr>
         </tbody>
@@ -78,7 +78,7 @@
   </div>
   <div class="col-xs-12 col-md-6 bs-callout bs-callout-info">
     <h2>About your traveler profile</h2>
-    <ul>
+    <ul class="traveler-profile-info">
       <li>The following fields are required ( <em style="color: #d9534f;">&#42</em> ) for RSS to complete any requests to arrange travel: Date of Birth, Legal Name, Cell Phone Number, First Emergency Contact Name, First Emergency Contact Phone Number. RSS will not provide assistance in travel booking with missing or incomplete information in these fields. The remaining fields are optional, but will help us quickly and smoothly complete your travel arrangements</li>
       <li>Any information that you do provide here will be automatically populated in future leave and travel requests</li>
       <li>With the exception of frequent flier numbers, if you provide any of these pieces of information in the course of filling out a request form, that information will be saved to your traveler profile and available in later requests</li>
