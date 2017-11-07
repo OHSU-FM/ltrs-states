@@ -134,25 +134,73 @@ RSpec.describe GrantFundedTravelRequestsController, type: :controller do
   end
 
   describe 'PUT #update' do
-    login_user
-    let(:gftr) { create :gf_travel_request, user: controller.current_user }
+    context 'with unsubmitted request' do
+      let(:gftr) { create :gf_travel_request, user: user }
 
-    context 'with valid params' do
-      let!(:date) { Date.today + 7 }
-      let(:valid_params) { gftr.attributes.update(return_date: date) }
+      context 'with valid_attributes' do
+        let(:date) { Date.today + 7 }
+        let(:valid_attributes) { gftr.attributes.update("return_date" => date) }
 
-      it 'updates the record' do
-        patch :update, params: { id: gftr.id, grant_funded_travel_request: valid_params }
-        gftr.reload
-        expect(gftr.return_date).to eq date
+        context 'with logged in user' do
+          login_user
+          let(:user) { controller.current_user }
+
+          it 'updates the request' do
+            patch :update, params: { id: gftr.id, grant_funded_travel_request: valid_attributes }
+            gftr.reload
+            expect(gftr.return_date).to eq date
+          end
+        end
+
+        context 'with logged in delegate' do
+          login_delegate
+          let(:user) { controller.current_user.delegators.first }
+
+          it 'updates the request' do
+            patch :update, params: { id: gftr.id, grant_funded_travel_request: valid_attributes }
+            gftr.reload
+            expect(gftr.return_date).to eq date
+          end
+        end
+
+        context 'without logged in user' do
+          let(:user) { create :user }
+          let(:gftr2) { create :gf_travel_request }
+
+          it 'doesnt update the request' do
+            patch :update, params: { id: gftr2.id, grant_funded_travel_request: valid_attributes }
+            gftr2.reload
+            expect(gftr2.return_date).not_to eq date
+          end
+        end
+      end
+
+      context 'with invalid_attributes' do
+        login_user
+        let(:user) { controller.current_user }
+        let(:invalid_attributes) { gftr.attributes.update(return_date: nil) }
+
+        it 'renders edit' do
+          patch :update, params: { id: gftr.id, grant_funded_travel_request: invalid_attributes }
+          expect(response).to redirect_to gftr
+          expect(assigns[:gf_travel_request]).to eq gftr
+        end
       end
     end
 
-    context 'with invalid params' do
-      let(:invalid_params) { gftr.attributes.update(air_use: nil) }
+    context 'with submitted request' do
+      login_user
+      let(:gftr) { create :gf_travel_request, :submitted, user: controller.current_user }
+      let(:new_date) { Date.today + 7 }
+      let(:params) { gftr.attributes.update(return_date: new_date) }
 
-      it 'redirects to throws an alert and renders edit' do
-        patch :update, params: { id: gftr.id, grant_funded_travel_request: invalid_params }
+      # gftr shouldn't be editable after it's been submitted
+      it 'redirect_to to the record' do
+        original_date = gftr.return_date
+        patch :update, params: { id: gftr.id, grant_funded_travel_request: params }
+        expect(response).to redirect_to root_path
+        gftr.reload
+        expect(gftr.return_date).to eq original_date
       end
     end
   end

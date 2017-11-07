@@ -51,6 +51,7 @@ class GrantFundedTravelRequestsController < ApplicationController
   # PATCH/PUT /grant_funded_travel_requests/1
   # PATCH/PUT /grant_funded_travel_requests/1.json
   def update
+    authorize! :update, @gf_travel_request
     respond_to do |format|
       if @gf_travel_request.update(grant_funded_travel_request_params)
         format.html { redirect_to @gf_travel_request, notice: 'Grant funded travel request was successfully updated.' }

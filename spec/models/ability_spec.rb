@@ -64,6 +64,12 @@ RSpec.describe Ability, type: :model do
         it { is_expected.to be_able_to(:read, request) }
         it { is_expected.to be_able_to(:update, request) }
         it { is_expected.not_to be_able_to(:destroy, request) }
+
+        (ApprovalState.aasm.states.map(&:name) - [:unsubmitted]).each do |state|
+          let(:u_request) { create :reimbursement_request, state, user: user }
+
+          it { is_expected.not_to be_able_to(:update, u_request) }
+        end
       end
     end
 

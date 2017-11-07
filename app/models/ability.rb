@@ -48,8 +48,12 @@ class Ability
       can?(:destroy, gftr) and gftr.approval_state.unsubmitted?
     end
 
-    can [:read, :edit, :update], ReimbursementRequest do |gftr|
-      gftr.user == user || user.reviewable_users.include?(gftr.user)
+    can [:read], ReimbursementRequest do |rr|
+      rr.user == user || user.reviewable_users.include?(rr.user)
+    end
+
+    can :update, ReimbursementRequest do |rr|
+      can?(:read, rr) and rr.approval_state.unsubmitted?
     end
 
     can :update, ApprovalState do |as|

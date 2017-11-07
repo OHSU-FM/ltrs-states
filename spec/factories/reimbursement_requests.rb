@@ -30,6 +30,13 @@ FactoryGirl.define do
       end
     end
 
+    trait :error do
+      association :user, factory: :user_with_approvers
+      after(:create) do |rr|
+        rr.approval_state.update(aasm_state: 'error')
+      end
+    end
+
     trait :with_uf do
       transient do
         document_type "Itinerary"
