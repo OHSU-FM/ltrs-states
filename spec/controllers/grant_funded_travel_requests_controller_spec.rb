@@ -65,7 +65,7 @@ RSpec.describe GrantFundedTravelRequestsController, type: :controller do
     context "with valid params" do
       login_user
       let(:user) { controller.current_user }
-      let(:valid_attributes) { build(:gf_travel_request, user: user) .attributes }
+      let(:valid_attributes) { build(:gf_travel_request, user: user).attributes }
 
       it "creates a new GrantFundedTravelRequest" do
         expect {
@@ -82,6 +82,13 @@ RSpec.describe GrantFundedTravelRequestsController, type: :controller do
       it "redirects to the created gf_travel_request" do
         post :create, params: { grant_funded_travel_request: valid_attributes }
         expect(response).to redirect_to(GrantFundedTravelRequest.last)
+      end
+
+      it 'updates the users traveler profile if new information is included' do
+        valid_attributes.update(tsa_pre: '123')
+        post :create, params: { grant_funded_travel_request: valid_attributes }
+        user.reload
+        expect(user.tsa_pre).to eq '123'
       end
     end
 

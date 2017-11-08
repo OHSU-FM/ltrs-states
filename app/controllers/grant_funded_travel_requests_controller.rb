@@ -39,6 +39,7 @@ class GrantFundedTravelRequestsController < ApplicationController
 
     respond_to do |format|
       if @gf_travel_request.save
+        update_user_travel_profile @gf_travel_request
         format.html { redirect_to @gf_travel_request, notice: 'Grant funded travel request was successfully created.' }
         format.json { render :show, status: :created, location: @gf_travel_request }
       else
@@ -88,6 +89,16 @@ class GrantFundedTravelRequestsController < ApplicationController
 
     def load_travel_profile
       @travel_profile = current_user.has_delegators? ? {} : current_user.form_travel_profile
+    end
+
+    def update_user_travel_profile gftr
+      User::FORM_TRAVEL_PROFILE_ATTRS.each do |attr|
+        if [nil, ""].include? gftr.user.send(attr.to_sym)
+          if !gftr.send(attr.to_sym).blank?
+            gftr.user.update_attribute(attr, gftr.send(attr))
+          end
+        end
+      end
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
