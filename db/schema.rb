@@ -67,6 +67,7 @@ ActiveRecord::Schema.define(version: 20171107204128) do
     t.boolean "car_rental"
     t.boolean "car_assistance"
     t.string "cell_number", limit: 255
+    t.string "drivers_licence_num", limit: 255
     t.boolean "lodging_reimb"
     t.boolean "lodging_assistance"
     t.string "lodging_url", limit: 255
@@ -88,7 +89,6 @@ ActiveRecord::Schema.define(version: 20171107204128) do
     t.boolean "additional_info_needed"
     t.text "additional_info_memo"
     t.boolean "additional_docs_needed"
-    t.string "drivers_licence_num", limit: 255
     t.index ["deleted_at"], name: "index_grant_funded_travel_requests_on_deleted_at"
   end
 
@@ -222,14 +222,11 @@ ActiveRecord::Schema.define(version: 20171107204128) do
     t.boolean "expense_card_use", default: false
     t.string "expense_card_type", limit: 255
     t.string "expense_card_desc", limit: 255
-    t.integer "status", default: 0
     t.integer "user_id"
-    t.integer "leave_request_id"
     t.boolean "mail_sent", default: false
     t.boolean "mail_final_sent", default: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.text "request_change"
     t.datetime "deleted_at"
     t.index ["deleted_at"], name: "index_travel_requests_on_deleted_at"
   end
@@ -257,9 +254,13 @@ ActiveRecord::Schema.define(version: 20171107204128) do
     t.string "uploaded_file_content_type"
     t.integer "uploaded_file_file_size"
     t.datetime "uploaded_file_updated_at"
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "fileable_type"
     t.bigint "fileable_id"
     t.string "document_type"
+    t.index ["user_id"], name: "index_user_files_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
