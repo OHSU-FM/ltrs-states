@@ -78,6 +78,14 @@ RSpec.describe ReimbursementRequest, type: :model do
   end
 
   describe 'methods' do
+    it '#ready_for_submission? checks that itinerary and agenda exist' do
+      rr = create :reimbursement_request
+      expect(rr.ready_for_submission?).to be_falsey
+      expect(rr.errors.any?).to be_truthy
+      full_rr = create :submittable_reimbursement_request
+      expect(full_rr.ready_for_submission?).to be_truthy
+    end
+
     it '#to_s returns a string representation of the object' do
       rr = create :reimbursement_request
       expect(rr.to_s).to eq "ReimbursementRequest #{rr.id}"

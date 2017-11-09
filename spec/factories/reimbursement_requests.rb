@@ -8,6 +8,8 @@ FactoryGirl.define do
     gf_travel_request
 
     trait :submitted do
+      submittable
+
       after :create do |reimbursement_request|
         reimbursement_request.approval_state.submit!
       end
@@ -46,5 +48,17 @@ FactoryGirl.define do
         create_list(:full_user_file, 1, fileable: rr, document_type: evaluator.document_type)
       end
     end
+
+    trait :submittable do
+      after(:create) do |rr, evaluator|
+        if rr.itinerary_ufs.empty?
+          create_list(:full_user_file, 1, fileable: rr, document_type: 'Itinerary')
+        end
+        if rr.agenda_ufs.empty?
+          create_list(:full_user_file, 1, fileable: rr, document_type: 'Agenda')
+        end
+      end
+    end
+    factory :submittable_reimbursement_request, traits: [:submittable]
   end
 end

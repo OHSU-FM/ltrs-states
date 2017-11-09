@@ -213,10 +213,27 @@ RSpec.describe ReimbursementRequestsController, type: :controller do
       }.to change(ReimbursementRequest, :count).by(0)
     end
 
-    it "redirects to the forms list" do
+    it "redirects to the root_path" do
       delete :destroy, params: { id: reimbursement_request.to_param }
-      # expect(response).to redirect_to(user_forms_path(user))
+      expect(response).to redirect_to root_path
       expect(response.status).to eq 302
+    end
+  end
+
+  describe 'POST #submit' do
+    login_user
+    let(:user) { controller.current_user }
+    let(:reimbursement_request) { create :reimbursement_request, user: user }
+    let(:submittable_rr) { create :submittable_reimbursement_request, user: user }
+
+    it 'should fail if user has not attached an itinerary and agenda' do
+      post :submit, params: { id: reimbursement_request.to_param }
+      expect(reimbursement_request.approval_state).to be_unsubmitted
+    end
+
+    it 'should succeed if user has attached an itinerary and agenda' do
+      post :submit, params: { id: submittable_rr.to_param }
+      expect(submittable_rr.approval_state).to be_unopened
     end
   end
 

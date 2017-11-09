@@ -39,7 +39,7 @@
   <div class="row">
     <div class="col-lg-6">
       <div id="itinerary-attachment">
-        <label>Itinerary for Travel</label>
+        <label class="required">Itinerary for Travel</label>
         <p>Please see Family Medicine Travel Expense Reimbursement Guide for itinerary requirements</p>
         <%= f.fields_for :user_files, f.object.itinerary_ufs do |g| %>
           <%= render partial: 'user_file_fields', locals: { f: g, document_type: 'Itinerary' } %>
@@ -50,7 +50,7 @@
           render_options: { locals: { document_type: 'Itinerary' } } %>
       </div>
       <div id="agenda-attachment">
-        <label>Agenda of Event</label>
+        <label class="required">Agenda of Event</label>
         <p>Please see Family Medicine Travel Expense Reimbursement Guide for agenda requirements</p>
         <%= f.fields_for :user_files, f.object.agenda_ufs do |g| %>
           <%= render partial: 'user_file_fields', locals: { f: g, document_type: 'Agenda' } %>

@@ -1,45 +1,45 @@
 <% return unless defined?(record) %>
 <% return if record.nil? %>
-<% 
-   err_count = 0
-   if record.errors.any?
-       record.errors.each do |key,val|
-           if val != '' then
-               err_count +=1
-           end
-        end
+<%
+    err_count = 0
+if record.errors.any?
+  record.errors.each do |key,val|
+    if val != '' then
+      err_count +=1
     end
-    keys = {
-        alert: :danger,
-        error: :warning,
-        notice: :info
-   }
-   ignored_keys = ['timedout']
+  end
+end
+keys = {
+  alert: :danger,
+  error: :warning,
+  notice: :info
+}
+ignored_keys = ['timedout']
 %>
 <% flash.keys.each do |key| %>
-    <% next if ignored_keys.include?(key.to_s) %>
-    <div class="alert alert-dismissable alert-<%= keys[key.to_sym] || :info %>" role="alert">
-        <%= flash[key] %>
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
+  <% next if ignored_keys.include?(key.to_s) %>
+  <div class="alert alert-dismissable alert-<%= keys[key.to_sym] || :info %>" role="alert">
+    <%= flash[key] %>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
 <% end %>
-<%  if err_count.to_i > 0 %>
-    <div class="alert alert-dismissable alert-warning" role="alert">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
+<% if err_count.to_i > 0 %>
+  <div class="alert alert-dismissable alert-warning" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
 
-        <b><%= pluralize(err_count, "error") %> prohibited this form from being saved:</b>
-        <ul>
-        <% record.errors.each do |key,val| %>
-           <% if val != '' %>
-              <li><%= val %></li>
-           <% end %>
+    <b><%= pluralize(err_count, "error") %> prohibited this form from being saved:</b>
+    <ul>
+      <% record.errors.each do |key,val| %>
+        <% if val != '' %>
+          <li><%= val %></li>
         <% end %>
-        </ul>
+      <% end %>
+    </ul>
 
-    </div>
+  </div>
 <% end %>
 

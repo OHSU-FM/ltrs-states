@@ -34,10 +34,15 @@ class ReimbursementRequest < ApplicationRecord
     ''
   end
 
-  # TODO impl in the case that there are things to check outside validations
-  # checks the presence of some attributes and returns true if they're there
-  # @return [Boolean] true if attributes present, else false
   def ready_for_submission?
+    if itinerary_ufs.empty?
+      errors.add(:itinerary_ufs, 'required before submission')
+      return false
+    end
+    if agenda_ufs.empty?
+      errors.add(:agenda_ufs, 'required before submission')
+      return false
+    end
     true
   end
 

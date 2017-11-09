@@ -15,7 +15,7 @@ module StateEvents
     authorize! :submit, @approvable
     respond_to do |format|
       if @approval_state.may_submit?
-        if @approval_state.submit!
+        if @approvable.ready_for_submission? && @approval_state.submit!
           UserMailer.request_submitted(@approval_state).deliver_now
           if @approval_state.may_send_to_unopened? && @approval_state.send_to_unopened!
             format.html { redirect_to @approvable,
@@ -23,7 +23,8 @@ module StateEvents
             format.json { render json: @approvable, status: :ok, location: @approvable }
           end
         else
-          format.html { redirect_to @approvable, alert: "Request was unable to be submitted" }
+          @approvable.errors.full_messages.each{|m| flash[:error] = m }
+          format.html { redirect_to @approvable }
           format.json { render json: @approvable.errors, status: :unprocessable_entity }
         end
       else
