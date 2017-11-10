@@ -232,7 +232,7 @@
           <%= render partial: 'shared/toggle_form_radio_buttons', locals: { f: f, symbol: :additional_docs_needed, target: '#additional_docs_needed_form' } %>
           <br />
           <div id="additional_docs_needed_form">
-            <%= f.fields_for :user_files do |g| %>
+            <%= f.fields_for :user_files, html: { multipart: true } do |g| %>
               <%= render partial: 'user_file_fields', locals: { f: g } %>
             <% end %>
             <div>

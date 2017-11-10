@@ -1,6 +1,6 @@
 class GrantFundedTravelRequestsController < ApplicationController
   before_action :load_resources, only: [:show, :edit, :update, :destroy]
-  before_action :load_travel_profile, only: [:new, :edit, :create]
+  before_action :load_travel_profile, only: [:new, :edit, :create, :update, :delete]
   include StateEvents
   authorize_resource
   skip_authorize_resource only: :update_state
@@ -116,7 +116,7 @@ class GrantFundedTravelRequestsController < ApplicationController
                :ground_transport_assistance, :ground_transport_desc,
                :additional_info_needed, :additional_info_memo,
                :additional_docs_needed, user_files_attributes: [
-                 :user_file, :uploaded_file, :document_type, :_destroy
+                 :id, :user_file, :uploaded_file, :document_type, :_destroy
                ])
     end
 end
