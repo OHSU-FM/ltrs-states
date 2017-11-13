@@ -4,7 +4,7 @@
   </div>
   <div class='col-xs-9'>
     <div class="btn-group pull-right">
-      <% if record.new_record? || ( params['action'] == 'edit' && can?(:edit, record) ) %>
+      <% if record.new_record? || (['edit', 'update'].include? params['action'] and can?(:edit, record)) %>
         <%= submit_tag 'Save & Review', class: 'btn btn-success' %>
       <% end %>
 
