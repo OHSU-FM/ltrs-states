@@ -43,7 +43,9 @@
           <div class="col-lg-6">
             <%= f.label :dest_desc, 'Travel Destination:', class: 'required' %>
             <br />
-            <%= f.text_field :dest_desc %>
+            <div class="space-left">
+              <%= f.text_field :dest_desc %>
+            </div>
           </div>
           <div class="col-lg-6">
           </div>
@@ -54,12 +56,16 @@
           <div class="col-lg-6">
             <%= f.label :depart_date, 'Departure date:', class: 'required' %>
             <br />
-            <%= f.text_field :depart_date, placeholder: 'mm/dd/yyyy', id: 'start-datepicker' %>
+            <div class="space-left">
+              <%= f.text_field :depart_date, placeholder: 'mm/dd/yyyy', id: 'start-datepicker' %>
+            </div>
           </div>
           <div class="col-lg-6">
             <%= f.label :return_date, 'Return date:', class: 'required' %>
             <br />
-            <%= f.text_field :return_date, placeholder: 'mm/dd/yyyy', id: 'end-datepicker' %>
+            <div class="space-left">
+              <%= f.text_field :return_date, placeholder: 'mm/dd/yyyy', id: 'end-datepicker' %>
+            </div>
           </div>
         </div>
       </div>
@@ -81,6 +87,9 @@
           <%= f.text_field :business_purpose_other, 'data-depends-on' => '#grant_funded_travel_request_business_purpose_desc', 'data-depends-on-value' => 'other' %>
         </div>
       </div>
+
+      <br />
+
       <div class="expense_card toggle_form">
         <div class="row">
           <%= f.label :expense_card_use, 'Will travel expenses be charged to an account managed by the Department of Family Medicine?', class: 'required' %>
@@ -113,18 +122,20 @@
             <br />
             <%= render partial: 'shared/toggle_form_radio_buttons', locals: { f: f, symbol: :air_assistance, target: '#air_assistance_form' } %>
             <div id="air_assistance_form" class="stop_flouc">
-              <%= f.label :air_seat_pref, 'Seat Preference:' %>
+              <%= f.label :air_seat_pref, 'Seat Preference:', class: 'space-left' %>
               <%= f.select :air_seat_pref, options_for_select([['Select', nil], ['Aisle', 'aisle'], ['Middle', 'middle'], ['Window', 'window']], f.object.air_seat_pref || @travel_profile["air_seat_pref"]) %>
               <br />
-              <%= f.label :ffid, 'Frequent Flyer ID:' %>
+              <%= f.label :ffid, 'Frequent Flyer ID:', class: 'space-left' %>
               <%= f.select :ffid, options_for_select(hf_ff_number_enum(@travel_profile["ff_numbers"]), f.object.ffid), { prompt: 'Select' } %>
               <br />
-              <%= f.label :tsa_pre, 'TSA Precheck #:' %>
+              <%= f.label :tsa_pre, 'TSA Precheck #:', class: 'space-left' %>
               <%= f.text_field :tsa_pre, value: f.object.tsa_pre || @travel_profile["tsa_pre"] %>
             </div>
           </div>
         </div>
       </div>
+
+      <br />
 
       <div class="row">
         <div class="toggle_form">
@@ -136,10 +147,12 @@
             <br />
             <%= render partial: 'shared/toggle_form_radio_buttons', locals: { f: f, symbol: :car_assistance, target: '#rental_car_assistance_form' } %>
             <div id="rental_car_assistance_form">
-              <%= f.label :rental_needs_desc, 'Describe rental needs' %>
+              <%= f.label :rental_needs_desc, 'Describe rental needs', class: 'required' %>
               (e.g. dates, vehicle size, etc.)
               <br >
-              <%= f.text_area :rental_needs_desc, size: '60x40' %>
+              <div class="space-left">
+                <%= f.text_area :rental_needs_desc, size: '60x40' %>
+              </div>
               <br />
               <%= f.label :cell_number, 'Cell Phone Number', class: 'required' %>
               <%= f.text_field :cell_number, value: f.object.cell_number || @travel_profile["cell_number"] %>
@@ -150,6 +163,8 @@
           </div>
         </div>
       </div>
+
+      <br />
 
       <div class="row">
         <div class="toggle_form">
@@ -187,6 +202,8 @@
         </div>
       </div>
 
+      <br />
+
       <div class="row">
         <div class="toggle_form">
           <%= f.label :ground_transport, 'Will traveler use ground transportation (e.g. taxi, shuttle) <br> for this event other than rental or personal vehicle?'.html_safe, class: 'required' %>
@@ -200,7 +217,9 @@
               <%= f.label :ground_transport_desc, 'Describe transportation needs', class: 'required' %>
               (e.g. shuttle URL, dates, etc)
               <br >
-              <%= f.text_area :ground_transport_desc, size: '60x40' %>
+              <div class="space-left">
+                <%= f.text_area :ground_transport_desc, size: '60x40' %>
+              </div>
             </div>
           </div>
         </div>
@@ -217,8 +236,10 @@
           <%= render partial: 'shared/toggle_form_radio_buttons', locals: { f: f, symbol: :additional_info_needed, target: '#additional_info_needed_form' } %>
           <div id="additional_info_needed_form">
             <%= f.label :additional_info_memo, 'Additional details:', class: 'required' %>
-          <br />
-            <%= f.text_area :additional_info_memo, size: '60x40' %>
+            <br />
+            <div class="space-left">
+              <%= f.text_area :additional_info_memo, size: '60x40' %>
+            </div>
           </div>
         </div>
       </div>
@@ -227,10 +248,8 @@
       <div class="row">
         <div class="toggle_form space-left" id="spec-circ-attachment">
           <%= f.label :additional_docs_needed, 'Does Traveler have <i>Special Circumstance: Pre-Approval</i> documentation to provide?'.html_safe %> <br />
-          <p class="space-left">Please see Family Medicine Travel Expense Reimbursement Guide</p>
-          <p class="space-left">for documentation examples & requirements</p>
+          <p class="pad-left">Please see Family Medicine Travel Expense Reimbursement Guide <br />for documentation examples & requirements</p>
           <%= render partial: 'shared/toggle_form_radio_buttons', locals: { f: f, symbol: :additional_docs_needed, target: '#additional_docs_needed_form' } %>
-          <br />
           <div id="additional_docs_needed_form">
             <%= f.fields_for :user_files, html: { multipart: true } do |g| %>
               <%= render partial: 'user_file_fields', locals: { f: g } %>
