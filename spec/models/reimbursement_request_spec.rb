@@ -97,4 +97,31 @@ RSpec.describe ReimbursementRequest, type: :model do
       expect(rr.has_na_meal_reimb?).to be_truthy
     end
   end
+
+  describe 'when reimb dates change' do
+    let(:rr) { create :reimbursement_request,
+               depart_date: Date.today,
+               return_date: Date.today
+    }
+    let!(:old_mrr) { rr.meal_reimbursement_requests.first }
+
+    context 'and old dates are included in new range' do
+      let(:return_date) { Date.tomorrow }
+
+      it 'doesnt delete the old mrr' do
+        rr.update(return_date: return_date)
+        expect(old_mrr.reload.reimb_date).to eq Date.today
+      end
+    end
+
+    context 'and old dates are not included in new range' do
+      let(:depart_date) { Date.tomorrow + 1 }
+      let(:return_date) { Date.tomorrow + 2 }
+
+      it 'deletes the old mrr' do
+        rr.update(depart_date: depart_date, return_date: return_date)
+        expect{ old_mrr.reload }.to raise_error ActiveRecord::RecordNotFound
+      end
+    end
+  end
 end

@@ -9,13 +9,8 @@ $(document).ready ->
     return
 
   # datepicker stuff
-  # $('input[type="date"]').prop('type','').datepicker()
   $('#start-datepicker').datepicker(
     format: 'yyyy-mm-dd',
-    # changeDate: (date) ->
-    #   console.log($("#start-datepicker").datepicker("getDate"))
-      # selectedDate = new Date(date)
-      # $('#end-datepicker').datepicker("option", "minDate", selectedDate)
   ).on "changeDate", (e) ->
     $('#end-datepicker').datepicker('setStartDate', e["date"])
 

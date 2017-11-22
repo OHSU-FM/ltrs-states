@@ -19,20 +19,40 @@ FactoryGirl.define do
       end
 
       after(:create) do |user, evaluator|
-        reviewer1 = evaluator.reviewer1 || create(:user, first_name: 'reviewer1', email: "reviewer14u#{user.id}@example.com")
-        reviewer2 = evaluator.reviewer2 || create(:user, first_name: 'reviewer2', email: "reviewer24u#{user.id}@example.com")
-        notifier = evaluator.notifier || create(:user, first_name: 'notifier', email: "notifier4u#{user.id}@example.com")
-        create :user_approver, user: user, approver_id: notifier.id, approver_type: 'notifier', approval_order: 3
-        create :user_approver, user: user, approver_id: reviewer1.id, approver_type: 'reviewer', approval_order: 1
-        create :user_approver, user: user, approver_id: reviewer2.id, approver_type: 'reviewer', approval_order: 2
+        reviewer1 = evaluator.reviewer1 || create(:user,
+                                                  first_name: 'reviewer1',
+                                                  email: "reviewer14u#{user.id}@example.com")
+        reviewer2 = evaluator.reviewer2 || create(:user,
+                                                  first_name: 'reviewer2',
+                                                  email: "reviewer24u#{user.id}@example.com")
+        notifier = evaluator.notifier || create(:user,
+                                                first_name: 'notifier',
+                                                email: "notifier4u#{user.id}@example.com")
+        create :user_approver,
+          user: user,
+          approver_id: notifier.id,
+          approver_type: 'notifier',
+          approval_order: 3
+        create :user_approver,
+          user: user,
+          approver_id: reviewer1.id,
+          approver_type: 'reviewer',
+          approval_order: 1
+        create :user_approver,
+          user: user,
+          approver_id: reviewer2.id,
+          approver_type: 'reviewer',
+          approval_order: 2
         user.reload
       end
     end
 
     trait :with_delegate do
       after(:create) do |user|
-        d = create :user_with_approvers, first_name: 'delegate',
-          login: 'delegate', email: "delegate4u#{user.id}@example.com"
+        d = create :user_with_approvers,
+          first_name: 'delegate',
+          login: 'delegate',
+          email: "delegate4u#{user.id}@example.com"
         create :user_delegation, user: user, delegate_user: d
       end
     end
@@ -56,10 +76,24 @@ FactoryGirl.define do
       password 'password'
 
       after(:create) do |user, evaluator|
-        reviewer = evaluator.reviewer_user || create(:user, first_name: 'reviewer', email: "reviewer4u#{user.id}@example.com", is_ldap: false, password: 'password')
-        notifier = create :user, first_name: 'notifier', email: "notifier4u#{user.id}@example.com"
-        create :user_approver, user: user, approver_id: notifier.id, approver_type: 'notifier', approval_order: 2
-        create :user_approver, user: user, approver_id: reviewer.id, approver_type: 'reviewer', approval_order: 1
+        reviewer = evaluator.reviewer_user || create(:user,
+                                                     first_name: 'reviewer',
+                                                     email: "reviewer4u#{user.id}@example.com",
+                                                     is_ldap: false,
+                                                     password: 'password')
+        notifier = create :user,
+          first_name: 'notifier',
+          email: "notifier4u#{user.id}@example.com"
+        create :user_approver,
+          user: user,
+          approver_id: notifier.id,
+          approver_type: 'notifier',
+          approval_order: 2
+        create :user_approver,
+          user: user,
+          approver_id: reviewer.id,
+          approver_type: 'reviewer',
+          approval_order: 1
         user.reload
       end
     end

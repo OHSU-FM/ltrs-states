@@ -237,7 +237,7 @@ RSpec.describe ReimbursementRequestsController, type: :controller do
     end
   end
 
-  describe "POST accept" do
+  describe "POST #accept" do
     login_user
     let(:user) { create :user_with_approvers, reviewer_user: controller.current_user}
     let(:approval_state) { reimbursement_request.approval_state }

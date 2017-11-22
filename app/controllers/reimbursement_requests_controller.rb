@@ -2,7 +2,7 @@ class ReimbursementRequestsController < ApplicationController
   before_action :load_resources, only: [:show, :edit, :update, :destroy]
   include StateEvents
   authorize_resource
-  skip_authorize_resource only: :update_state
+  skip_authorize_resource only: [:update_state, :change_per_diem]
 
   # GET /reimbursement_requests/1
   # GET /reimbursement_requests/1.json
@@ -67,6 +67,7 @@ class ReimbursementRequestsController < ApplicationController
   end
 
   private
+
     # Use callbacks to share common setup or constraints between actions.
     def load_resources
       @user = current_user
@@ -90,8 +91,7 @@ class ReimbursementRequestsController < ApplicationController
         :id, :user_file, :uploaded_file, :document_type, :_destroy
       ],
       meal_reimbursement_requests_attributes: [
-        :id, :breakfast, :breakfast_desc, :lunch,
-        :lunch_desc, :dinner, :dinner_desc
+        :id, :breakfast, :lunch, :dinner, :reimb_date, :_destroy
       ])
     end
 end

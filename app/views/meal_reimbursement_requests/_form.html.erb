@@ -1,6 +1,11 @@
-<div class="col-lg-2 col-xs-12">
+<div class="col-lg-2 col-xs-12 mrr-day">
   <div class="row">
-    <%= f.label :reimb_date, f.object.reimb_date.strftime("%a %B %d, %Y"), class: 'required' %>
+    <% if f.object.new_record? %>
+      <%= f.label :reimb_date, 'placeholder', class: 'required', id: 'replace-me-label' %>
+      <%= f.hidden_field :reimb_date, value: 'placeholder', id: 'replace-me-input' %>
+    <% else %>
+      <%= f.label :reimb_date, f.object.reimb_date.strftime("%a %B %d, %Y"), class: 'required' %>
+    <% end %>
   </div>
 
   <div class="row">

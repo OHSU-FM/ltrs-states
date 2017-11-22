@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171107204128) do
+ActiveRecord::Schema.define(version: 20171122182528) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -48,7 +48,6 @@ ActiveRecord::Schema.define(version: 20171107204128) do
   create_table "grant_funded_travel_requests", force: :cascade do |t|
     t.string "form_user", limit: 255
     t.string "form_email", limit: 255
-    t.boolean "other_fmr_attending"
     t.text "dest_desc"
     t.text "business_purpose_desc"
     t.text "business_purpose_url"
@@ -223,8 +222,6 @@ ActiveRecord::Schema.define(version: 20171107204128) do
     t.string "expense_card_type", limit: 255
     t.string "expense_card_desc", limit: 255
     t.integer "user_id"
-    t.boolean "mail_sent", default: false
-    t.boolean "mail_final_sent", default: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "deleted_at"
@@ -250,13 +247,13 @@ ActiveRecord::Schema.define(version: 20171107204128) do
   end
 
   create_table "user_files", force: :cascade do |t|
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "uploaded_file_file_name"
     t.string "uploaded_file_content_type"
     t.integer "uploaded_file_file_size"
     t.datetime "uploaded_file_updated_at"
-    t.bigint "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.string "fileable_type"
     t.bigint "fileable_id"
     t.string "document_type"

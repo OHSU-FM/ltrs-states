@@ -61,7 +61,7 @@
   <h4>Event & Travel Expenses</h4>
   <div class="daily_meal_reimb">
     <div class="row">
-      <% reimbursement_request.meal_reimbursement_requests.each do |mrr| %>
+      <% reimbursement_request.meal_reimbursement_requests.sort_by(&:reimb_date).each do |mrr| %>
         <%= render partial: 'meal_reimbursement_requests/show_form', locals: { mrr: mrr } %>
       <% end %>
     </div>

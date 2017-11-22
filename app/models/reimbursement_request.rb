@@ -26,6 +26,8 @@ class ReimbursementRequest < ApplicationRecord
   after_create :build_approval_state
   after_create :build_meal_reimb_requests
 
+  after_update :update_mrrs
+
   has_paper_trail
   acts_as_paranoid
 
@@ -99,6 +101,22 @@ class ReimbursementRequest < ApplicationRecord
   def build_meal_reimb_requests
     (depart_date..return_date).each do |d|
       MealReimbursementRequest.create!(reimb_date: d, reimbursement_request: self)
+    end
+  end
+
+  def update_mrrs
+    mrrs = meal_reimbursement_requests
+
+    # delete mrrs outside rr date range
+    mrrs.select{ |mrr|
+      !(depart_date..return_date).include? mrr.reimb_date
+    }.map(&:destroy)
+
+    # delete duplicates
+    mrrs.group_by(&:reimb_date).values.each do |vals|
+      next unless vals.count > 1
+      vals.sort_by!(&:created_at).pop
+      vals.each(&:destroy)
     end
   end
 end
