@@ -19,3 +19,18 @@ label.required:before {
 .pad-left {
   padding-left: 10px;
 }
+
+.annoying-long-div-star {
+  display: inline;
+  float: left;
+  color: #d9534f;
+  width: 3%;
+  padding-left: 0.5em;
+  font-size: 18px;
+}
+
+.annoying-long-div-label {
+  display: inline;
+  float: right;
+  width: 97%;
+}

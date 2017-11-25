@@ -9,17 +9,17 @@
       <h4>Traveler Details</h4>
       <% if @gf_travel_request.new_record? %>
         <% if current_user.has_delegators? %>
-        <div class="ui-widget-content ui-corner-all wide partial_form">
-          <%= f.label :user_id, 'Submit request for:' %><br/>
-          <%= f.select :user_id, options_from_collection_for_select([current_user] + current_user.delegators, "id", "full_name"), { include_blank: 'Select' }, id: 'delegate-dd' %>
-        </div>
+          <div class="pad-left ui-widget-content ui-corner-all wide partial_form">
+            <%= f.label :user_id, 'Submit request for:' %><br/>
+            <%= f.select :user_id, options_from_collection_for_select([current_user] + current_user.delegators, "id", "full_name"), { include_blank: 'Select' }, id: 'delegate-dd' %>
+          </div>
         <% else %>
-          <p>Submitting Travel Request as: <%= current_user.full_name %></p>
+          <p class="pad-left">Submitting Travel Request as: <%= current_user.full_name %></p>
           <%= f.hidden_field :user_id, value: current_user.id %>
         <% end %>
       <% else %>
         <% if @gf_travel_request.form_email != @gf_travel_request.user.email %>
-          <div class="ui-widget-content ui-corner-all wide partial_form">
+          <div class="pad-left ui-widget-content ui-corner-all wide partial_form">
             Submitted for:
             <%= @gf_travel_request.user.full_name %>
             <br/>
@@ -27,17 +27,16 @@
             <%= @gf_travel_request.form_user %>
           </div>
         <% else %>
-          <p>Travel Request for <%= @gf_travel_request.user.full_name %></p>
+          <p class="pad-left">Travel Request for <%= @gf_travel_request.user.full_name %></p>
         <% end %>
       <% end %>
     </div>
   </div>
 </div>
+
 <div class="container" style="width: inherit;">
   <div class="row">
     <div class="col-lg-6">
-      <div class="row">
-      </div>
       <div class="row">
         <div class="dest_desc">
           <div class="col-lg-6">
@@ -106,119 +105,125 @@
       </div>
     </div>
   </div>
+</div>
 
-  <hr />
+<hr />
 
+<div class="container" style="width: inherit;">
   <div class="row">
-    <h4>Event & Travel Expenses</h4>
-    <div class="col-lg-6">
-      <div class="row">
-        <div class="toggle_form">
-          <%= f.label :air_use, 'Will traveler be flying for this event?', class: 'required' %>
-          <br />
-          <%= render partial: 'shared/toggle_form_radio_buttons', locals: { f: f, symbol: :air_use, target: '#air_use_form' } %>
-          <div id="air_use_form" class="stop_flouc">
-            <%= f.label :air_assistance, 'Would you like assistance obtaining airline reservations?', class: 'required' %>
+    <div class="col-lg-12">
+      <h4>Event & Travel Expenses</h4>
+      <div class="col-lg-6">
+        <div class="row">
+          <div class="toggle_form">
+            <%= f.label :air_use, 'Will traveler be flying for this event?', class: 'required' %>
             <br />
-            <%= render partial: 'shared/toggle_form_radio_buttons', locals: { f: f, symbol: :air_assistance, target: '#air_assistance_form' } %>
-            <div id="air_assistance_form" class="stop_flouc">
-              <%= f.label :air_seat_pref, 'Seat Preference:', class: 'space-left' %>
-              <%= f.select :air_seat_pref, options_for_select([['Select', nil], ['Aisle', 'aisle'], ['Middle', 'middle'], ['Window', 'window']], f.object.air_seat_pref || @travel_profile["air_seat_pref"]) %>
+            <%= render partial: 'shared/toggle_form_radio_buttons', locals: { f: f, symbol: :air_use, target: '#air_use_form' } %>
+            <div id="air_use_form" class="stop_flouc">
+              <%= f.label :air_assistance, 'Would you like assistance obtaining airline reservations?', class: 'required' %>
               <br />
-              <%= f.label :ffid, 'Frequent Flyer ID:', class: 'space-left' %>
-              <%= f.select :ffid, options_for_select(hf_ff_number_enum(@travel_profile["ff_numbers"]), f.object.ffid), { prompt: 'Select' } %>
-              <br />
-              <%= f.label :tsa_pre, 'TSA Precheck #:', class: 'space-left' %>
-              <%= f.text_field :tsa_pre, value: f.object.tsa_pre || @travel_profile["tsa_pre"] %>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <br />
-
-      <div class="row">
-        <div class="toggle_form">
-          <%= f.label :car_rental, 'Will traveler be renting a car for this event?', class: 'required' %>
-          <br />
-          <%= render partial: 'shared/toggle_form_radio_buttons', locals: { f: f, symbol: :car_rental, target: '#rental_car_form' } %>
-          <div id="rental_car_form">
-            <%= f.label :car_assistance, 'Does traveler need assistance in obtaining rental car reservations?', class: 'required' %>
-            <br />
-            <%= render partial: 'shared/toggle_form_radio_buttons', locals: { f: f, symbol: :car_assistance, target: '#rental_car_assistance_form' } %>
-            <div id="rental_car_assistance_form">
-              <%= f.label :rental_needs_desc, 'Describe rental needs', class: 'required' %>
-              (e.g. dates, vehicle size, etc.)
-              <br >
-              <div class="space-left">
-                <%= f.text_area :rental_needs_desc, size: '60x40' %>
+              <%= render partial: 'shared/toggle_form_radio_buttons', locals: { f: f, symbol: :air_assistance, target: '#air_assistance_form' } %>
+              <div id="air_assistance_form" class="stop_flouc">
+                <%= f.label :air_seat_pref, 'Seat Preference:', class: 'space-left' %>
+                <%= f.select :air_seat_pref, options_for_select([['Select', nil], ['Aisle', 'aisle'], ['Middle', 'middle'], ['Window', 'window']], f.object.air_seat_pref || @travel_profile["air_seat_pref"]) %>
+                <br />
+                <%= f.label :ffid, 'Frequent Flyer ID:', class: 'space-left' %>
+                <%= f.select :ffid, options_for_select(hf_ff_number_enum(@travel_profile["ff_numbers"]), f.object.ffid), { prompt: 'Select' } %>
+                <br />
+                <%= f.label :tsa_pre, 'TSA Precheck #:', class: 'space-left' %>
+                <%= f.text_field :tsa_pre, value: f.object.tsa_pre || @travel_profile["tsa_pre"] %>
               </div>
+            </div>
+          </div>
+        </div>
+
+        <br />
+
+        <div class="row">
+          <div class="toggle_form">
+            <%= f.label :car_rental, 'Will traveler be renting a car for this event?', class: 'required' %>
+            <br />
+            <%= render partial: 'shared/toggle_form_radio_buttons', locals: { f: f, symbol: :car_rental, target: '#rental_car_form' } %>
+            <div id="rental_car_form">
+              <%= f.label :car_assistance, 'Does traveler need assistance in obtaining rental car reservations?', class: 'required' %>
               <br />
-              <%= f.label :cell_number, 'Cell Phone Number', class: 'required' %>
-              <%= f.text_field :cell_number, value: f.object.cell_number || @travel_profile["cell_number"] %>
+              <%= render partial: 'shared/toggle_form_radio_buttons', locals: { f: f, symbol: :car_assistance, target: '#rental_car_assistance_form' } %>
+              <div id="rental_car_assistance_form">
+                <%= f.label :rental_needs_desc, 'Describe rental needs', class: 'required' %>
+                (e.g. dates, vehicle size, etc.)
+                <br >
+                <div class="space-left">
+                  <%= f.text_area :rental_needs_desc, size: '60x40' %>
+                </div>
+                <br />
+                <%= f.label :cell_number, 'Cell Phone Number', class: 'required' %>
+                <%= f.text_field :cell_number, value: f.object.cell_number || @travel_profile["cell_number"] %>
+                <br />
+                <%= f.label :drivers_licence_num, 'Driver License Number', class: 'required' %>
+                <%= f.text_field :drivers_licence_num, value: f.object.drivers_licence_num || @travel_profile["drivers_licence_num"] %>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <br />
+
+        <div class="row">
+          <div class="toggle_form">
+            <%= f.label :registration_reimb, 'Will traveler need to pay for event registration?', class: 'required' %>
+            <br />
+            <%= render partial: 'shared/toggle_form_radio_buttons', locals: { f: f, symbol: :registration_reimb, target: '#registration_form' } %>
+            <div id="registration_form">
+              <%= f.label :registration_assistance, 'Does traveler need assistance in paying for registering?', class: 'required' %>
               <br />
-              <%= f.label :drivers_licence_num, 'Driver License Number', class: 'required' %>
-              <%= f.text_field :drivers_licence_num, value: f.object.drivers_licence_num || @travel_profile["drivers_licence_num"] %>
+              <%= render partial: 'shared/toggle_form_radio_buttons', locals: { f: f, symbol: :registration_assistance, target: '#registration_assistance_form' } %>
+              <div id="registration_assistance_form">
+                <%= f.label :registration_url, 'URL of registration site', class: 'required' %>
+                <%= f.text_field :registration_url %>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      <br />
-
-      <div class="row">
-        <div class="toggle_form">
-          <%= f.label :registration_reimb, 'Will traveler need to pay for event registration?', class: 'required' %>
-          <br />
-          <%= render partial: 'shared/toggle_form_radio_buttons', locals: { f: f, symbol: :registration_reimb, target: '#registration_form' } %>
-          <div id="registration_form">
-            <%= f.label :registration_assistance, 'Does traveler need assistance in paying for registering?', class: 'required' %>
+      <div class="col-lg-6">
+        <div class="row">
+          <div class="toggle_form">
+            <%= f.label :lodging_reimb, 'Will traveler use paid lodging for this event?', class: 'required' %>
             <br />
-            <%= render partial: 'shared/toggle_form_radio_buttons', locals: { f: f, symbol: :registration_assistance, target: '#registration_assistance_form' } %>
-            <div id="registration_assistance_form">
-              <%= f.label :registration_url, 'URL of registration site', class: 'required' %>
-              <%= f.text_field :registration_url %>
+            <%= render partial: 'shared/toggle_form_radio_buttons', locals: { f: f, symbol: :lodging_reimb, target: '#lodging_form' } %>
+            <div id="lodging_form">
+              <%= f.label :lodging_assistance, 'Does traveler need assistance in obtaining lodging reservations?', class: 'required' %>
+              <br />
+              <%= render partial: 'shared/toggle_form_radio_buttons', locals: { f: f, symbol: :lodging_assistance, target: '#lodging_assistance_form' } %>
+              <div id="lodging_assistance_form" class="table_form stop_flouc">
+                <%= f.label :lodging_url, 'URL of desired lodging', class: 'required' %>
+                <%= f.text_field :lodging_url %>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
 
-    <div class="col-lg-6">
-      <div class="row">
-        <div class="toggle_form">
-          <%= f.label :lodging_reimb, 'Will traveler use paid lodging for this event?', class: 'required' %>
-          <br />
-          <%= render partial: 'shared/toggle_form_radio_buttons', locals: { f: f, symbol: :lodging_reimb, target: '#lodging_form' } %>
-          <div id="lodging_form">
-            <%= f.label :lodging_assistance, 'Does traveler need assistance in obtaining lodging reservations?', class: 'required' %>
-            <br />
-            <%= render partial: 'shared/toggle_form_radio_buttons', locals: { f: f, symbol: :lodging_assistance, target: '#lodging_assistance_form' } %>
-            <div id="lodging_assistance_form" class="table_form stop_flouc">
-              <%= f.label :lodging_url, 'URL of desired lodging', class: 'required' %>
-              <%= f.text_field :lodging_url %>
+        <br />
+
+        <div class="row">
+          <div class="toggle_form">
+            <div class="row">
+              <div class="annoying-long-div-star">*</div>
+              <div class="annoying-long-div-label"><%= f.label :ground_transport, 'Will traveler use ground transportation (e.g. taxi, shuttle) <br /> for this event other than rental or personal vehicle?'.html_safe %></div>
             </div>
-          </div>
-        </div>
-      </div>
-
-      <br />
-
-      <div class="row">
-        <div class="toggle_form">
-          <%= f.label :ground_transport, 'Will traveler use ground transportation (e.g. taxi, shuttle) <br> for this event other than rental or personal vehicle?'.html_safe, class: 'required' %>
-          <br />
-          <%= render partial: 'shared/toggle_form_radio_buttons', locals: { f: f, symbol: :ground_transport, target: '#ground_transport_form' } %>
-          <div id="ground_transport_form">
-            <%= f.label :ground_transport_assistance, 'Does traveler need assistance in obtaining ground transportation?', class: 'required' %>
-            <br />
-            <%= render partial: 'shared/toggle_form_radio_buttons', locals: { f: f, symbol: :ground_transport_assistance, target: '#ground_transport_assistance_form' } %>
-            <div id="ground_transport_assistance_form">
-              <%= f.label :ground_transport_desc, 'Describe transportation needs', class: 'required' %>
-              (e.g. shuttle URL, dates, etc)
-              <br >
-              <div class="space-left">
-                <%= f.text_area :ground_transport_desc, size: '60x40' %>
+            <%= render partial: 'shared/toggle_form_radio_buttons', locals: { f: f, symbol: :ground_transport, target: '#ground_transport_form' } %>
+            <div id="ground_transport_form">
+              <%= f.label :ground_transport_assistance, 'Does traveler need assistance in obtaining ground transportation?', class: 'required' %>
+              <br />
+              <%= render partial: 'shared/toggle_form_radio_buttons', locals: { f: f, symbol: :ground_transport_assistance, target: '#ground_transport_assistance_form' } %>
+              <div id="ground_transport_assistance_form">
+                <%= f.label :ground_transport_desc, 'Describe transportation needs', class: 'required' %>
+                (e.g. shuttle URL, dates, etc)
+                <br >
+                <div class="space-left">
+                  <%= f.text_area :ground_transport_desc, size: '60x40' %>
+                </div>
               </div>
             </div>
           </div>
@@ -226,39 +231,46 @@
       </div>
     </div>
   </div>
-  <hr />
-  <div class="row">
-    <div class="col-lg-6">
-      <div class="row">
-        <div class="toggle_form space-left">
-          <%= f.label :additional_info_needed, 'Does traveler have additional details to provide?' %>
-          <br />
-          <%= render partial: 'shared/toggle_form_radio_buttons', locals: { f: f, symbol: :additional_info_needed, target: '#additional_info_needed_form' } %>
-          <div id="additional_info_needed_form">
-            <%= f.label :additional_info_memo, 'Additional details:', class: 'required' %>
+</div>
+
+<hr />
+
+<div class="container" style="width: inherit;">
+  <div class="col-lg-12">
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="row">
+          <div class="toggle_form space-left">
+            <%= f.label :additional_info_needed, 'Does traveler have additional details to provide?' %>
             <br />
-            <div class="space-left">
-              <%= f.text_area :additional_info_memo, size: '60x40' %>
+            <%= render partial: 'shared/toggle_form_radio_buttons', locals: { f: f, symbol: :additional_info_needed, target: '#additional_info_needed_form' } %>
+            <div id="additional_info_needed_form">
+              <%= f.label :additional_info_memo, 'Additional details:', class: 'required' %>
+              <br />
+              <div class="space-left">
+                <%= f.text_area :additional_info_memo, size: '60x40' %>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="col-lg-6">
-      <div class="row">
-        <div class="toggle_form space-left" id="spec-circ-attachment">
-          <%= f.label :additional_docs_needed, 'Does Traveler have <i>Special Circumstance: Pre-Approval</i> documentation to provide?'.html_safe %> <br />
-          <p class="pad-left">Please see Family Medicine Travel Expense Reimbursement Guide <br />for documentation examples & requirements</p>
-          <%= render partial: 'shared/toggle_form_radio_buttons', locals: { f: f, symbol: :additional_docs_needed, target: '#additional_docs_needed_form' } %>
-          <div id="additional_docs_needed_form">
-            <%= f.fields_for :user_files, html: { multipart: true } do |g| %>
-              <%= render partial: 'user_file_fields', locals: { f: g } %>
-            <% end %>
-            <div>
-              <%= link_to_add_association '+ Add File', f, :user_files,
-                partial: 'user_file_fields',
-                id: 'add-assoc-spec-circ',
-                render_options: { locals: { document_type: 'SpecCirc' } } %>
+
+      <div class="col-lg-6">
+        <div class="row">
+          <div class="toggle_form space-left" id="spec-circ-attachment">
+            <%= f.label :additional_docs_needed, 'Does Traveler have <i>Special Circumstance: Pre-Approval</i> documentation to provide?'.html_safe %> <br />
+            <p class="pad-left">Please see Family Medicine Travel Expense Reimbursement Guide <br />for documentation examples & requirements</p>
+            <%= render partial: 'shared/toggle_form_radio_buttons', locals: { f: f, symbol: :additional_docs_needed, target: '#additional_docs_needed_form' } %>
+            <div class="pad-left" id="additional_docs_needed_form">
+              <%= f.fields_for :user_files, html: { multipart: true } do |g| %>
+                <%= render partial: 'user_file_fields', locals: { f: g } %>
+              <% end %>
+              <div>
+                <%= link_to_add_association '+ Add File', f, :user_files,
+                  partial: 'user_file_fields',
+                  id: 'add-assoc-spec-circ',
+                  render_options: { locals: { document_type: 'SpecCirc' } } %>
+              </div>
             </div>
           </div>
         </div>
