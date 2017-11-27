@@ -119,6 +119,9 @@ class User < ApplicationRecord
         field :hotel_room_pref do
           label 'Hotel Room Preference'
         end
+        field :drivers_licence_num do
+          label "Driver's license number"
+        end
         field :tsa_pre do
           label 'TSA Precheck #'
         end
