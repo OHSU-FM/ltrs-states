@@ -9,16 +9,16 @@
       <h4>Traveler Details</h4>
       <% if @reimbursement_request.new_record? %>
         <% if current_user.has_delegators? %>
-          <div class="ui-widget-content ui-corner-all wide partial_form">
+          <div class="ui-widget-content ui-corner-all wide partial_form pad-left">
             <%= f.label :user_id, 'Submit request for:' %><br/>
             <%= f.select :user_id, options_from_collection_for_select([current_user] + current_user.delegators, "id", "full_name", current_user.id) %>
           </div>
         <% else %>
-          <p>Submitting Travel Request as: <%= current_user.full_name %></p>
+          <p class="pad-left">Submitting Travel Request as: <%= current_user.full_name %></p>
         <% end %>
       <% else %>
         <% if @reimbursement_request.form_email != @reimbursement_request.user.email %>
-          <div class="ui-widget-content ui-corner-all wide partial_form">
+          <div class="ui-widget-content ui-corner-all wide partial_form pad-left">
             Submitted for:
             <%= @reimbursement_request.user.full_name %>
             <br/>
@@ -26,7 +26,7 @@
             <%= @reimbursement_request.form_user %>
           </div>
         <% else %>
-          <p>Reimbursement Request for <%= @reimbursement_request.user.full_name %></p>
+          <p class="pad-left">Reimbursement Request for <%= @reimbursement_request.user.full_name %></p>
         <% end %>
       <% end %>
     </div>

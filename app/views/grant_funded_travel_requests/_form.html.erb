@@ -56,14 +56,14 @@
             <%= f.label :depart_date, 'Departure date:', class: 'required' %>
             <br />
             <div class="space-left">
-              <%= f.text_field :depart_date, placeholder: 'mm/dd/yyyy', id: 'start-datepicker' %>
+              <%= f.text_field :depart_date, placeholder: 'yyyy-mm-dd', id: 'start-datepicker' %>
             </div>
           </div>
           <div class="col-lg-6">
             <%= f.label :return_date, 'Return date:', class: 'required' %>
             <br />
             <div class="space-left">
-              <%= f.text_field :return_date, placeholder: 'mm/dd/yyyy', id: 'end-datepicker' %>
+              <%= f.text_field :return_date, placeholder: 'yyyy-mm-dd', id: 'end-datepicker' %>
             </div>
           </div>
         </div>
@@ -74,8 +74,9 @@
         <div class="row">
           <%= f.label :business_purpose_desc, 'Business Purpose:', class: 'required' %>
           <br />
-          <%= f.select :business_purpose_desc, [['Site Visit', 'site_visit'], ['Conference', 'conference'], ['In Person Interview', 'in_person_interview'], ['Other', 'other']], include_blank: 'Select', id: 'business_purpose_desc' %>
-          <br />
+          <div class="pad-left">
+            <%= f.select :business_purpose_desc, [['Site Visit', 'site_visit'], ['Conference', 'conference'], ['In Person Interview', 'in_person_interview'], ['Other', 'other']], include_blank: 'Select', id: 'business_purpose_desc' %>
+          </div>
           <%= f.label :business_purpose_url, "Conference URL:",
             'data-depends-on' => '#grant_funded_travel_request_business_purpose_desc',
             'data-depends-on-value' => 'conference', class: 'required' %>
