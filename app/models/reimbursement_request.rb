@@ -9,6 +9,8 @@ class ReimbursementRequest < ApplicationRecord
 
   delegate :current_user_approver, :next_user_approver, to: :approval_state
 
+  before_validation :save_ufs, on: :update
+
   validates_associated :approval_state
   validates_presence_of :depart_date,
     :return_date,
@@ -77,6 +79,10 @@ class ReimbursementRequest < ApplicationRecord
   end
 
   private
+
+  def save_ufs
+    user_files.each(&:save!)
+  end
 
   def miles_map_attachment_if_travel_mildage_reimb
     if traveler_mileage_reimb == true
