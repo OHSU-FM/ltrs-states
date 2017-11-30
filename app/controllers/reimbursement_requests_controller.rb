@@ -83,7 +83,7 @@ class ReimbursementRequestsController < ApplicationController
     def reimbursement_request_params
       params.require(:reimbursement_request)
         .permit(:form_user, :form_email, :other_fmr_attending, :depart_date,
-      :return_date, :air_use, :car_rental, :meal_host, :lodging_reimb,
+      :return_date, :air_use, :car_rental, :lodging_reimb,
       :traveler_mileage_reimb, :meal_host_reimb, :user_id,
       :grant_funded_travel_request_id, :meal_na_desc, :additional_info_needed,
       :additional_info_memo, :additional_docs_needed,

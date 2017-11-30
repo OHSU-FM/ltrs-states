@@ -52,7 +52,6 @@ FactoryGirl.define do
     trait :submittable do
       air_use false
       car_rental false
-      meal_host false
       lodging_reimb false
       traveler_mileage_reimb false
       meal_host_reimb false

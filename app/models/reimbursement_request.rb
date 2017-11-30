@@ -37,7 +37,6 @@ class ReimbursementRequest < ApplicationRecord
   USER_ATTRS = [
     "air_use",
     "car_rental",
-    "meal_host",
     "lodging_reimb",
     "traveler_mileage_reimb",
     "meal_host_reimb"
