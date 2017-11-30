@@ -53,7 +53,6 @@ RSpec.feature "leave_request states", type: :feature do
       expect(@lr.approval_state).to be_in_review
       expect(page).to have_text("In review")
       expect(page).to have_text("Waiting on response from " + @r.full_name)
-
     end
 
     scenario "leave_request accept button pressed" do

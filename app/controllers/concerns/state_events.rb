@@ -9,6 +9,10 @@ module StateEvents
 
   def update_state
     send params[:approval_state][:aasm_state]
+    respond_to do |format|
+      format.js
+      format.html
+    end
   end
 
   def submit
