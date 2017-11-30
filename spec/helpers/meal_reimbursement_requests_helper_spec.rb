@@ -13,5 +13,9 @@ RSpec.describe MealReimbursementRequestsHelper, type: :helper do
       expect(helper.hf_reimb_tf_to_words(true)).to eq 'Yes'
       expect(helper.hf_reimb_tf_to_words(false)).to eq 'No'
     end
+
+    it "returns 'Unanswered' if nil" do
+      expect(helper.hf_reimb_tf_to_words(nil)).to eq 'Unanswered'
+    end
   end
 end

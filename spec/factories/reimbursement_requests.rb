@@ -50,6 +50,13 @@ FactoryGirl.define do
     end
 
     trait :submittable do
+      air_use false
+      car_rental false
+      meal_host false
+      lodging_reimb false
+      traveler_mileage_reimb false
+      meal_host_reimb false
+
       after(:create) do |rr, evaluator|
         if rr.itinerary_ufs.empty?
           create_list(:full_user_file, 1, fileable: rr, document_type: 'Itinerary')

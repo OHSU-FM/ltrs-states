@@ -33,6 +33,10 @@ RSpec.describe ReimbursementRequest, type: :model do
     expect(build :reimbursement_request, traveler_mileage_reimb: true).not_to be_valid
   end
 
+  it 'requires an additional_info_memo if additional_info_needed is true' do
+    expect(build :reimbursement_request, additional_info_needed: true).not_to be_valid
+  end
+
   it 'requires an ExceptionApp attachment if additional_docs_needed is true' do
     expect(build :reimbursement_request, additional_docs_needed: true).not_to be_valid
   end
@@ -78,10 +82,25 @@ RSpec.describe ReimbursementRequest, type: :model do
   end
 
   describe 'methods' do
-    it '#ready_for_submission? checks that itinerary and agenda exist' do
+    it '#ready_for_submission? checks that itinerary, agenda exist, and that everything is answered' do
+      # check itinerary (order determined by order they're checked in method)
       rr = create :reimbursement_request
       expect(rr.ready_for_submission?).to be_falsey
       expect(rr.errors.any?).to be_truthy
+
+      # check agenda (pass itinerary)
+      create(:full_user_file, fileable: rr, document_type: 'Itinerary')
+      rr.reload
+      expect(rr.ready_for_submission?).to be_falsey
+      expect(rr.errors.any?).to be_truthy
+
+      # check other questions
+      create(:full_user_file, fileable: rr, document_type: 'Agenda')
+      rr.reload
+      expect(rr.ready_for_submission?).to be_falsey
+      expect(rr.errors.any?).to be_truthy
+
+      # check pass
       full_rr = create :submittable_reimbursement_request
       expect(full_rr.ready_for_submission?).to be_truthy
     end

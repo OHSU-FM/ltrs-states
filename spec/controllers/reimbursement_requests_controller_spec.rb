@@ -164,12 +164,34 @@ RSpec.describe ReimbursementRequestsController, type: :controller do
 
         context 'without logged in user' do
           let(:user) { create :user }
+
           it 'doesnt update the request' do
             patch :update, params: { id: rr.id, reimbursement_request: valid_attributes }
             rr.reload
             expect(rr.air_use).to be_falsey
           end
         end
+
+        # TODO this is supposed to test Reimbursementrequest#update_mrrs, but
+        # i don't think the params work because when start/end dates are changed
+        # in the form, it's the mrr attributes that actually trigger the
+        # difference in the number of associated mrrs. the below params don't
+        # include mrr attrs at all. we need a method like rr.attributes that
+        # includes all the associated attributes as well
+        #
+        # context 'when dates change' do
+        #   login_user
+        #   let(:user) { controller.current_user }
+        #
+        #   it 'deletes duplicate mrrs' do
+        #     attrs = valid_attributes.update(depart_date: rr.depart_date - 1)
+        #     patch :update, params: { id: rr.id, reimbursement_request: attrs }
+        #     rr.reload
+        #     dates = rr.meal_reimbursement_requests.map(&:reimb_date)
+        #     expect(dates.detect{|e| dates.count(e) > 1 })
+        #       .to eq nil
+        #   end
+        # end
       end
 
       context 'with invalid_attributes' do
@@ -228,6 +250,12 @@ RSpec.describe ReimbursementRequestsController, type: :controller do
 
     it 'should fail if user has not attached an itinerary and agenda' do
       post :submit, params: { id: reimbursement_request.to_param }
+      expect(reimbursement_request.approval_state).to be_unsubmitted
+    end
+
+    it 'should fail if the user has not answered a question' do
+      submittable_rr.update!(air_use: nil)
+      post :submit, params: { id: submittable_rr.to_param }
       expect(reimbursement_request.approval_state).to be_unsubmitted
     end
 

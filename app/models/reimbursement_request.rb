@@ -18,7 +18,8 @@ class ReimbursementRequest < ApplicationRecord
     :form_user,
     :user
   validate :miles_map_attachment_if_travel_mildage_reimb,
-    :exception_app_attachment_if_additional_docs_needed
+    :exception_app_attachment_if_additional_docs_needed,
+    :additional_info_memo_if_additional_info_needed
 
   accepts_nested_attributes_for :approval_state, allow_destroy: true
   accepts_nested_attributes_for :user_files, allow_destroy: true
@@ -29,6 +30,18 @@ class ReimbursementRequest < ApplicationRecord
   after_create :build_meal_reimb_requests
 
   after_update :update_mrrs
+
+  # self.attributes.except ActiveRecord columns such as created_at and
+  # conditionally shown fields.
+  # used for validation before submission
+  USER_ATTRS = [
+    "air_use",
+    "car_rental",
+    "meal_host",
+    "lodging_reimb",
+    "traveler_mileage_reimb",
+    "meal_host_reimb"
+  ]
 
   has_paper_trail
   acts_as_paranoid
@@ -43,9 +56,17 @@ class ReimbursementRequest < ApplicationRecord
       errors.add(:itinerary_ufs, 'required before submission')
       return false
     end
+
     if agenda_ufs.empty?
       errors.add(:agenda_ufs, 'required before submission')
       return false
+    end
+
+    attributes.slice(*USER_ATTRS).each do |attr, val|
+      if val.nil?
+        errors.add(:base, "Please answer all questions before submitting")
+        return false
+      end
     end
     true
   end
@@ -88,6 +109,14 @@ class ReimbursementRequest < ApplicationRecord
     if traveler_mileage_reimb == true
       if miles_map_ufs.empty?
         errors.add(:traveler_mileage_reimb, 'Attachment required')
+      end
+    end
+  end
+
+  def additional_info_memo_if_additional_info_needed
+    if additional_info_needed == true
+      if additional_info_memo.nil? or additional_info_memo.empty?
+        errors.add(:additional_info_memo, 'Required')
       end
     end
   end
