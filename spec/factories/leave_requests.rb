@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :leave_request do
     association :user, factory: :user_with_approvers
     hours_vacation 1

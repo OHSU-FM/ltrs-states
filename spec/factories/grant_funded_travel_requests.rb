@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :gf_travel_request, class: GrantFundedTravelRequest do
     dest_desc 'description'
     depart_date { 1.day.from_now }

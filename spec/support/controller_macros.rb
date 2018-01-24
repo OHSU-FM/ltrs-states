@@ -17,21 +17,21 @@ module ControllerMacros
   def login_user
     before(:each) do
       @request.env["devise.mapping"] = Devise.mappings[:user]
-      sign_in(FactoryGirl.create(:user_with_approvers))
+      sign_in(FactoryBot.create(:user_with_approvers))
     end
   end
 
   def login_admin
     before(:each) do
       @request.env["devise.mapping"] = Devise.mappings[:admin]
-      sign_in(FactoryGirl.create :admin)
+      sign_in(FactoryBot.create :admin)
     end
   end
 
   def login_reviewer
     before(:each) do
       @request.env["devise.mapping"] = Devise.mappings[:user]
-      sign_in((FactoryGirl.create :user_with_approvers).reviewers.first.approver)
+      sign_in((FactoryBot.create :user_with_approvers).reviewers.first.approver)
     end
   end
 
@@ -39,7 +39,7 @@ module ControllerMacros
   def login_first_reviewer
     before(:each) do
       @request.env["devise.mapping"] = Devise.mappings[:user]
-      sign_in((FactoryGirl.create :user_two_reviewers).reviewers.first.approver)
+      sign_in((FactoryBot.create :user_two_reviewers).reviewers.first.approver)
     end
   end
 
@@ -47,7 +47,7 @@ module ControllerMacros
   def login_second_reviewer
     before(:each) do
       @request.env["devise.mapping"] = Devise.mappings[:user]
-      sign_in((FactoryGirl.create :user_two_reviewers).reviewers.second.approver)
+      sign_in((FactoryBot.create :user_two_reviewers).reviewers.second.approver)
     end
   end
 

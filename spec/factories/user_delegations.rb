@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :user_delegation do
     user
     association :delegate_user, factory: :user

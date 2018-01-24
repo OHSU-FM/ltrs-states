@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :travel_request do
     depart_date { 1.day.from_now }
     return_date { 2.days.from_now }

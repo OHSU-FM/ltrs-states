@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :funding_source do
     pi "MyString"
     title "MyString"

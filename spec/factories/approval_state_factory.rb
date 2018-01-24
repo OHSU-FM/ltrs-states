@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :approval_state do
     association :user, factory: :user_with_approvers
 

@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :leave_request_extra do
     leave_request
     work_days 1
