@@ -36,7 +36,7 @@ class User < ApplicationRecord
   validates :empid, numericality: { only_integer: true }, allow_blank: true
 
   devise :database_authenticatable, :ldap_authenticatable, :rememberable,
-    :trackable, :timeoutable
+    :trackable, :timeoutable, :recoverable
 
   has_paper_trail
   acts_as_paranoid
