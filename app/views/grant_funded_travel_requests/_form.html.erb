@@ -260,7 +260,7 @@
         <div class="row">
           <div class="toggle_form space-left" id="spec-circ-attachment">
             <%= f.label :additional_docs_needed, 'Does Traveler have <i>Special Circumstance: Pre-Approval</i> documentation to provide?'.html_safe %> <br />
-            <p class="pad-left">Please see Family Medicine Travel Expense Reimbursement Guide <br />for documentation examples & requirements</p>
+            <p class="pad-left">Please see <%= link_to "Family Medicine Travel Expense Reimbursement Guide", root_path << "documents/travel_guide_2_2018.pdf", target: "_blank" %><br />for documentation examples & requirements</p>
             <%= render partial: 'shared/toggle_form_radio_buttons', locals: { f: f, symbol: :additional_docs_needed, target: '#additional_docs_needed_form' } %>
             <div class="pad-left" id="additional_docs_needed_form">
               <%= f.fields_for :user_files, html: { multipart: true } do |g| %>
