@@ -1,24 +1,24 @@
-# README
+# LTRS States
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+A state-machine-based request and approval app for OHSU FM
 
-Things you may want to cover:
+### Getting Started
 
-* Ruby version
+```ruby
+git clone git@github.com:OHSU-FM/ltrs-states.git && cd ltrs-states
+bundle
+rails db:create && rails db:migrate
+rails s
+```
 
-* System dependencies
+There's a simplistic set of relationships in `seeds.rb`, so seed if you'd like, or just go grab the production database (easier for debugging).
 
-* Configuration
+Users are shown the grant funded travel and reimbursement request forms if the boolean `grant_funded` is true on their user record.
 
-* Database creation
+### Setting up a user
 
-* Database initialization
+Users need (at least) a reviewer and a notifier. These are set up via `UserApprovers`. The `approval_order` of the notifier `UserApprover` is just 1 plus the `approval_order` of the last reviewer
 
-* How to run the test suite
+### Specs
 
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+RSpec for testing, Guard to watch `/spec`. The main approval logic lives in `/app/controllers/concerns/state_events.rb`, and is tested primarily in the LeaveRequest controller spec.
