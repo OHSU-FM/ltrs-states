@@ -17,7 +17,7 @@ gem 'aasm'
 gem 'paperclip'
 
 gem 'rails_admin'
-gem 'paper_trail'
+gem 'paper_trail', '8.1.2'
 gem 'devise'
 gem 'devise_ldap_authenticatable'
 gem 'cancancan'
